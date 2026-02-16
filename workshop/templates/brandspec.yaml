@@ -1,0 +1,112 @@
+# brandspec.yaml template
+# Based on brandspec v0.2.0
+# Spec: https://github.com/numtet/brandspec
+
+meta:
+  name: ""           # Required: Brand name
+  version: "1.0.0"
+  updated: ""
+  description: ""
+
+core:
+  essence: ""        # One sentence capturing the brand
+  tagline: ""
+  personality: []    # 3-5 adjectives
+  voice:
+    tone: []
+    principles: []
+
+tokens:
+  # W3C Design Tokens Community Group format
+  # https://tr.designtokens.org/format/
+  # Color format: oklch recommended (perceptually uniform, wide gamut)
+  colors:
+    # Brand colors
+    primary:
+      $value: ""
+      $type: color
+      $description: ""
+    primary-foreground:
+      $value: ""
+      $type: color
+    secondary:
+      $value: ""
+      $type: color
+    secondary-foreground:
+      $value: ""
+      $type: color
+
+    # Surface colors
+    background:
+      $value: ""
+      $type: color
+    foreground:
+      $value: ""
+      $type: color
+    muted:
+      $value: ""
+      $type: color
+    muted-foreground:
+      $value: ""
+      $type: color
+
+    # Status colors
+    destructive:
+      $value: ""
+      $type: color
+    destructive-foreground:
+      $value: ""
+      $type: color
+    success:
+      $value: ""
+      $type: color
+    success-foreground:
+      $value: ""
+      $type: color
+    warning:
+      $value: ""
+      $type: color
+    warning-foreground:
+      $value: ""
+      $type: color
+    info:
+      $value: ""
+      $type: color
+    info-foreground:
+      $value: ""
+      $type: color
+
+  typography:
+    heading:
+      $value: ""
+      $type: fontFamily
+    body:
+      $value: ""
+      $type: fontFamily
+
+assets: []
+  # - file: assets/logo-primary.svg
+  #   id: logo-primary
+  #   role: logo
+  #   variant: primary
+
+guidelines: {}
+  # logo-usage:
+  #   content: |
+  #     ## Logo Usage
+  #     ...
+
+extensions: {}
+  # Optional: Brand-specific color scale
+  # brand-scale:
+  #   primary-50:
+  #     $value: "oklch(...)"
+  #     $type: color
+  #   primary-100:
+  #     $value: "oklch(...)"
+  #     $type: color
+  #   # ... through primary-900
+  #
+  # Optional: Social links, legal info, etc.
+  # social:
+  #   twitter: "@handle"

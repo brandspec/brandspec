@@ -1,0 +1,15 @@
+# Workshop decisions - append-only log
+# Each decision is permanent and timestamped
+# When overriding a previous decision, use `supersedes` to reference its ID
+
+decisions: []
+
+# Decision schema:
+#   - id: "d001"            # Unique ID (auto-increment)
+#     timestamp: "ISO 8601"
+#     phase: 1
+#     step: "product"
+#     key: "product_essence"
+#     value: "..."
+#     rationale: "..."
+#     supersedes: null       # or "d00X" if overriding a previous decision

@@ -1,0 +1,5 @@
+# Minimal brandspec example
+# Only the required field: meta.name
+
+meta:
+  name: "My Brand"

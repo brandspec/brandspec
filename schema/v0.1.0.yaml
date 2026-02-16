@@ -1,0 +1,201 @@
+# brandspec Schema v0.1.0
+# This document defines the structure of a brandspec.yaml file.
+
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://brandspec.tools/schema/v0.1.0"
+title: "brandspec"
+description: "Brand Identity specification format"
+type: object
+
+required:
+  - meta
+
+properties:
+  meta:
+    type: object
+    description: "Brand metadata"
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: "Brand name"
+      version:
+        type: string
+        description: "Brand spec version (semver)"
+      updated:
+        type: string
+        format: date
+        description: "Last updated date"
+      description:
+        type: string
+        description: "Brief brand description"
+      url:
+        type: string
+        format: uri
+        description: "Brand website"
+    additionalProperties: true
+
+  core:
+    type: object
+    description: "Brand essence, personality, and voice"
+    properties:
+      essence:
+        type: string
+        description: "One sentence capturing the brand's core"
+      tagline:
+        type: string
+        description: "Public-facing tagline"
+      mission:
+        type: string
+        description: "Brand mission statement"
+      vision:
+        type: string
+        description: "Brand vision statement"
+      values:
+        type: array
+        items:
+          type: string
+        description: "Core brand values"
+      personality:
+        type: array
+        items:
+          type: string
+        description: "Brand personality traits"
+      voice:
+        type: object
+        description: "Voice and tone guidelines"
+        properties:
+          tone:
+            type: array
+            items:
+              type: string
+          principles:
+            type: array
+            items:
+              type: string
+        additionalProperties: true
+    additionalProperties: true
+
+  tokens:
+    type: object
+    description: "Design tokens (W3C DTCG compliant)"
+    additionalProperties: true
+    # Follows W3C Design Tokens Community Group specification
+    # https://tr.designtokens.org/format/
+    # 
+    # Example:
+    #   colors:
+    #     primary:
+    #       $value: "oklch(0.7 0.15 250)"
+    #       $type: color
+    #       $description: "Primary brand color"
+
+  assets:
+    type: array
+    description: "Brand assets (logos, icons, images, etc.)"
+    items:
+      type: object
+      required:
+        - file
+      properties:
+        file:
+          type: string
+          description: "File path (required)"
+        id:
+          type: string
+          description: "Semantic identifier (recommended)"
+        role:
+          type: string
+          description: "Asset role"
+          # Recommended values:
+          # logo, wordmark, symbol, icon, favicon,
+          # graphic, pattern, photo, illustration,
+          # video, audio, document, font
+        variant:
+          type: string
+          description: "Asset variant"
+          # Recommended values:
+          # primary, secondary, monochrome, inverse,
+          # simplified, stacked, horizontal
+        context:
+          type: string
+          description: "Usage context"
+          # Recommended values:
+          # light-bg, dark-bg, any, print, digital, social
+        description:
+          type: string
+          description: "Human-readable description"
+        formats:
+          type: array
+          description: "Derived formats"
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              width:
+                type: integer
+              height:
+                type: integer
+            additionalProperties: true
+        tags:
+          type: array
+          items:
+            type: string
+          description: "Free-form tags"
+      additionalProperties: true
+
+  guidelines:
+    type: object
+    description: "Usage guidelines — each key is a guideline section (e.g. logo-usage, color-usage)"
+    additionalProperties:
+      type: object
+      properties:
+        content:
+          type: string
+          description: "Free-form Markdown content (human-readable guidelines)"
+        rules:
+          type: array
+          description: "Structured, machine-readable rules for AI-driven brand linting"
+          items:
+            $ref: "#/$defs/guidelineRule"
+      additionalProperties: true
+
+  extensions:
+    type: object
+    description: "Custom extensions (fully open)"
+    additionalProperties: true
+
+additionalProperties: true
+
+$defs:
+  guidelineRule:
+    type: object
+    description: "A single checkable brand guideline rule"
+    required:
+      - description
+      - severity
+    properties:
+      id:
+        type: string
+        description: "Unique rule identifier (e.g. logo-min-size, color-contrast)"
+      description:
+        type: string
+        description: "Human-readable explanation of what this rule enforces"
+      severity:
+        type: string
+        enum:
+          - info
+          - warning
+          - error
+        description: "Severity level — info (advisory), warning (should fix), error (must fix)"
+      criteria:
+        type: array
+        items:
+          type: string
+        description: "List of specific, checkable conditions that satisfy this rule"
+      applies_to:
+        type: string
+        description: "What this rule targets (e.g. logo, color, typography, voice)"
+    additionalProperties: true

@@ -1,0 +1,95 @@
+# Standard brandspec example
+# Typical usage covering common fields
+
+meta:
+  name: "Acme Corp"
+  version: "1.0.0"
+  updated: "2025-01-25"
+  description: "Modern productivity tools for teams"
+  url: "https://acme.example.com"
+
+core:
+  essence: "Making the impossible satisfyingly simple"
+  tagline: "Simplicity, delivered"
+  personality:
+    - innovative
+    - approachable
+    - confident
+    - playful
+  voice:
+    tone:
+      - friendly
+      - clear
+      - encouraging
+    principles:
+      - "Use active voice"
+      - "Keep sentences short"
+      - "Avoid jargon"
+
+tokens:
+  colors:
+    primary:
+      $value: "oklch(0.65 0.18 250)"
+      $type: color
+      $description: "Main brand color - trust and innovation"
+    primary-foreground:
+      $value: "oklch(0.98 0.01 250)"
+      $type: color
+      $description: "Text on primary background"
+    secondary:
+      $value: "oklch(0.75 0.12 150)"
+      $type: color
+      $description: "Accent color - growth and energy"
+    secondary-foreground:
+      $value: "oklch(0.20 0.02 150)"
+      $type: color
+      $description: "Text on secondary background"
+    background:
+      $value: "oklch(0.99 0.005 250)"
+      $type: color
+      $description: "Page background"
+    foreground:
+      $value: "oklch(0.15 0.02 250)"
+      $type: color
+      $description: "Default text color"
+    muted:
+      $value: "oklch(0.95 0.01 250)"
+      $type: color
+      $description: "Subtle backgrounds"
+    muted-foreground:
+      $value: "oklch(0.45 0.02 250)"
+      $type: color
+      $description: "Secondary text, placeholders"
+    destructive:
+      $value: "oklch(0.55 0.20 25)"
+      $type: color
+      $description: "Error and destructive actions"
+    destructive-foreground:
+      $value: "oklch(0.98 0.01 25)"
+      $type: color
+      $description: "Text on destructive background"
+  typography:
+    heading:
+      $value: "Inter, system-ui, sans-serif"
+      $type: fontFamily
+    body:
+      $value: "Inter, system-ui, sans-serif"
+      $type: fontFamily
+
+assets:
+  - file: assets/logo-primary.svg
+    id: logo-primary
+    role: logo
+    variant: primary
+    description: "Primary logo for light backgrounds"
+
+  - file: assets/logo-monochrome.svg
+    id: logo-monochrome
+    role: logo
+    variant: monochrome
+    description: "Single-color version for limited color contexts"
+
+  - file: assets/icon-favicon.png
+    id: icon-favicon
+    role: favicon
+    description: "Browser favicon"

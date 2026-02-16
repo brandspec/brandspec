@@ -1,0 +1,425 @@
+# Full brandspec example
+# Demonstrates all available features
+
+meta:
+  name: "Acme Corp"
+  version: "1.0.0"
+  updated: "2025-01-25"
+  description: "Modern productivity tools for teams"
+  url: "https://acme.example.com"
+
+core:
+  essence: "Making the impossible satisfyingly simple"
+  tagline: "Simplicity, delivered"
+  mission: "To empower teams with tools that eliminate complexity"
+  vision: "A world where technology adapts to humans, not the other way around"
+  values:
+    - "Simplicity over features"
+    - "Users over metrics"
+    - "Transparency over polish"
+  personality:
+    - innovative
+    - approachable
+    - confident
+    - playful
+  voice:
+    tone:
+      - friendly
+      - clear
+      - encouraging
+      - witty
+    principles:
+      - "Use active voice"
+      - "Keep sentences short"
+      - "Avoid jargon"
+      - "Celebrate user wins"
+    examples:
+      greeting: "Hey there! Ready to get things done?"
+      error: "Oops, something went sideways. Let's fix it together."
+      success: "Nailed it! Your changes are live."
+
+tokens:
+  # W3C Design Tokens Community Group compliant
+  # https://tr.designtokens.org/format/
+  
+  colors:
+    # Core colors with -foreground and -muted variants
+    primary:
+      $value: "oklch(0.65 0.18 250)"
+      $type: color
+      $description: "Main brand color - trust and innovation"
+      $extensions:
+        compat:
+          hsl: "hsl(220 70% 50%)"
+          hex: "#3b82f6"
+        dark: "oklch(0.70 0.16 250)"
+    primary-foreground:
+      $value: "oklch(0.98 0.01 250)"
+      $type: color
+      $description: "Text on primary background"
+      $extensions:
+        dark: "oklch(0.15 0.02 250)"
+    primary-muted:
+      $value: "oklch(0.90 0.04 250)"
+      $type: color
+      $description: "Subtle primary background"
+    secondary:
+      $value: "oklch(0.75 0.12 150)"
+      $type: color
+      $description: "Accent color - growth and energy"
+      $extensions:
+        compat:
+          hsl: "hsl(140 45% 55%)"
+          hex: "#4ade80"
+        dark: "oklch(0.70 0.14 150)"
+    secondary-foreground:
+      $value: "oklch(0.20 0.02 150)"
+      $type: color
+      $description: "Text on secondary background"
+      $extensions:
+        dark: "oklch(0.95 0.01 150)"
+    secondary-muted:
+      $value: "oklch(0.92 0.03 150)"
+      $type: color
+      $description: "Subtle secondary background"
+
+    # Surface colors
+    background:
+      $value: "oklch(0.99 0.005 250)"
+      $type: color
+      $description: "Page background"
+      $extensions:
+        dark: "oklch(0.15 0.02 250)"
+    foreground:
+      $value: "oklch(0.15 0.02 250)"
+      $type: color
+      $description: "Default text color"
+      $extensions:
+        dark: "oklch(0.95 0.01 250)"
+    muted:
+      $value: "oklch(0.95 0.01 250)"
+      $type: color
+      $description: "Subtle backgrounds"
+      $extensions:
+        dark: "oklch(0.25 0.02 250)"
+    muted-foreground:
+      $value: "oklch(0.45 0.02 250)"
+      $type: color
+      $description: "Secondary text, placeholders"
+      $extensions:
+        dark: "oklch(0.65 0.02 250)"
+
+    # Status colors
+    destructive:
+      $value: "oklch(0.55 0.20 25)"
+      $type: color
+      $description: "Error and destructive actions"
+    destructive-foreground:
+      $value: "oklch(0.98 0.01 25)"
+      $type: color
+    success:
+      $value: "oklch(0.65 0.18 145)"
+      $type: color
+      $description: "Positive actions and confirmations"
+    success-foreground:
+      $value: "oklch(0.98 0.01 145)"
+      $type: color
+    success-muted:
+      $value: "oklch(0.92 0.05 145)"
+      $type: color
+      $description: "Subtle success background"
+    warning:
+      $value: "oklch(0.75 0.15 85)"
+      $type: color
+      $description: "Caution states and non-blocking alerts"
+    warning-foreground:
+      $value: "oklch(0.25 0.05 85)"
+      $type: color
+    warning-muted:
+      $value: "oklch(0.92 0.05 85)"
+      $type: color
+      $description: "Subtle warning background"
+    info:
+      $value: "oklch(0.65 0.12 230)"
+      $type: color
+      $description: "Informational messages and tips"
+    info-foreground:
+      $value: "oklch(0.98 0.01 230)"
+      $type: color
+    info-muted:
+      $value: "oklch(0.92 0.04 230)"
+      $type: color
+      $description: "Subtle info background"
+
+  typography:
+    heading:
+      $value: "Inter, system-ui, sans-serif"
+      $type: fontFamily
+      $description: "Headlines and titles"
+    body:
+      $value: "Inter, system-ui, sans-serif"
+      $type: fontFamily
+      $description: "Body text"
+    mono:
+      $value: "JetBrains Mono, monospace"
+      $type: fontFamily
+      $description: "Code and technical content"
+
+  spacing:
+    xs:
+      $value: "0.25rem"
+      $type: dimension
+    sm:
+      $value: "0.5rem"
+      $type: dimension
+    md:
+      $value: "1rem"
+      $type: dimension
+    lg:
+      $value: "1.5rem"
+      $type: dimension
+    xl:
+      $value: "2rem"
+      $type: dimension
+
+  radius:
+    sm:
+      $value: "0.25rem"
+      $type: dimension
+    md:
+      $value: "0.5rem"
+      $type: dimension
+    lg:
+      $value: "1rem"
+      $type: dimension
+
+assets:
+  # Logos
+  - file: assets/logo-primary.svg
+    id: logo-primary
+    role: logo
+    variant: primary
+    context: light-bg
+    description: "Primary logo for light backgrounds"
+    formats:
+      - path: assets/logo-primary.png
+        width: 800
+        height: 200
+      - path: assets/logo-primary@2x.png
+        width: 1600
+        height: 400
+    tags: [header, official, print]
+
+  - file: assets/logo-inverse.svg
+    id: logo-inverse
+    role: logo
+    variant: inverse
+    context: dark-bg
+    description: "White logo for dark backgrounds"
+
+  - file: assets/logo-monochrome.svg
+    id: logo-monochrome
+    role: logo
+    variant: monochrome
+    description: "Single-color version"
+
+  # Symbol
+  - file: assets/symbol.svg
+    id: symbol
+    role: symbol
+    variant: primary
+    description: "Standalone symbol mark"
+
+  # Icons
+  - file: assets/icon-favicon.ico
+    id: icon-favicon
+    role: favicon
+    description: "Browser favicon"
+    formats:
+      - path: assets/icon-favicon-16.png
+        width: 16
+        height: 16
+      - path: assets/icon-favicon-32.png
+        width: 32
+        height: 32
+
+  - file: assets/icon-app.png
+    id: icon-app
+    role: icon
+    description: "App icon"
+    formats:
+      - path: assets/icon-app-180.png
+        width: 180
+        height: 180
+      - path: assets/icon-app-512.png
+        width: 512
+        height: 512
+
+  # Social
+  - file: assets/og-image.png
+    id: og-image
+    role: graphic
+    context: social
+    description: "Open Graph image for social sharing"
+    tags: [twitter, facebook, linkedin]
+
+guidelines:
+  logo-usage:
+    content: |
+      ## Logo Usage
+
+      ### Clear Space
+      Maintain clear space around the logo equal to the height of the letter 'A' in the wordmark.
+
+      ### Minimum Size
+      - Digital: 120px width minimum
+      - Print: 25mm width minimum
+
+      ### Don'ts
+      - Don't rotate the logo
+      - Don't change the colors
+      - Don't add effects (shadows, gradients)
+      - Don't stretch or distort
+
+    # Structured rules for AI-driven brand linting
+    rules:
+      - id: logo-min-size
+        description: "Logo must meet minimum size requirements"
+        severity: error
+        applies_to: logo
+        criteria:
+          - "Digital usage: minimum 120px width"
+          - "Print usage: minimum 25mm width"
+      - id: logo-clear-space
+        description: "Maintain clear space around the logo"
+        severity: warning
+        applies_to: logo
+        criteria:
+          - "Clear space equal to the height of the letter 'A' in the wordmark on all sides"
+      - id: logo-no-rotation
+        description: "Logo must not be rotated"
+        severity: error
+        applies_to: logo
+        criteria:
+          - "Logo rotation must be 0 degrees"
+      - id: logo-no-effects
+        description: "Logo must not have added effects"
+        severity: error
+        applies_to: logo
+        criteria:
+          - "No drop shadows"
+          - "No gradients applied to the logo"
+          - "No outer glow or emboss effects"
+      - id: logo-no-distortion
+        description: "Logo must not be stretched or distorted"
+        severity: error
+        applies_to: logo
+        criteria:
+          - "Aspect ratio must match the original"
+
+  color-usage:
+    content: |
+      ## Color Usage
+
+      ### Primary Color
+      Use for primary actions, links, and key UI elements.
+      Ensure sufficient contrast (WCAG AA minimum).
+
+      ### Secondary Color
+      Use sparingly for accents and highlights.
+      Avoid using for large areas.
+
+    rules:
+      - id: color-contrast-aa
+        description: "Text over brand colors must meet WCAG AA contrast ratio"
+        severity: error
+        applies_to: color
+        criteria:
+          - "Normal text: contrast ratio >= 4.5:1"
+          - "Large text (>=18pt or >=14pt bold): contrast ratio >= 3:1"
+      - id: color-secondary-area
+        description: "Secondary color should not be used for large background areas"
+        severity: warning
+        applies_to: color
+        criteria:
+          - "Secondary color background should not exceed 30% of viewport area"
+
+  voice-examples:
+    content: |
+      ## Voice & Tone Examples
+
+      ### Buttons
+      - "Get started"
+      - "Save changes"
+      - Avoid "Submit" (too formal)
+      - Avoid "Click here" (not descriptive)
+
+      ### Error Messages
+      - "Couldn't save. Check your connection and try again."
+      - Avoid "Error 500: Internal server error"
+
+    rules:
+      - id: voice-active
+        description: "Copy should use active voice"
+        severity: warning
+        applies_to: voice
+        criteria:
+          - "Sentences use active voice rather than passive"
+      - id: voice-no-jargon
+        description: "Copy must avoid technical jargon"
+        severity: warning
+        applies_to: voice
+        criteria:
+          - "No HTTP status codes in user-facing messages"
+          - "No internal system terminology in user-facing copy"
+      - id: voice-button-descriptive
+        description: "Button labels must be descriptive of the action"
+        severity: error
+        applies_to: voice
+        criteria:
+          - "Button text describes the action (e.g. 'Save changes' not 'Submit')"
+          - "No generic labels like 'Click here' or 'OK'"
+
+extensions:
+  # Custom fields for specific needs
+  social:
+    twitter: "@acmecorp"
+    linkedin: "company/acmecorp"
+    github: "acmecorp"
+
+  legal:
+    trademark: "Acme Corp™"
+    copyright: "© 2025 Acme Corporation"
+
+  # Brand-specific color scale (beyond standard tokens)
+  brand-scale:
+    primary-50:
+      $value: "oklch(0.97 0.02 250)"
+      $type: color
+    primary-100:
+      $value: "oklch(0.93 0.04 250)"
+      $type: color
+    primary-200:
+      $value: "oklch(0.87 0.08 250)"
+      $type: color
+    primary-300:
+      $value: "oklch(0.80 0.12 250)"
+      $type: color
+    primary-400:
+      $value: "oklch(0.72 0.15 250)"
+      $type: color
+    primary-500:
+      $value: "oklch(0.65 0.18 250)"
+      $type: color
+    primary-600:
+      $value: "oklch(0.55 0.18 250)"
+      $type: color
+    primary-700:
+      $value: "oklch(0.45 0.16 250)"
+      $type: color
+    primary-800:
+      $value: "oklch(0.35 0.12 250)"
+      $type: color
+    primary-900:
+      $value: "oklch(0.25 0.08 250)"
+      $type: color

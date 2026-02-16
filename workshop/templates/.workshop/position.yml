@@ -1,0 +1,9 @@
+# Workshop position - tracks current progress
+# Updated by AI after each step completion
+
+phase: 1
+step: "product"
+mode: "facilitation"
+revision: 1              # +1 when backtracking
+updated: ""
+completed_at: null        # ISO date when workshop finishes
