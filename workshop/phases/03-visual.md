@@ -354,55 +354,211 @@ tokens:
 
 ---
 
-### 3.4 Logo
+### 3.4 Logo System
+
+**Note:** This step produces a **logo system brief** — the pattern, required assets, and usage guidance. Actual logo creation may be done externally or as a separate exercise.
+
+#### 3.4.1 Logo System Patterns
+
+Brands use one of four fundamental logo system patterns. Each pattern determines what assets are needed, how they relate, and how they're laid out in contexts like portal hero screens, navigation, and social.
+
+**Pattern A: Wordmark**
+
+```
+┌─────────────────────────────┐
+│        B R A N D            │
+└─────────────────────────────┘
+```
+
+Typography itself is the identity. May include custom letterforms or a stylized lettermark (initials).
+
+| Attribute | Detail |
+|-----------|--------|
+| Examples | Google, FedEx, Coca-Cola, Supreme, IBM, HBO |
+| Best for | Strong names, text-centric services, long names (as lettermark) |
+| Required assets | `wordmark` (+ variants) |
+| Optional assets | `lettermark` (initials for compact use) |
+| Hero layout | Wordmark centered or left-aligned |
+
+**Pattern B: Symbol + Wordmark (separated)**
+
+```
+┌─────────────────────────────┐
+│     ◆  B R A N D            │  lockup-horizontal
+└─────────────────────────────┘
+
+┌─────────────────────────────┐
+│           ◆                 │
+│        B R A N D            │  lockup-vertical
+└─────────────────────────────┘
+```
+
+Symbol and wordmark are **independent assets** that can be used separately or combined in lockups. As brand recognition grows, the symbol can stand alone.
+
+| Attribute | Detail |
+|-----------|--------|
+| Examples | Apple, Nike, Spotify, Slack, Airbnb, Pepsi |
+| Best for | Apps needing an icon, global brands, long-term symbol recognition |
+| Required assets | `symbol`, `wordmark` |
+| Optional assets | `lockup-horizontal`, `lockup-vertical` |
+| Hero layout | Symbol + wordmark side by side, or symbol above wordmark |
+
+**Pattern C: Combination Mark (integrated)**
+
+```
+┌─────────────────────────────┐
+│       ◆ BRAND               │  one inseparable unit
+└─────────────────────────────┘
+```
+
+Symbol and text form a **single inseparable unit**. They are always used together.
+
+| Attribute | Detail |
+|-----------|--------|
+| Examples | Adidas, Burger King, Lacoste |
+| Best for | Early-stage brands, consistency priority, simpler asset management |
+| Required assets | `logo` (integrated unit) |
+| Optional assets | `symbol` (extracted for small sizes like favicon) |
+| Hero layout | Logo centered |
+
+**Pattern D: Emblem**
+
+```
+┌─────────────────────────────┐
+│         ╔═══╗               │
+│         ║ B ║               │
+│         ║ R ║               │
+│         ╚═══╝               │
+└─────────────────────────────┘
+```
+
+Text is **enclosed within** or **integral to** a shape. Conveys tradition, authority, and craftsmanship.
+
+| Attribute | Detail |
+|-----------|--------|
+| Examples | Starbucks, BMW, NFL, university crests |
+| Best for | Heritage, authority, luxury, institutional brands |
+| Required assets | `logo` (full emblem) |
+| Optional assets | `logo-simplified` (reduced detail for small sizes) |
+| Hero layout | Logo centered, typically larger |
+
+#### 3.4.2 Pattern Summary
+
+```yaml
+# Reference for AI facilitation and portal layout
+logo_system_patterns:
+  wordmark:
+    required: [wordmark]
+    optional: [lettermark]
+
+  symbol_wordmark:
+    required: [symbol, wordmark]
+    optional: [lockup-horizontal, lockup-vertical]
+
+  combined:
+    required: [logo]
+    optional: [symbol]
+
+  emblem:
+    required: [logo]
+    optional: [logo-simplified]
+```
+
+#### 3.4.3 Recommended Variants
+
+Regardless of pattern, every brand should consider these variants:
+
+| Variant | Purpose | Priority |
+|---------|---------|----------|
+| `primary` | Standard use on light backgrounds | Required |
+| `inverse` | Use on dark backgrounds | High |
+| `monochrome` | Single-color constraints (fax, engraving, sponsorship) | High |
+| `simplified` | Small sizes (favicon, 16–32px) | Medium |
+| `stacked` / `horizontal` | Layout-specific lockups (Pattern B only) | Pattern B: Required |
+
+#### 3.4.4 Facilitation Approach
+
+Present patterns based on brand personality and practical needs established in earlier phases:
+
+```
+Your brand identity so far:
+- Name: [from Phase 2]
+- Personality: [from Phase 2]
+- Mood: [from 3.1]
+
+Logo system patterns:
+
+a) Wordmark
+   Your name as the identity. Clean, typographic.
+   Simplest to manage. Works well if the name is distinctive.
+
+b) Symbol + Wordmark
+   A mark that can stand on its own + your name.
+   Most flexible. Best if you need an app icon or
+   want long-term symbol recognition.
+
+c) Combination Mark
+   An integrated logo — symbol and name as one unit.
+   Consistent, easier to manage than (b).
+
+d) Emblem
+   Name enclosed in a shape. Heritage, authority feel.
+   Powerful but can be challenging at small sizes.
+
+Which pattern fits your brand?
+```
+
+After pattern selection, confirm the asset checklist:
+
+```
+You chose: Symbol + Wordmark
+
+Assets you'll need:
+  ✓ symbol (primary, inverse, monochrome)
+  ✓ wordmark (primary, inverse, monochrome)
+  ○ lockup-horizontal (recommended)
+  ○ lockup-vertical (recommended)
+
+Plus for digital use:
+  ✓ favicon derived from symbol
+  ○ app icon (if applicable)
+  ○ OG image for social sharing
+
+Shall I record this, or adjust anything?
+```
+
+#### 3.4.5 Concept & Brief
+
+After selecting the pattern, explore the visual concept:
 
 **Questions to answer:**
 
-- What style of logo? (wordmark, symbol, combination)
 - What visual metaphor or concept?
-- What are the constraints?
+- What are the practical constraints?
+- How should it feel at different sizes?
 
-**Note:** This step produces a **logo brief**, not the actual logo. Logo creation may be done externally or as a separate exercise.
-
-**Logo types:**
-
-| Type | Example | Best for |
-|------|---------|----------|
-| Wordmark | Google, Coca-Cola | Strong names |
-| Symbol | Apple, Nike | Global brands |
-| Combination | Adidas, Slack | Flexibility |
-| Lettermark | IBM, HBO | Long names |
-| Emblem | Starbucks, NFL | Heritage feel |
-
-**Facilitation approach:**
-
-```
-Logo direction options:
-
-a) Wordmark only
-   Clean typography, maybe custom letterform
-   
-b) Symbol + Wordmark
-   Abstract mark that works alone
-   
-c) Lettermark
-   First letter or initials, stylized
-
-Given your name and personality, which approach?
-```
-
-**Output: Logo Brief**
+**Output: Logo System Brief**
 
 ```yaml
-# Example
+# Example — recorded in decisions.yml
 logo:
-  type: "symbol + wordmark"
-  concept: "Abstract prism/facet shape suggesting clarity and multiple perspectives"
+  pattern: "symbol_wordmark"
+  concept: "Abstract prism shape suggesting clarity and multiple perspectives"
+  required_assets:
+    - role: symbol
+      variants: [primary, inverse, monochrome]
+    - role: wordmark
+      variants: [primary, inverse, monochrome]
+  optional_assets:
+    - role: lockup-horizontal
+    - role: lockup-vertical
+    - role: favicon
+      note: "Derived from symbol"
   requirements:
-    - "Works at small sizes (favicon)"
-    - "Single color version needed"
+    - "Symbol works at 16px (favicon)"
+    - "Single color version for sponsorship contexts"
     - "Should feel modern but not trendy"
-  notes: "Consider how it animates for loading states"
+  notes: "Consider animation potential for loading states"
 ```
 
 ---
@@ -412,7 +568,10 @@ logo:
 - [ ] Visual mood/direction defined
 - [ ] Color palette complete (primary, secondary, neutrals)
 - [ ] Typography selected (heading, body, mono)
-- [ ] Logo brief documented
+- [ ] Logo system pattern selected (wordmark / symbol_wordmark / combined / emblem)
+- [ ] Required and optional assets identified
+- [ ] Recommended variants confirmed (primary, inverse, monochrome)
+- [ ] Logo concept/brief documented
 - [ ] All recorded in `decisions.yml`
 
 ## Transition to Phase 4
