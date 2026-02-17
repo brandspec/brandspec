@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>brandspec OGP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: oklch(0.16 0.01 60);
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* Top edge — the blade */
+  body::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.55 0.10 68 / 0.3) 20%,
+      oklch(0.65 0.14 70 / 0.8) 50%,
+      oklch(0.55 0.10 68 / 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    height: 628px; /* 630 - 2px blade */
+    padding: 0 80px;
+    gap: 64px;
+  }
+
+  /* ── Left side: brand text ── */
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .brand-name {
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    color: oklch(0.92 0.005 80);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .tagline {
+    font-size: 22px;
+    font-weight: 400;
+    color: oklch(0.55 0.01 70);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .sub {
+    font-size: 14px;
+    font-weight: 400;
+    color: oklch(0.45 0.01 75);
+    line-height: 1.5;
+  }
+
+  .site-url {
+    font-size: 15px;
+    font-weight: 400;
+    color: oklch(0.70 0.12 70);
+    margin-top: 36px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Right side: code block ── */
+  .right {
+    flex: 0 0 480px;
+    display: flex;
+    align-items: center;
+  }
+
+  .code-block {
+    background: oklch(0.12 0.01 55);
+    border-radius: 12px;
+    padding: 32px 36px;
+    border-left: 2px solid oklch(0.55 0.12 68 / 0.5);
+    width: 100%;
+  }
+
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.75;
+    color: oklch(0.75 0.008 80);
+    white-space: pre;
+  }
+
+  .code-block .c  { color: oklch(0.45 0.01 75); }
+  .code-block .k  { color: oklch(0.88 0.01 80); }
+  .code-block .v  { color: oklch(0.72 0.10 70); }
+  .code-block .s  { color: oklch(0.78 0.08 75); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="left">
+    <div class="brand-name">brandspec</div>
+    <div class="tagline">Define once. Brand everywhere.</div>
+    <div class="sub">Forge your brand with any AI. One open format out.</div>
+    <div class="site-url">brandspec.dev</div>
+  </div>
+  <div class="right">
+    <div class="code-block">
+<pre><span class="c"># brandspec.yaml</span>
+<span class="k">meta:</span>
+  <span class="k">name:</span> <span class="s">"Acme Corp"</span>
+
+<span class="k">core:</span>
+  <span class="k">essence:</span> <span class="s">"Making the impossible simple"</span>
+
+<span class="k">tokens:</span>
+  <span class="k">colors:</span>
+    <span class="k">primary:</span>
+      <span class="k">$value:</span> <span class="s">"oklch(0.7 0.15 250)"</span>
+      <span class="k">$type:</span> <span class="v">color</span></pre>
+    </div>
+  </div>
+</div>
+</body>
+</html>

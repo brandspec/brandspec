@@ -30,6 +30,8 @@ Commands:
   workshop status         Show current workshop position
   workshop resume         Reconstruct state from decisions.yml
 
+  consult [path]          Print brand context for AI consultation
+
 Options:
   --help, -h       Show this help
   --version, -v    Show version
@@ -331,6 +333,191 @@ Commands:
   }
 }
 
+// ── Consult command ──
+
+function cmdConsult(args: string[]) {
+  const filePath = args.find((a) => !a.startsWith("-"));
+  const target = resolve(filePath ?? "brandspec.yaml");
+
+  if (!existsSync(target)) {
+    console.error(`File not found: ${target}`);
+    process.exit(1);
+  }
+
+  const content = readFileSync(target, "utf-8");
+  const parseResult = parse(content);
+  if (!parseResult.success) {
+    console.error("Parse errors:");
+    for (const err of parseResult.errors) {
+      console.error(`  - ${err}`);
+    }
+    process.exit(1);
+  }
+
+  const data = parseResult.data!;
+  const lines: string[] = [];
+
+  // Header
+  lines.push(`# You are a brand consultant for ${data.meta.name}.`);
+  lines.push("");
+
+  // Role
+  lines.push("## Your Role");
+  lines.push(
+    "You evaluate business decisions, creative work, and communications " +
+      "against this brand's identity. When asked about any business decision, " +
+      "advertisement, campaign, copy, or design — assess whether it aligns " +
+      "with the brand. Flag inconsistencies and suggest alternatives.",
+  );
+  lines.push("");
+
+  // Brand Identity
+  lines.push("## Brand Identity");
+  lines.push(`- Name: ${data.meta.name}`);
+  if (data.meta.description) lines.push(`- Description: ${data.meta.description}`);
+  if (data.core?.essence) lines.push(`- Essence: ${data.core.essence}`);
+  if (data.core?.tagline) lines.push(`- Tagline: ${data.core.tagline}`);
+  if (data.core?.mission) lines.push(`- Mission: ${data.core.mission}`);
+  if (data.core?.vision) lines.push(`- Vision: ${data.core.vision}`);
+  if (data.core?.values?.length) lines.push(`- Values: ${data.core.values.join(", ")}`);
+  if (data.core?.personality?.length)
+    lines.push(`- Personality: ${data.core.personality.join(", ")}`);
+  lines.push("");
+
+  // Voice & Tone
+  if (data.core?.voice) {
+    const v = data.core.voice;
+    lines.push("## Voice & Tone");
+    if (v.tone?.length) lines.push(`Tone: ${v.tone.join(", ")}`);
+    if (v.principles?.length) {
+      lines.push("Principles:");
+      for (const p of v.principles) lines.push(`- ${p}`);
+    }
+    lines.push("");
+  }
+
+  // Do / Don't from extensions.brand-voice.boundaries
+  const brandVoice = data.extensions?.["brand-voice"] as
+    | { metaphor?: string; boundaries?: { do?: string[]; dont?: string[] } }
+    | undefined;
+  if (brandVoice?.boundaries) {
+    const b = brandVoice.boundaries;
+    lines.push("## Do / Don't");
+    if (brandVoice.metaphor) lines.push(`Voice metaphor: ${brandVoice.metaphor}`);
+    if (b.do?.length) {
+      lines.push("Do:");
+      for (const d of b.do) lines.push(`- ${d}`);
+    }
+    if (b.dont?.length) {
+      lines.push("Don't:");
+      for (const d of b.dont) lines.push(`- ${d}`);
+    }
+    lines.push("");
+  }
+
+  // Visual Identity
+  const hasColors = data.tokens?.colors && Object.keys(data.tokens.colors).length > 0;
+  const hasTypography = data.tokens?.typography && Object.keys(data.tokens.typography).length > 0;
+  const hasAssets = data.assets && data.assets.length > 0;
+
+  if (hasColors || hasTypography || hasAssets) {
+    lines.push("## Visual Identity");
+
+    if (hasColors) {
+      lines.push("Colors:");
+      for (const [name, token] of Object.entries(data.tokens!.colors!)) {
+        if (token.$description) {
+          const hex = (token.$extensions as Record<string, Record<string, string>> | undefined)
+            ?.compat?.hex;
+          lines.push(`- ${name}: ${token.$description}${hex ? ` (${hex})` : ""}`);
+        }
+      }
+    }
+
+    if (hasTypography) {
+      lines.push("Typography:");
+      for (const [name, token] of Object.entries(data.tokens!.typography!)) {
+        const desc = token.$description ? ` — ${token.$description}` : "";
+        lines.push(`- ${name}: ${token.$value}${desc}`);
+      }
+    }
+
+    if (hasAssets) {
+      // Detect logo system pattern from asset roles
+      const roles = new Set(data.assets!.map((a) => a.role).filter(Boolean));
+      const parts: string[] = [];
+      if (roles.has("symbol")) parts.push("symbol");
+      if (roles.has("wordmark")) parts.push("wordmark");
+      if (roles.has("lockup-horizontal") || roles.has("lockup-vertical") || roles.has("lockup"))
+        parts.push("lockup");
+      if (roles.has("favicon")) parts.push("favicon");
+
+      if (parts.length) {
+        lines.push(`Logo system: ${parts.join(" + ")}`);
+      }
+
+      // List assets with descriptions
+      for (const asset of data.assets!) {
+        if (asset.description) {
+          lines.push(`- ${asset.id ?? asset.file}: ${asset.description}`);
+        }
+      }
+    }
+
+    lines.push("");
+  }
+
+  // Guidelines
+  if (data.guidelines && Object.keys(data.guidelines).length > 0) {
+    lines.push("## Guidelines");
+    for (const [, section] of Object.entries(data.guidelines)) {
+      if (section.content) {
+        lines.push(section.content.trim());
+        lines.push("");
+      }
+      if (section.rules?.length) {
+        for (const rule of section.rules) {
+          lines.push(`- [${rule.severity}] ${rule.description}`);
+        }
+        lines.push("");
+      }
+    }
+  }
+
+  // Additional Context from extensions (excluding brand-voice already handled)
+  if (data.extensions) {
+    const extKeys = Object.keys(data.extensions).filter((k) => k !== "brand-voice");
+    if (extKeys.length > 0) {
+      lines.push("## Additional Context");
+      for (const key of extKeys) {
+        const ext = data.extensions[key];
+        if (ext && typeof ext === "object" && !Array.isArray(ext)) {
+          // Only include objects that have at least one simple string value
+          const record = ext as Record<string, unknown>;
+          const stringEntries = Object.entries(record).filter(
+            ([, v]) => typeof v === "string",
+          );
+          if (stringEntries.length > 0) {
+            lines.push(`### ${key}`);
+            for (const [k, v] of stringEntries) {
+              lines.push(`- ${k}: ${v}`);
+            }
+            lines.push("");
+          }
+        }
+      }
+    }
+  }
+
+  // Usage hint
+  lines.push("---");
+  lines.push(
+    "Use this prompt as a system message for any AI model to get brand-aligned consultation.",
+  );
+
+  console.log(lines.join("\n"));
+}
+
 // ── Main ──
 
 function main() {
@@ -359,6 +546,9 @@ function main() {
       break;
     case "workshop":
       cmdWorkshop(args.slice(1));
+      break;
+    case "consult":
+      cmdConsult(args.slice(1));
       break;
     default:
       console.error(`Unknown command: ${command}`);

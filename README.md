@@ -47,6 +47,22 @@ Discovery → Concept → Visual Identity → Documentation
 
 The AI guides you through brand essence, personality, colors, typography. All decisions are recorded in `.workshop/decisions.yml` — resumable, auditable, model-independent.
 
+## Consult — Brand-aligned AI in one command
+
+Already have a `brandspec.yaml`? Turn any AI into a brand consultant:
+
+```bash
+npx brandspec consult
+```
+
+This prints a system prompt to stdout — paste it into any LLM (Claude, GPT, Gemini, etc.) and it will evaluate your copy, campaigns, ads, and design decisions against your brand identity. Pipe it directly:
+
+```bash
+npx brandspec consult | pbcopy   # macOS — copy to clipboard
+```
+
+The prompt includes your brand's personality, voice principles, do/don't boundaries, color palette, typography, logo system, and guidelines — everything the AI needs to stay on-brand.
+
 ## CLI
 
 ```
@@ -62,6 +78,8 @@ Commands:
   workshop start [name]   Scaffold a new brand project
   workshop status         Show current workshop position
   workshop resume         Print state for AI session resumption
+
+  consult [path]          Print brand context for AI consultation
 ```
 
 ## Format
@@ -96,6 +114,18 @@ assets:
   - file: assets/logo-primary.svg
     id: logo-primary
     role: logo
+    variant: primary
+    description: "Primary logo for light backgrounds"
+  - file: assets/logo-inverse.svg
+    id: logo-inverse
+    role: logo
+    variant: inverse
+  - file: assets/symbol.svg
+    id: symbol
+    role: symbol
+  - file: assets/icon-favicon.ico
+    id: icon-favicon
+    role: favicon
 
 guidelines:
   logo-usage:
@@ -105,6 +135,24 @@ guidelines:
 ```
 
 Only `meta.name` is required. Everything else is opt-in.
+
+### Logo System Patterns
+
+The `assets` section uses `role` + `variant` to describe a logo system. Common roles:
+
+| Role | Description |
+|------|-------------|
+| `logo` | Main logo (may include wordmark) |
+| `symbol` | Icon/symbol mark (no text) |
+| `wordmark` | Text-only logo |
+| `icon` | Small icon (app icon, etc.) |
+| `favicon` | Browser favicon |
+
+Variants: `primary`, `inverse`, `monochrome`, `simplified`, etc. Custom roles are also allowed.
+
+File naming convention: `{role}-{variant}.{ext}` (e.g., `logo-primary.svg`, `logo-inverse.svg`, `icon-favicon.ico`).
+
+Full asset spec: [`docs/assets.md`](docs/assets.md)
 
 Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`examples/`](examples/)
 

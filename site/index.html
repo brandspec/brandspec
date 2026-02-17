@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>brandspec — Define once. Brand everywhere.</title>
+<meta name="description" content="An open specification for defining Brand Identity as code. One YAML file becomes the source of truth for your entire brand.">
+
+<!-- OGP -->
+<meta property="og:title" content="brandspec — Define once. Brand everywhere.">
+<meta property="og:description" content="An open specification for defining Brand Identity as code. Forge it. Keep the edge. Cut through everything.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://brandspec.dev">
+<meta property="og:site_name" content="brandspec">
+<meta property="og:image" content="https://brandspec.dev/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="brandspec — Define once. Brand everywhere.">
+<meta name="twitter:description" content="An open specification for defining Brand Identity as code.">
+<meta name="twitter:image" content="https://brandspec.dev/ogp.png">
+
+<!-- Favicon (inline SVG data URI — Inter 900 "b" in titanium-900) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23302a24'/><text x='50%25' y='74%25' text-anchor='middle' font-family='Inter,system-ui,sans-serif' font-size='22' font-weight='900' fill='%23c4a060'>b</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --titanium-50:  oklch(0.97 0.005 80);
+    --titanium-100: oklch(0.93 0.008 80);
+    --titanium-200: oklch(0.87 0.010 75);
+    --titanium-300: oklch(0.78 0.012 72);
+    --titanium-400: oklch(0.65 0.015 70);
+    --titanium-600: oklch(0.45 0.015 65);
+    --titanium-900: oklch(0.22 0.015 60);
+
+    --ember:        oklch(0.65 0.10 70);
+    --ember-subtle: oklch(0.80 0.05 75);
+    --ember-strong: oklch(0.55 0.12 65);
+
+    --bg:           var(--titanium-50);
+    --bg-card:      white;
+    --text:         var(--titanium-600);
+    --text-heading: var(--titanium-900);
+    --text-sub:     var(--titanium-400);
+    --border:       var(--titanium-200);
+    --accent:       var(--ember);
+  }
+
+  /* ── Dark mode ── */
+  [data-theme="dark"] {
+    --bg:           oklch(0.16 0.01 60);
+    --bg-card:      oklch(0.20 0.012 65);
+    --text:         oklch(0.70 0.01 75);
+    --text-heading: oklch(0.92 0.005 80);
+    --text-sub:     oklch(0.55 0.01 70);
+    --border:       oklch(0.28 0.015 65);
+    --accent:       oklch(0.70 0.12 70);
+    --ember-strong: oklch(0.62 0.14 68);
+  }
+
+  [data-theme="dark"] .code-block {
+    background: oklch(0.12 0.01 55);
+  }
+
+  [data-theme="dark"] .nav-links .btn-nav {
+    background: var(--accent);
+    color: oklch(0.12 0.01 55);
+  }
+
+  [data-theme="dark"] .nav-links .btn-nav:hover {
+    background: var(--ember-strong);
+  }
+
+  [data-theme="dark"] .btn-primary {
+    background: var(--accent);
+    color: oklch(0.12 0.01 55);
+  }
+
+  [data-theme="dark"] .btn-primary:hover {
+    background: var(--ember-strong);
+  }
+
+  [data-theme="dark"] .how-number {
+    color: oklch(0.28 0.015 65);
+  }
+
+  [data-theme="dark"] .oss {
+    background: oklch(0.20 0.012 65);
+    border-color: var(--border);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* Detail 5: Top edge — the blade */
+  body::before {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.55 0.10 68 / 0.3) 20%,
+      oklch(0.65 0.14 70 / 0.8) 50%,
+      oklch(0.55 0.10 68 / 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* ── Scroll animations ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children */
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .reveal-stagger.visible > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+  .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; }
+  .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; }
+  .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; }
+
+  /* ── Theme toggle ── */
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle:hover { border-color: var(--text-sub); }
+
+  .theme-toggle svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: var(--text-sub);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.15s;
+  }
+
+  .theme-toggle:hover svg { stroke: var(--text-heading); }
+
+  .theme-toggle .icon-moon { display: block; }
+  .theme-toggle .icon-sun  { display: none; }
+
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+
+  /* ── Nav ── */
+  .nav {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-brand {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text-heading);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-sub);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .nav-links a:hover { color: var(--text-heading); }
+
+  .nav-links .btn-nav {
+    padding: 8px 20px;
+    background: var(--text-heading);
+    color: var(--titanium-50);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .nav-links .btn-nav:hover { background: var(--titanium-600); }
+
+  /* ── Hero ── */
+  .hero {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 100px 40px 80px;
+    text-align: center;
+  }
+
+  .hero-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 1.08;
+    color: var(--text-heading);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--ember-strong);
+  }
+
+  /* Detail 1 — Hero "Brand." emphasis variants (switch class on <em>) */
+
+  /* A: Gradient text — heated metal cooling from white-hot to ember */
+  [data-theme="dark"] .hero h1 em.glow-gradient {
+    background: linear-gradient(
+      135deg,
+      oklch(0.92 0.04 75) 0%,
+      oklch(0.70 0.14 70) 60%,
+      oklch(0.55 0.12 65) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* B: Underline ember — text stays clean, glowing rule underneath */
+  [data-theme="dark"] .hero h1 em.glow-underline {
+    text-decoration: none;
+    position: relative;
+  }
+
+  [data-theme="dark"] .hero h1 em.glow-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    height: 3px;
+    border-radius: 2px;
+    background: oklch(0.62 0.14 68 / 0.7);
+    box-shadow: 0 0 12px oklch(0.55 0.14 68 / 0.5), 0 0 32px oklch(0.50 0.12 65 / 0.2);
+  }
+
+  /* C: Breathing glow — forge inhales on hover */
+  [data-theme="dark"] .hero h1 em.glow-breathe {
+    text-shadow: 0 0 40px oklch(0.55 0.15 68 / 0.25), 0 0 80px oklch(0.50 0.12 65 / 0.15);
+    transition: text-shadow 0.6s ease;
+  }
+
+  [data-theme="dark"] .hero h1:hover em.glow-breathe {
+    text-shadow: 0 0 50px oklch(0.60 0.16 68 / 0.6), 0 0 100px oklch(0.55 0.14 65 / 0.3), 0 0 150px oklch(0.50 0.10 65 / 0.1);
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-sub);
+    max-width: 480px;
+    margin: 0 auto 44px;
+    line-height: 1.6;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    gap: 12px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--text-heading);
+    color: var(--titanium-50);
+  }
+  .btn-primary:hover { background: var(--titanium-600); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-heading);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--titanium-400); }
+
+  /* ── Section utility ── */
+  .section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 80px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  /* Detail 3: Section titles — letter-spacing breathes on hover */
+  .section-title {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    color: var(--text-heading);
+    margin-bottom: 16px;
+    transition: letter-spacing 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    cursor: default;
+  }
+
+  .section-title:hover {
+    letter-spacing: -0.02em;
+  }
+
+  .section-desc {
+    font-size: 18px;
+    color: var(--text-sub);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── Problem / Why ── */
+  .why {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+    text-align: center;
+  }
+
+  .why blockquote {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.35;
+    color: var(--text-heading);
+    margin-bottom: 24px;
+  }
+
+  .why p {
+    font-size: 16px;
+    color: var(--text-sub);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── Three pillars ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 100px;
+  }
+
+  /* Detail 4: Cards — border warms to ember on hover */
+  .pillar {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 28px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .pillar:hover {
+    border-color: oklch(0.55 0.08 70 / 0.4);
+  }
+
+  .pillar-icon {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .pillar h3 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-heading);
+    margin-bottom: 10px;
+  }
+
+  .pillar p {
+    font-size: 15px;
+    color: var(--text-sub);
+    line-height: 1.65;
+  }
+
+  /* ── Code ── */
+  .code-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  /* Detail 2: Code block — ember accent line on left edge */
+  .code-block {
+    background: var(--titanium-900);
+    border-radius: 12px;
+    padding: 32px 36px;
+    overflow-x: auto;
+    border-left: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  [data-theme="dark"] .code-block {
+    border-left-color: oklch(0.55 0.12 68 / 0.5);
+  }
+
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: oklch(0.75 0.008 80);
+  }
+
+  /* Code syntax — increased contrast */
+  .code-block .c  { color: oklch(0.45 0.01 75); }   /* comment — dim */
+  .code-block .k  { color: oklch(0.88 0.01 80); }   /* key — bright */
+  .code-block .v  { color: oklch(0.72 0.10 70); }   /* value — ember tint */
+  .code-block .s  { color: oklch(0.78 0.08 75); }   /* string — warm light */
+
+  /* ── Workshop phases ── */
+  .workshop-phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto 100px;
+  }
+
+  .workshop-phase {
+    padding: 0;
+  }
+
+  .workshop-phase-number {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .workshop-phase h3 {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-heading);
+    margin-bottom: 6px;
+  }
+
+  .workshop-phase p {
+    font-size: 13px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+
+  .workshop-byom {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  .byom-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: baseline;
+    transition: border-color 0.3s ease;
+  }
+
+  .byom-block:hover {
+    border-color: oklch(0.55 0.08 70 / 0.4);
+  }
+
+  .byom-marker {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .byom-block p {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .byom-block p strong {
+    color: var(--text-heading);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .workshop-phases { grid-template-columns: repeat(2, 1fr); }
+    .workshop-byom { padding: 0 24px 80px; }
+  }
+
+  /* ── How it works ── */
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 100px;
+  }
+
+  .how-step {
+    padding: 0;
+  }
+
+  .how-number {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    color: var(--titanium-200);
+    margin-bottom: 12px;
+  }
+
+  .how-step h3 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-heading);
+    margin-bottom: 8px;
+  }
+
+  .how-step p {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.65;
+  }
+
+  /* ── Audience ── */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto 100px;
+  }
+
+  .audience-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .audience-card:hover {
+    border-color: oklch(0.55 0.08 70 / 0.4);
+  }
+
+  .audience-role {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .audience-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 4px;
+  }
+
+  .audience-card p {
+    font-size: 14px;
+    color: var(--text-sub);
+    line-height: 1.6;
+  }
+
+  /* ── Why Now ── */
+  .why-now {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+
+  .why-now-item {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    align-items: baseline;
+  }
+
+  .why-now-marker {
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  .why-now-item p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .why-now-item p strong {
+    color: var(--text-heading);
+    font-weight: 600;
+  }
+
+  /* ── Open source ── */
+  .oss {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 80px 40px;
+    margin-bottom: 80px;
+  }
+
+  .oss-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .oss-inner h2 {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text-heading);
+    margin-bottom: 16px;
+  }
+
+  .oss-inner p {
+    font-size: 16px;
+    color: var(--text-sub);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .oss-links {
+    display: inline-flex;
+    gap: 12px;
+  }
+
+  /* ── CTA final ── */
+  .final-cta {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    color: var(--text-heading);
+    margin-bottom: 16px;
+  }
+
+  .final-cta p {
+    font-size: 16px;
+    color: var(--text-sub);
+    margin-bottom: 32px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: var(--text-heading);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--text-sub);
+    text-decoration: none;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 36px; }
+    .hero { padding: 60px 24px 60px; }
+    .section { padding: 0 24px; }
+    .pillars { grid-template-columns: 1fr; }
+    .how-grid { grid-template-columns: 1fr; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 28px; }
+    .nav { padding: 20px 24px; }
+    .nav-links { gap: 16px; }
+    .code-section { padding: 0 24px 80px; }
+    .why { padding: 0 24px 80px; }
+    .why-now { padding: 0 24px 80px; }
+    .oss { padding: 60px 24px; }
+    .final-cta { padding: 0 24px 80px; }
+  }
+
+  /* ── Reduced motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-stagger > * {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="https://brandspec.dev" class="nav-brand">brandspec</a>
+  <div class="nav-links">
+    <a href="https://github.com/numtet/brandspec/tree/main/schema">Spec</a>
+    <a href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai">Workshop</a>
+    <a href="https://github.com/numtet/brandspec/tree/main/docs">Docs</a>
+    <a href="https://github.com/numtet/brandspec#quick-start" class="btn-nav">Get started</a>
+    <button class="theme-toggle" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero reveal">
+  <div class="hero-label">Define once. Brand everywhere.</div>
+  <h1>The hardest thing<br>in the world? <em class="glow-breathe">Brand.</em></h1>
+  <p class="hero-sub">Forge it. Keep the edge. Cut through everything.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai">Start Workshop</a>
+    <a class="btn btn-secondary" href="https://github.com/numtet/brandspec#format">Read the spec</a>
+  </div>
+</section>
+
+<!-- Why -->
+<div class="section-divider"></div>
+<section class="why reveal">
+  <blockquote>Your brand guidelines are in a PDF no one opens.</blockquote>
+  <p>Colors drift across teams. Logos get stretched, cropped, recolored. A new hire picks the wrong font. A partner uses last year's palette. Every new channel is another place to get it wrong. brandspec exists to make that stop.</p>
+</section>
+
+<!-- Pillars -->
+<div class="section-divider"></div>
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">What's inside</div>
+    <div class="section-title">A spec, a forge, an ecosystem</div>
+  </div>
+  <div class="pillars reveal-stagger">
+    <div class="pillar">
+      <div class="pillar-icon">The format</div>
+      <h3>brandspec.yaml</h3>
+      <p>One file defines your entire brand. Personality, tokens, assets, guidelines — machine-readable, human-friendly. Built on JSON Schema and W3C Design Tokens.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">Forge it</div>
+      <h3>Workshop</h3>
+      <p>An open harness that turns any LLM into a brand facilitator. AI asks the right questions, you make the decisions, out comes a complete brandspec.yaml. Bring your own model.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">Build on it</div>
+      <h3>Ecosystem</h3>
+      <p>Turn any AI into your brand consultant with one command. Generate CSS, Tailwind v4, Figma tokens, Style Dictionary — all from one file. Or build your own tools on the open schema. <a href="https://brandspec.tools" style="color:var(--accent)">brandspec.tools</a> is one of them.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Code -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">Format</div>
+    <div class="section-title">Not a platform. A file.</div>
+    <p class="section-desc">One YAML file. Personality, tokens, assets, guidelines. Version it, diff it, own it. No vendor lock-in.</p>
+  </div>
+</div>
+<section class="code-section reveal">
+  <div class="code-block">
+<pre><span class="c"># brandspec.yaml</span>
+<span class="k">meta:</span>
+  <span class="k">name:</span> <span class="s">"Acme Corp"</span>
+
+<span class="k">core:</span>
+  <span class="k">essence:</span> <span class="s">"Making the impossible satisfyingly simple"</span>
+  <span class="k">personality:</span>
+    <span class="v">- innovative</span>
+    <span class="v">- approachable</span>
+
+<span class="k">tokens:</span>
+  <span class="k">colors:</span>
+    <span class="k">primary:</span>
+      <span class="k">$value:</span> <span class="s">"oklch(0.7 0.15 250)"</span>
+      <span class="k">$type:</span> <span class="v">color</span>
+
+<span class="k">guidelines:</span>
+  <span class="k">logo-usage:</span>
+    <span class="k">rules:</span>
+      <span class="v">- description:</span> <span class="s">"Minimum size 120px"</span>
+        <span class="v">severity:</span> <span class="s">error</span>
+
+<span class="k">assets:</span>
+  <span class="v">- file:</span> <span class="s">logo-primary.svg</span>
+    <span class="v">role:</span> <span class="s">logo</span>
+    <span class="v">variant:</span> <span class="s">primary</span>
+  <span class="v">- file:</span> <span class="s">logo-inverse.svg</span>
+    <span class="v">role:</span> <span class="s">logo</span>
+    <span class="v">variant:</span> <span class="s">inverse</span>
+  <span class="v">- file:</span> <span class="s">symbol.svg</span>
+    <span class="v">role:</span> <span class="s">symbol</span>
+  <span class="v">- file:</span> <span class="s">icon-favicon.ico</span>
+    <span class="v">role:</span> <span class="s">favicon</span></pre>
+  </div>
+</section>
+
+<!-- Workshop — Forge -->
+<div class="section-divider"></div>
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">Forge</div>
+    <div class="section-title">Your AI. Your brand.</div>
+    <p class="section-desc">Workshop is an open-source harness that turns any LLM into a brand strategist. Four phases. Structured decisions. One output format. Bring Claude, GPT, Gemini — whatever you have access to.</p>
+  </div>
+  <div class="workshop-phases reveal-stagger">
+    <div class="workshop-phase">
+      <div class="workshop-phase-number">01</div>
+      <h3>Discovery</h3>
+      <p>AI asks the hard questions about purpose, audience, and positioning.</p>
+    </div>
+    <div class="workshop-phase">
+      <div class="workshop-phase-number">02</div>
+      <h3>Concept</h3>
+      <p>Brand personality, voice, and narrative direction — shaped through dialogue.</p>
+    </div>
+    <div class="workshop-phase">
+      <div class="workshop-phase-number">03</div>
+      <h3>Visual identity</h3>
+      <p>Colors, typography, and design tokens derived from your brand concept.</p>
+    </div>
+    <div class="workshop-phase">
+      <div class="workshop-phase-number">04</div>
+      <h3>Documentation</h3>
+      <p>Everything crystallizes into a validated brandspec.yaml.</p>
+    </div>
+  </div>
+</div>
+<div class="workshop-byom reveal">
+  <div class="byom-block">
+    <span class="byom-marker">BYOM</span>
+    <p><strong>Bring Your Own Model.</strong> Workshop standardizes the process and the output — not the AI. The harness is open. The decisions are yours. The format is universal.</p>
+  </div>
+  <div style="text-align:center;margin-top:32px">
+    <a class="btn btn-primary" href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai">Try Workshop</a>
+  </div>
+</div>
+
+<!-- Generate everywhere -->
+<div class="section-divider"></div>
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">Generate</div>
+    <div class="section-title">One file in. Every platform out.</div>
+    <p class="section-desc">brandspec.yaml is the input. The CLI generates everything your team needs.</p>
+  </div>
+  <div class="how-grid reveal-stagger" style="margin-bottom:100px">
+    <div class="how-step">
+      <div class="how-number" style="font-size:20px;color:var(--accent)">Web</div>
+      <h3>CSS + Tailwind v4</h3>
+      <p>Custom properties for vanilla CSS. <code style="font-family:'JetBrains Mono',monospace;font-size:12px">@theme</code> block for Tailwind. Drop in and go.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-number" style="font-size:20px;color:var(--accent)">Design</div>
+      <h3>Figma + Tokens Studio</h3>
+      <p>JSON tokens ready for Figma Variables or Tokens Studio import. Designers stay in sync.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-number" style="font-size:20px;color:var(--accent)">Multi-platform</div>
+      <h3>Style Dictionary</h3>
+      <p>DTCG tokens + config. One build generates scss, Swift, Android XML, and any format Style Dictionary supports.</p>
+    </div>
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Three steps</div>
+  </div>
+  <div class="how-grid reveal-stagger">
+    <div class="how-step">
+      <div class="how-number">01</div>
+      <h3>Define</h3>
+      <p>Already have a brand? <code style="font-family:'JetBrains Mono',monospace;font-size:12px">npx brandspec init</code>. Starting fresh? Let <a href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai" style="color:var(--accent)">Workshop</a> forge it with your AI — four phases, any model, structured output.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-number">02</div>
+      <h3>Commit</h3>
+      <p>Put it in your repo. It's a file — version it, diff it, review it in a PR like any other code.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-number">03</div>
+      <h3>Consume</h3>
+      <p>One command generates CSS variables, Tailwind v4 theme, Figma tokens, Style Dictionary config. From there — scss, Swift, Android, anything.</p>
+    </div>
+  </div>
+</div>
+
+<!-- For everyone -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">Consistent Polymorphism</div>
+    <div class="section-title">One definition.<br>Every output. Every agent.</div>
+    <p class="section-desc">The same brand, manifested differently for every team, every tool, every channel — and every AI that touches it.</p>
+  </div>
+  <div class="audience-grid reveal-stagger">
+    <div class="audience-card">
+      <div class="audience-role">Developer</div>
+      <h4>brandspec generate</h4>
+      <p>CSS variables, Tailwind v4 theme, Style Dictionary, Figma tokens — one command. Or <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">brandspec pull</code> from the cloud.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-role">Designer</div>
+      <h4>Single source of truth</h4>
+      <p>Every token, asset, and guideline in one file. Sync to Figma via Tokens Studio. Read it, reference it, trust it.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-role">AI agent</div>
+      <h4>Machine-readable rules</h4>
+      <p>Machine-readable brand rules with severity levels. AI agents can lint, generate, and enforce within your brand constraints.</p>
+    </div>
+    <div class="audience-card">
+      <div class="audience-role">Tool builder</div>
+      <h4>Open schema</h4>
+      <p>JSON Schema, MIT licensed. Build converters, linters, MCP servers, CI integrations — the spec is yours to extend.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Differentiation -->
+<div class="section-divider"></div>
+<section class="why reveal">
+  <blockquote>Brand platforms lock your brand in their UI. brandspec sets it free.</blockquote>
+  <p>It's a file in your repo. You own it. You version it. You decide what tools read it. The spec is open. The ecosystem is optional.</p>
+</section>
+
+<!-- AI Harness -->
+<div class="section-divider"></div>
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">AI Harness</div>
+    <div class="section-title">Brand rules AI can read.</div>
+    <p class="section-desc">One command turns any AI into your brand consultant. Structured rules keep AI agents on-brand at scale. The harness, not the cage.</p>
+  </div>
+</div>
+
+<!-- Consult -->
+<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
+  <div class="why-now reveal-stagger" style="padding:0 0 48px">
+    <div class="why-now-item">
+      <span class="why-now-marker" style="width:auto">Consult</span>
+      <p><strong>One command, any model.</strong> <code style="font-family:'JetBrains Mono',monospace;font-size:13px">brandspec consult</code> reads your brandspec.yaml and prints a system prompt — personality, voice, do/don't, colors, typography, logo system, guidelines. Paste it into Claude, GPT, Gemini, or any AI. Instant brand consultant.</p>
+    </div>
+  </div>
+</div>
+<section class="code-section reveal" style="padding-bottom:48px">
+  <div class="code-block">
+<pre><span class="c"># Turn any AI into your brand consultant</span>
+<span class="v">$ npx brandspec consult | pbcopy</span>
+
+<span class="c"># Output (system prompt):</span>
+<span class="k"># You are a brand consultant for Acme Corp.</span>
+<span class="c"># You evaluate business decisions, creative work,</span>
+<span class="c"># and communications against this brand's identity.</span>
+<span class="c"># ...</span>
+<span class="c"># ## Voice & Tone</span>
+<span class="c"># Tone: direct, helpful</span>
+<span class="c"># ## Do / Don't</span>
+<span class="c"># ## Visual Identity</span>
+<span class="c"># ## Guidelines</span></pre>
+  </div>
+</section>
+
+<!-- Rules -->
+<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
+  <div class="why-now reveal-stagger" style="padding:0 0 48px">
+    <div class="why-now-item">
+      <span class="why-now-marker" style="width:auto">Rules</span>
+      <p><strong>Machine-readable constraints.</strong> <code style="font-family:'JetBrains Mono',monospace;font-size:13px">guidelines.rules</code> gives AI agents structured rules with severity, criteria, and scope. They lint, generate, and enforce — within your brand.</p>
+    </div>
+  </div>
+</div>
+<section class="code-section reveal">
+  <div class="code-block">
+<pre><span class="k">guidelines:</span>
+  <span class="k">logo-usage:</span>
+    <span class="k">rules:</span>
+      <span class="v">- id:</span> <span class="s">logo-min-size</span>
+        <span class="v">description:</span> <span class="s">"Minimum 120px width on digital"</span>
+        <span class="v">severity:</span> <span class="s">error</span>
+        <span class="v">applies_to:</span> <span class="s">logo</span>
+        <span class="k">criteria:</span>
+          <span class="v">- "Digital: minimum 120px width"</span>
+          <span class="v">- "Print: minimum 25mm width"</span>
+
+  <span class="k">voice:</span>
+    <span class="k">rules:</span>
+      <span class="v">- id:</span> <span class="s">voice-no-jargon</span>
+        <span class="v">description:</span> <span class="s">"No technical jargon in user-facing copy"</span>
+        <span class="v">severity:</span> <span class="s">warning</span>
+        <span class="v">applies_to:</span> <span class="s">voice</span>
+        <span class="k">criteria:</span>
+          <span class="v">- "No HTTP status codes in messages"</span>
+          <span class="v">- "No internal system terminology"</span></pre>
+  </div>
+</section>
+<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
+  <div class="why-now reveal-stagger" style="padding:0 0 100px">
+    <div class="why-now-item">
+      <span class="why-now-marker">Lint</span>
+      <p>AI checks assets and copy against <strong>severity: error</strong> rules before shipping.</p>
+    </div>
+    <div class="why-now-item">
+      <span class="why-now-marker" style="width:auto">Generate</span>
+      <p>AI reads <strong>criteria</strong> to stay within constraints while creating.</p>
+    </div>
+    <div class="why-now-item">
+      <span class="why-now-marker" style="width:auto">Enforce</span>
+      <p>CI pipelines fail on <strong>error</strong>, warn on <strong>warning</strong>, note on <strong>info</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Why Now -->
+<div class="section-divider"></div>
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">Why now</div>
+    <div class="section-title">Three things converged</div>
+  </div>
+</div>
+<section class="why-now reveal-stagger">
+  <div class="why-now-item">
+    <span class="why-now-marker">01</span>
+    <p><strong>Schema-level precision.</strong> JSON Schema and YAML bring rigor to what was always informal.</p>
+  </div>
+  <div class="why-now-item">
+    <span class="why-now-marker">02</span>
+    <p><strong>W3C Design Tokens standard.</strong> A shared language for design values across tools.</p>
+  </div>
+  <div class="why-now-item">
+    <span class="why-now-marker">03</span>
+    <p><strong>AI needs a harness.</strong> Agents generate copy, code, assets at scale — but drift without structured rules. brandspec gives them machine-readable constraints. That's new.</p>
+  </div>
+</section>
+
+<!-- Open source -->
+<section class="oss">
+  <div class="oss-inner reveal">
+    <h2>Open at the core</h2>
+    <p>The specification, schema, and workshop are open source. MIT licensed. The format belongs to everyone.</p>
+    <div class="oss-links">
+      <a class="btn btn-secondary" href="https://github.com/numtet/brandspec">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta reveal">
+  <h2>Define once.<br>Brand everywhere.</h2>
+  <p>Forge your brand with Workshop. Or start from the spec and build your own way.</p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai">Start Workshop</a>
+    <a class="btn btn-secondary" href="https://github.com/numtet/brandspec#format">Read the spec</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-brand">brandspec</div>
+  <div class="footer-links">
+    <a href="https://github.com/numtet/brandspec/tree/main/schema">Spec</a>
+    <a href="https://github.com/numtet/brandspec#workshop--forge-your-brand-with-any-ai">Workshop</a>
+    <a href="https://github.com/numtet/brandspec">GitHub</a>
+    <a href="https://github.com/numtet/brandspec/tree/main/docs">Docs</a>
+  </div>
+</footer>
+
+<!-- Scroll reveal + Theme toggle -->
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Theme toggle — dark by default
+  const toggle = document.querySelector('.theme-toggle');
+  const html = document.documentElement;
+
+  const saved = localStorage.getItem('brandspec-theme');
+  if (saved) {
+    html.setAttribute('data-theme', saved);
+  } else {
+    html.setAttribute('data-theme', 'dark');
+  }
+
+  toggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('brandspec-theme', next);
+  });
+</script>
+
+</body>
+</html>
