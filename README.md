@@ -47,6 +47,36 @@ Discovery → Concept → Visual Identity → Documentation
 
 The AI guides you through brand essence, personality, colors, typography. All decisions are recorded in `.workshop/decisions.yml` — resumable, auditable, model-independent.
 
+## Using brandspec in your project
+
+Workshop outputs `brandspec.yaml` and `assets/` in a standalone directory. To use them in your project, copy the finished files in:
+
+```bash
+# After workshop is complete
+cp brandspec-acme/brandspec.yaml my-app/brandspec/
+cp -r brandspec-acme/assets/ my-app/brandspec/assets/
+
+# Generate tokens
+cd my-app/brandspec
+npx brandspec generate
+```
+
+This gives you:
+
+```
+my-app/
+├── brandspec/
+│   ├── brandspec.yaml       # Source of truth
+│   ├── assets/              # Logo, symbol, favicon, etc.
+│   └── dist/                # Generated — tokens.css, theme.css, etc.
+└── src/
+    └── app.css              # @import "../brandspec/dist/theme.css";
+```
+
+In a monorepo, `packages/brandspec/` is a natural home. For smaller projects, `brandspec/` at the root works fine.
+
+Commit `brandspec.yaml` and `assets/` to your repo. No submodules needed — brand files are few and change infrequently. Regenerate `dist/` after editing `brandspec.yaml`, or add it to your build step.
+
 ## Consult — Brand-aligned AI in one command
 
 Already have a `brandspec.yaml`? Turn any AI into a brand consultant:
