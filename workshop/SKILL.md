@@ -6,8 +6,8 @@ Compatible spec: brandspec v0.x
 
 ## Related Resources
 
-- Repository: https://github.com/numtet/brandspec
-- Spec: https://github.com/numtet/brandspec/tree/main/schema
+- Repository: https://github.com/brandspec/brandspec
+- Spec: https://github.com/brandspec/brandspec/tree/main/schema
 - SaaS: https://brandspec.tools
 
 ## Purpose

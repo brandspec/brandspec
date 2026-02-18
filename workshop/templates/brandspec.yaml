@@ -1,6 +1,6 @@
 # brandspec.yaml template
 # Based on brandspec v0.2.0
-# Spec: https://github.com/numtet/brandspec
+# Spec: https://github.com/brandspec/brandspec
 
 meta:
   name: ""           # Required: Brand name
