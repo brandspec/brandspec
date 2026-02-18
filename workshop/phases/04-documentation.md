@@ -54,7 +54,7 @@ If not, record the next action and leave `assets: []`.
 
 ### 4.3 Export Format Selection
 
-Choose which formats to generate into `dist/`.
+Choose which formats to generate.
 
 **Facilitation approach:**
 
@@ -190,11 +190,9 @@ If compat values are needed, add `$extensions.compat` with hsl/hex to key brand 
 
 ---
 
-### 4.5 Dist Generation
+### 4.5 Export Generation
 
-Generate selected export formats into `dist/`.
-
-**Reference templates** are available in `templates/dist/*.tmpl`. Use them as structural guides to ensure consistent output regardless of which LLM runs the workshop. The AI reads the template, substitutes values from decisions, and writes the final file.
+Generate selected export formats using the CLI.
 
 #### brand.md
 
@@ -244,7 +242,7 @@ Human-readable brand documentation.
 2. **Intent** - Why we chose it
 3. **Usage** - How to apply it
 
-**Output:** `dist/brand.md`
+**Output:** `brand.md` (in project root or output directory)
 
 #### tokens.css
 
@@ -303,21 +301,22 @@ CSS custom properties following [export rules](../../docs/exports/css.md).
 }
 ```
 
-**Output:** `dist/tokens.css`
+**Output:** `out/tokens.css`
 
 #### Other Exports (if selected)
 
-- `dist/tailwind.config.ts` - Tailwind config referencing CSS variables
-- `dist/brand.html` - Visual preview (color chips, font samples, logo brief)
-- Future: `dist/figma-tokens.json`, JSON, etc.
+- `out/theme.css` - Tailwind v4 `@theme` block
+- `out/figma-tokens.json` - Figma Tokens plugin format
+- `out/style-dictionary/` - Style Dictionary tokens + config
 
-#### Alternative: Use brandspec CLI
+#### Use the brandspec CLI
 
-Instead of having the AI generate dist files manually, you can use the CLI:
+Generate token files from the CLI:
 
 ```bash
-npx brandspec generate brandspec.yaml --out dist/
-# Generates: tokens.css, theme.css (Tailwind), figma-tokens.json, style-dictionary/
+npx brandspec generate --format tailwind       # → out/theme.css
+npx brandspec generate --format css,tailwind   # → out/tokens.css, out/theme.css
+npx brandspec generate --format all            # → all formats
 ```
 
 The CLI produces machine-precise output. The AI-generated `brand.md` (human-readable documentation) is still best produced by the AI, as it requires narrative writing.
@@ -329,7 +328,7 @@ The CLI produces machine-precise output. The AI-generated `brand.md` (human-read
 - [ ] Spacing/radius confirmed
 - [ ] Assets registered (or next action documented)
 - [ ] `brandspec.yaml` generated and valid
-- [ ] Selected `dist/` files generated
+- [ ] Selected export files generated
 - [ ] User has reviewed and approved
 
 ## Final Review
@@ -337,14 +336,12 @@ The CLI produces machine-precise output. The AI-generated `brand.md` (human-read
 Before marking complete, review with user:
 
 ```
-Here's your brandspec-{brand} repository:
+Here's your brandspec directory:
 
 📄 brandspec.yaml - Source of truth
 📁 assets/        - Brand assets
-📦 dist/          - Generated exports
-  ├── tokens.css
-  ├── brand.md
-  └── (other selected formats)
+
+Run `npx brandspec generate --format <fmt>` to generate token files.
 
 Please review:
 1. Does the essence capture your brand?
@@ -368,26 +365,23 @@ completed_at: "2026-02-07"
 
 **Next steps to suggest:**
 
-1. Initialize git repository for `brandspec-{brand}`
-2. Create actual logo based on brief and register in `assets/`
-3. Add to your project: `git submodule add <repo-url> brandspec`
-4. Or host on brandspec.tools for team distribution
-5. Regenerate `dist/` anytime by re-running the export step
+1. Create actual logo based on brief and register in `assets/`
+2. Generate token files: `npx brandspec generate --format tailwind`
+3. Use `npx brandspec consult` to get brand-aligned AI consultation
+4. Host on brandspec.tools for team distribution
 
 ---
 
-## Example Final Repository
+## Example Final Directory
 
 ```
-brandspec-prism/
+brandspec/
 ├── brandspec.yaml
 ├── assets/             (empty — logo creation is next step)
-├── dist/
-│   ├── tokens.css
-│   └── brand.md
 └── .workshop/
     ├── decisions.yml
-    └── sessions/
+    ├── memo.md
+    └── session.md
 ```
 
 ### brandspec.yaml

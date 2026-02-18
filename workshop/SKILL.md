@@ -1,6 +1,6 @@
 # brandspec workshop
 
-A Brand Identity forge. Through dialogue — pressure, refinement, and sharpening — generate a `brandspec-{brand}` repository.
+A Brand Identity forge. Through dialogue — pressure, refinement, and sharpening — produce a complete `brandspec.yaml` and brand assets.
 
 Compatible spec: brandspec v0.x
 
@@ -24,10 +24,6 @@ The workshop populates the `brandspec/` directory created by `brandspec init`.
 brandspec/                      ← inside your project
 ├── brandspec.yaml              # SSoT — everything expands polymorphically from here
 ├── assets/                     # brand assets (logos, icons, etc.)
-├── dist/                       # derived from yaml (all regenerable)
-│   ├── tokens.css
-│   ├── theme.css
-│   └── figma-tokens.json
 └── .workshop/                  # process records (keep for AI resumability)
     ├── decisions.yml
     ├── memo.md

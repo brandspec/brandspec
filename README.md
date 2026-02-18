@@ -19,7 +19,6 @@ my-app/
 ├── brandspec/
 │   ├── brandspec.yaml          # Brand definition (edit this)
 │   ├── assets/                 # Logo, symbol, favicon, etc.
-│   ├── dist/                   # Generated — tokens.css, theme.css, etc.
 │   └── .workshop/              # Workshop state (AI-resumable)
 └── src/
 ```
@@ -27,8 +26,9 @@ my-app/
 From here, either edit `brandspec.yaml` directly or run the Workshop to build your brand with AI. Then generate tokens:
 
 ```bash
-npx brandspec validate          # Check against schema
-npx brandspec generate          # → tokens.css, theme.css, figma-tokens.json, style-dictionary/
+npx brandspec validate                     # Check against schema
+npx brandspec generate --format tailwind   # → out/theme.css
+npx brandspec generate --format all        # → out/tokens.css, theme.css, figma-tokens.json, style-dictionary/
 ```
 
 ## Workshop — Forge your brand with any AI
@@ -81,9 +81,9 @@ brandspec <command> [options]
 Commands:
   init              Create a brandspec/ directory with templates
   validate [path]   Validate against schema (default: ./brandspec.yaml)
-  generate [path]   Generate dist files from brandspec.yaml
-    --format <fmt>   css, tailwind, figma, sd, all (default: all)
-    --out <dir>      Output directory (default: ./dist)
+  generate [path]   Generate token files from brandspec.yaml
+    --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
+    --out <dir>      Output directory (default: ./out)
 
   consult [path]          Print brand context for AI consultation
 
@@ -168,14 +168,16 @@ Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`examples/`
 
 ## Exports
 
-`brandspec generate` produces:
+`brandspec generate --format <fmt>` produces files in `out/` (override with `--out`):
 
-| File | Description |
-|------|-------------|
-| `tokens.css` | CSS custom properties (`--primary`, `--font-heading`, etc.) |
-| `theme.css` | Tailwind v4 `@theme` block |
-| `figma-tokens.json` | Figma Tokens plugin format |
-| `style-dictionary/` | Style Dictionary tokens + config |
+| Format | File | Description |
+|--------|------|-------------|
+| `css` | `tokens.css` | CSS custom properties (`--primary`, `--font-heading`, etc.) |
+| `tailwind` | `theme.css` | Tailwind v4 `@theme` block |
+| `figma` | `figma-tokens.json` | Figma Tokens plugin format |
+| `sd` | `style-dictionary/` | Style Dictionary tokens + config |
+
+Combine formats: `--format css,tailwind`. Use `--format all` to generate everything.
 
 All outputs target **shadcn/ui + Tailwind v4** compatibility.
 

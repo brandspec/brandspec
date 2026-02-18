@@ -25,7 +25,7 @@ Workshop populates the `brandspec/` directory created by `brandspec init`:
 brandspec/
 ├── brandspec.yaml              # source of truth
 ├── assets/                     # brand assets
-├── dist/                       # generated from yaml
+├── out/                       # generated from yaml
 │   ├── tokens.css
 │   ├── theme.css
 │   └── figma-tokens.json
@@ -122,15 +122,15 @@ brandspec/
 2. **assets** - Register existing assets or note next actions
 3. **export-selection** - Choose export formats (css, tailwind, html, etc.)
 4. **yaml** - Generate `brandspec.yaml`
-5. **dist** - Generate selected exports into `dist/`
+5. **dist** - Generate selected exports into `out/`
 
 ### Outputs
 
 - `brandspec.yaml` - Machine-readable spec (repository root)
-- `dist/tokens.css` - CSS variables
-- `dist/brand.md` - Human-readable document
-- `dist/brand.html` - Visual preview (if selected)
-- `dist/tailwind.config.ts` - Tailwind config (if selected)
+- `out/tokens.css` - CSS variables
+- `out/brand.md` - Human-readable document
+- `out/brand.html` - Visual preview (if selected)
+- `out/tailwind.config.ts` - Tailwind config (if selected)
 
 ### Complete When
 

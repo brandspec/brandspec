@@ -22,9 +22,9 @@ Usage:
 Commands:
   init              Create a brandspec/ directory with templates
   validate [path]   Validate a brandspec.yaml file (default: ./brandspec.yaml)
-  generate [path]   Generate dist files from brandspec.yaml
-    --format <fmt>   css, tailwind, figma, sd, all (default: all)
-    --out <dir>      Output directory (default: ./dist)
+  generate [path]   Generate token files from brandspec.yaml
+    --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
+    --out <dir>      Output directory (default: ./out)
 
   consult [path]          Print brand context for AI consultation
 
@@ -119,7 +119,7 @@ function cmdInit() {
   console.log("  npx brandspec workshop start | pbcopy");
   console.log();
   console.log("  # Or edit brandspec.yaml directly, then:");
-  console.log("  npx brandspec generate");
+  console.log("  npx brandspec generate --format tailwind");
 }
 
 function cmdValidate(filePath?: string) {
@@ -173,20 +173,65 @@ function cmdValidate(filePath?: string) {
 }
 
 type Format = "css" | "tailwind" | "figma" | "sd" | "all";
+const VALID_FORMATS: Format[] = ["css", "tailwind", "figma", "sd", "all"];
+
+function parseFormats(input: string): Format[] {
+  const parts = input.split(",").map((s) => s.trim()) as Format[];
+  for (const p of parts) {
+    if (!VALID_FORMATS.includes(p)) {
+      console.error(`Unknown format: ${p}`);
+      console.error(`Valid formats: ${VALID_FORMATS.join(", ")}`);
+      process.exit(1);
+    }
+  }
+  if (parts.includes("all")) return ["all"];
+  return parts;
+}
+
+function detectProjectFormat(): string | undefined {
+  // Suggest format based on project files in parent directories
+  const checks: Array<{ file: string; format: string; hint: string }> = [
+    { file: "tailwind.config.ts", format: "tailwind", hint: "Tailwind project detected" },
+    { file: "tailwind.config.js", format: "tailwind", hint: "Tailwind project detected" },
+    { file: "postcss.config.js", format: "css", hint: "PostCSS project detected" },
+    { file: "postcss.config.mjs", format: "css", hint: "PostCSS project detected" },
+  ];
+
+  // Check parent directory (brandspec/ is typically inside a project)
+  const parentDir = resolve("..");
+  for (const check of checks) {
+    if (existsSync(join(parentDir, check.file))) {
+      return check.format;
+    }
+  }
+  return undefined;
+}
 
 function cmdGenerate(args: string[]) {
   let filePath: string | undefined;
-  let format: Format = "all";
+  let formatArg: string | undefined;
   let outDir: string | undefined;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--format" && args[i + 1]) {
-      format = args[++i] as Format;
+      formatArg = args[++i];
     } else if (args[i] === "--out" && args[i + 1]) {
       outDir = args[++i];
     } else if (!args[i].startsWith("-")) {
       filePath = args[i];
     }
+  }
+
+  // If no format specified, suggest based on project or default to all
+  let formats: Format[];
+  if (formatArg) {
+    formats = parseFormats(formatArg);
+  } else {
+    const detected = detectProjectFormat();
+    if (detected) {
+      console.log(`Hint: ${detected} project detected. You can use --format ${detected} to generate only what you need.`);
+    }
+    formats = ["all"];
   }
 
   const target = resolve(filePath ?? "brandspec.yaml");
@@ -206,31 +251,32 @@ function cmdGenerate(args: string[]) {
   }
 
   const data = parseResult.data!;
-  const dist = resolve(outDir ?? "dist");
-  mkdirSync(dist, { recursive: true });
+  const out = resolve(outDir ?? "out");
+  mkdirSync(out, { recursive: true });
 
   const generated: string[] = [];
+  const shouldGenerate = (f: Format) => formats.includes(f) || formats.includes("all");
 
-  if (format === "css" || format === "all") {
-    const out = resolve(dist, "tokens.css");
-    writeFileSync(out, toCss(data), "utf-8");
+  if (shouldGenerate("css")) {
+    const dest = resolve(out, "tokens.css");
+    writeFileSync(dest, toCss(data), "utf-8");
     generated.push("tokens.css");
   }
 
-  if (format === "tailwind" || format === "all") {
-    const out = resolve(dist, "theme.css");
-    writeFileSync(out, toTailwindCss(data), "utf-8");
+  if (shouldGenerate("tailwind")) {
+    const dest = resolve(out, "theme.css");
+    writeFileSync(dest, toTailwindCss(data), "utf-8");
     generated.push("theme.css");
   }
 
-  if (format === "figma" || format === "all") {
-    const out = resolve(dist, "figma-tokens.json");
-    writeFileSync(out, toFigmaTokens(data), "utf-8");
+  if (shouldGenerate("figma")) {
+    const dest = resolve(out, "figma-tokens.json");
+    writeFileSync(dest, toFigmaTokens(data), "utf-8");
     generated.push("figma-tokens.json");
   }
 
-  if (format === "sd" || format === "all") {
-    const sdDir = resolve(dist, "style-dictionary");
+  if (shouldGenerate("sd")) {
+    const sdDir = resolve(out, "style-dictionary");
     mkdirSync(sdDir, { recursive: true });
     const sd = toStyleDictionary(data);
     writeFileSync(resolve(sdDir, "tokens.json"), sd.tokens, "utf-8");
@@ -241,7 +287,7 @@ function cmdGenerate(args: string[]) {
 
   console.log(`Generated from ${data.meta.name}:`);
   for (const f of generated) {
-    console.log(`  ${dist}/${f}`);
+    console.log(`  ${out}/${f}`);
   }
 }
 
