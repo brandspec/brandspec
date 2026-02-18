@@ -18,35 +18,20 @@ The workshop is a forge. Apply pressure to raw material, refine it, put an edge 
 
 ## Deliverables
 
-The workshop produces a `brandspec-{brand}` repository. The workshop itself does not remain in the output (the forge does not remain in the blade).
+The workshop populates the `brandspec/` directory created by `brandspec init`.
 
 ```
-brandspec-{brand}/              ← standalone repository
+brandspec/                      ← inside your project
 ├── brandspec.yaml              # SSoT — everything expands polymorphically from here
 ├── assets/                     # brand assets (logos, icons, etc.)
 ├── dist/                       # derived from yaml (all regenerable)
 │   ├── tokens.css
-│   ├── tailwind.config.ts
-│   ├── brand.md
-│   └── brand.html
-└── .workshop/                  # process records
+│   ├── theme.css
+│   └── figma-tokens.json
+└── .workshop/                  # process records (keep for AI resumability)
     ├── decisions.yml
     ├── memo.md
-    └── sessions/
-```
-
-### Integrating into Projects
-
-| Method | Recommendation |
-|--------|----------------|
-| submodule (default) | Recommended. Include `.workshop/` as-is |
-| submodule + sparse checkout | Optional. Exclude `.workshop/` |
-| brandspec.tools (pull) | Recommended (service delegation) |
-| direct copy | Possible. Not recommended long-term |
-
-```bash
-# submodule example
-git submodule add git@github.com:user/brandspec-acme.git brandspec
+    └── session.md
 ```
 
 ## Flow
@@ -71,9 +56,8 @@ Activate this skill on utterances like:
 
 1. **Ask session language**: Ask the user which language they prefer for the workshop session. Record as the first decision (`session_language`). Conduct the entire session in that language from this point forward.
 2. Confirm brand name
-3. Scaffold the brand repository from `templates/`
-4. Read `.workshop/position.yml` to determine current position
-5. Load the corresponding phase `.md`
+3. Read `.workshop/position.yml` to determine current position
+4. Load the corresponding phase `.md`
 
 ## Session Language
 

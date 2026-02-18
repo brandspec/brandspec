@@ -19,21 +19,20 @@
 
 ## Output
 
-Workshop generates a `brandspec-{brand}` repository:
+Workshop populates the `brandspec/` directory created by `brandspec init`:
 
 ```
-brandspec-{brand}/
+brandspec/
 ├── brandspec.yaml              # source of truth
 ├── assets/                     # brand assets
 ├── dist/                       # generated from yaml
 │   ├── tokens.css
-│   ├── tailwind.config.ts      # if selected
-│   ├── brand.md
-│   └── brand.html              # if selected
+│   ├── theme.css
+│   └── figma-tokens.json
 └── .workshop/                  # process records
     ├── decisions.yml
     ├── memo.md
-    └── sessions/
+    └── session.md
 ```
 
 ## Phase 1: Discovery

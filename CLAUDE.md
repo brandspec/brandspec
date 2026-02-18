@@ -50,12 +50,13 @@ npm run typecheck      # TypeScript type checking
 ## CLI Commands
 
 ```bash
-brandspec init                          # Create brandspec.yaml
+brandspec init                          # Create brandspec/ directory with templates
 brandspec validate [path]               # Validate a brandspec.yaml
 brandspec generate [path] --format all  # Generate dist/ (css, tailwind, figma, sd)
-brandspec workshop start [name]         # Scaffold brandspec-{name}/ project
+brandspec consult [path]                # Print brand context for AI consultation
+brandspec workshop start                # Print start prompt for AI workshop
+brandspec workshop resume               # Print resume prompt for AI workshop
 brandspec workshop status               # Show workshop position
-brandspec workshop resume               # Print state for AI session resumption
 ```
 
 ## Specification (brandspec.yaml)
@@ -74,7 +75,7 @@ brandspec workshop resume               # Print state for AI session resumption
 
 - Entry point for Claude Code: `workshop/SKILL.md`
 - Phase guides: `workshop/phases/01-04`
-- State management (in scaffolded project):
+- State management (in brandspec/ directory):
   - `.workshop/position.yml` — current phase/step tracker
   - `.workshop/decisions.yml` — append-only decision log
   - `.workshop/memo.md` — working notes

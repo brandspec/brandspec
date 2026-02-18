@@ -20,17 +20,17 @@ Usage:
   brandspec <command> [options]
 
 Commands:
-  init              Create a new brandspec.yaml in the current directory
+  init              Create a brandspec/ directory with templates
   validate [path]   Validate a brandspec.yaml file (default: ./brandspec.yaml)
   generate [path]   Generate dist files from brandspec.yaml
     --format <fmt>   css, tailwind, figma, sd, all (default: all)
     --out <dir>      Output directory (default: ./dist)
 
-  workshop start [name]   Scaffold a new brand project with workshop structure
-  workshop status         Show current workshop position
-  workshop resume         Reconstruct state from decisions.yml
-
   consult [path]          Print brand context for AI consultation
+
+  workshop start          Print start prompt for AI workshop
+  workshop resume         Print resume prompt for AI workshop
+  workshop status         Show current workshop position
 
 Options:
   --help, -h       Show this help
@@ -86,16 +86,40 @@ const MINIMAL_TEMPLATE: BrandspecYaml = {
 };
 
 function cmdInit() {
-  const target = resolve("brandspec.yaml");
+  const targetDir = resolve("brandspec");
 
-  if (existsSync(target)) {
-    console.error("brandspec.yaml already exists in this directory.");
+  if (existsSync(targetDir)) {
+    console.error("brandspec/ already exists in this directory.");
     process.exit(1);
   }
 
-  const content = serialize(MINIMAL_TEMPLATE);
-  writeFileSync(target, content, "utf-8");
-  console.log("Created brandspec.yaml");
+  const templatesDir = getWorkshopTemplatesDir();
+  if (!existsSync(templatesDir)) {
+    console.error("Templates not found. Ensure brandspec is installed correctly.");
+    process.exit(1);
+  }
+
+  // Create brandspec/ with templates (yaml + assets/ + .workshop/)
+  cpSync(templatesDir, targetDir, { recursive: true });
+
+  // Update position.yml with timestamp
+  const positionPath = join(targetDir, ".workshop", "position.yml");
+  if (existsSync(positionPath)) {
+    let pos = readFileSync(positionPath, "utf-8");
+    pos = pos.replace('updated: ""', `updated: "${new Date().toISOString()}"`);
+    writeFileSync(positionPath, pos, "utf-8");
+  }
+
+  console.log("Created brandspec/");
+  console.log();
+  console.log("Next steps:");
+  console.log("  cd brandspec");
+  console.log();
+  console.log("  # Start the brand workshop with any AI:");
+  console.log("  npx brandspec workshop start | pbcopy");
+  console.log();
+  console.log("  # Or edit brandspec.yaml directly, then:");
+  console.log("  npx brandspec generate");
 }
 
 function cmdValidate(filePath?: string) {
@@ -228,43 +252,73 @@ function getWorkshopTemplatesDir(): string {
   return resolve(__dirname, "..", "workshop", "templates");
 }
 
-function cmdWorkshopStart(name?: string) {
-  const brandName = name ?? "my-brand";
-  const targetDir = resolve(`brandspec-${brandName}`);
+function getWorkshopDir(): string {
+  return resolve(__dirname, "..", "workshop");
+}
 
-  if (existsSync(targetDir)) {
-    console.error(`Directory already exists: brandspec-${brandName}/`);
+function ensureWorkshopState(): { positionPath: string; decisionsPath: string } {
+  const positionPath = resolve(".workshop", "position.yml");
+  const decisionsPath = resolve(".workshop", "decisions.yml");
+
+  if (!existsSync(positionPath) || !existsSync(decisionsPath)) {
+    console.error("No .workshop/ state found in current directory.");
+    console.error("Run 'brandspec init' first, then cd into brandspec/.");
     process.exit(1);
   }
 
-  const templatesDir = getWorkshopTemplatesDir();
-  if (!existsSync(templatesDir)) {
-    console.error("Workshop templates not found. Ensure brandspec is installed correctly.");
+  return { positionPath, decisionsPath };
+}
+
+function isInitialPosition(position: string): boolean {
+  // Check if position.yml is in its initial state (phase 1, no completion)
+  return /phase:\s*1/.test(position) && /completed_at:\s*null/.test(position);
+}
+
+function cmdWorkshopStart() {
+  const { positionPath, decisionsPath } = ensureWorkshopState();
+  const position = readFileSync(positionPath, "utf-8");
+  const decisions = readFileSync(decisionsPath, "utf-8");
+
+  // Guard: if workshop has progressed, tell user to use resume
+  const hasDecisions = !/decisions:\s*\[\]/.test(decisions);
+  if (!isInitialPosition(position) || hasDecisions) {
+    console.error("Workshop already in progress.");
+    console.error("Use 'brandspec workshop resume' to continue.");
     process.exit(1);
   }
 
-  // Scaffold the project
-  cpSync(templatesDir, targetDir, { recursive: true });
+  // Load workshop materials
+  const workshopDir = getWorkshopDir();
+  const skillMd = readFileSync(join(workshopDir, "SKILL.md"), "utf-8");
+  const flowMd = readFileSync(join(workshopDir, "flow.md"), "utf-8");
+  const phase1 = readFileSync(join(workshopDir, "phases", "01-discovery.md"), "utf-8");
 
-  // Update position.yml with timestamp
-  const positionPath = join(targetDir, ".workshop", "position.yml");
-  if (existsSync(positionPath)) {
-    let pos = readFileSync(positionPath, "utf-8");
-    pos = pos.replace('updated: ""', `updated: "${new Date().toISOString()}"`);
-    writeFileSync(positionPath, pos, "utf-8");
-  }
+  const lines: string[] = [];
 
-  console.log(`Created brandspec-${brandName}/`);
-  console.log();
-  console.log("Next steps:");
-  console.log(`  cd brandspec-${brandName}`);
-  console.log();
-  console.log("  # With Claude Code:");
-  console.log('  claude "Let\'s start the brand workshop"');
-  console.log();
-  console.log("  # With other LLMs:");
-  console.log("  Share workshop/flow.md and workshop/phases/01-discovery.md");
-  console.log("  with your AI to begin Phase 1: Discovery");
+  lines.push("# brandspec workshop — Start Session");
+  lines.push("");
+  lines.push("You are a brand identity facilitator. Guide the user through the brandspec workshop.");
+  lines.push("First ask the user's preferred session language, then proceed with Phase 1: Discovery.");
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push(skillMd);
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push(flowMd);
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push("## Current Phase Guide");
+  lines.push("");
+  lines.push(phase1);
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push("Begin the workshop now. Ask the user their preferred session language.");
+
+  console.log(lines.join("\n"));
 }
 
 function cmdWorkshopStatus() {
@@ -280,26 +334,83 @@ function cmdWorkshopStatus() {
   console.log(content);
 }
 
+function getPhaseFile(phase: number): string {
+  const phaseFiles: Record<number, string> = {
+    1: "01-discovery.md",
+    2: "02-concept.md",
+    3: "03-visual.md",
+    4: "04-documentation.md",
+  };
+  const file = phaseFiles[phase];
+  if (!file) return "";
+  const filePath = join(getWorkshopDir(), "phases", file);
+  return existsSync(filePath) ? readFileSync(filePath, "utf-8") : "";
+}
+
 function cmdWorkshopResume() {
-  const decisionsPath = resolve(".workshop", "decisions.yml");
-  const positionPath = resolve(".workshop", "position.yml");
-
-  if (!existsSync(decisionsPath) || !existsSync(positionPath)) {
-    console.error("No .workshop/ state found in current directory.");
-    process.exit(1);
-  }
-
+  const { positionPath, decisionsPath } = ensureWorkshopState();
   const position = readFileSync(positionPath, "utf-8");
   const decisions = readFileSync(decisionsPath, "utf-8");
 
-  console.log("Workshop state:");
-  console.log();
-  console.log("── Position ──");
-  console.log(position);
-  console.log("── Decisions ──");
-  console.log(decisions);
-  console.log();
-  console.log("Pass this output to your AI to resume the workshop session.");
+  // Extract current phase number
+  const phaseMatch = position.match(/phase:\s*(\d+)/);
+  const currentPhase = phaseMatch ? parseInt(phaseMatch[1], 10) : 1;
+
+  // Load workshop materials
+  const workshopDir = getWorkshopDir();
+  const skillMd = readFileSync(join(workshopDir, "SKILL.md"), "utf-8");
+  const phaseGuide = getPhaseFile(currentPhase);
+
+  const lines: string[] = [];
+
+  lines.push("# brandspec workshop — Resume Session");
+  lines.push("");
+  lines.push("You are a brand identity facilitator. The user is resuming a workshop session.");
+  lines.push("Restore context from the state below, then continue where they left off.");
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push(skillMd);
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push("## Current State");
+  lines.push("");
+  lines.push("### Position");
+  lines.push("```yaml");
+  lines.push(position.trim());
+  lines.push("```");
+  lines.push("");
+  lines.push("### Decisions");
+  lines.push("```yaml");
+  lines.push(decisions.trim());
+  lines.push("```");
+  lines.push("");
+
+  // Include memo if present
+  const memoPath = resolve(".workshop", "memo.md");
+  if (existsSync(memoPath)) {
+    const memo = readFileSync(memoPath, "utf-8").trim();
+    if (memo) {
+      lines.push("### Working Notes");
+      lines.push(memo);
+      lines.push("");
+    }
+  }
+
+  lines.push("---");
+  lines.push("");
+  lines.push(`## Current Phase Guide (Phase ${currentPhase})`);
+  lines.push("");
+  if (phaseGuide) {
+    lines.push(phaseGuide);
+  }
+  lines.push("");
+  lines.push("---");
+  lines.push("");
+  lines.push("Resume the workshop. Present the restored state summary, then continue from the current step.");
+
+  console.log(lines.join("\n"));
 }
 
 function cmdWorkshop(args: string[]) {
@@ -310,16 +421,16 @@ function cmdWorkshop(args: string[]) {
 brandspec workshop — AI-facilitated brand creation
 
 Commands:
-  start [name]   Scaffold a new brand project (default name: my-brand)
-  status         Show current workshop position
-  resume         Print state for AI session resumption
+  start    Print start prompt for AI (initial state only)
+  resume   Print resume prompt for AI (any state)
+  status   Show current workshop position
     `.trim());
     process.exit(0);
   }
 
   switch (sub) {
     case "start":
-      cmdWorkshopStart(args[1]);
+      cmdWorkshopStart();
       break;
     case "status":
       cmdWorkshopStatus();
