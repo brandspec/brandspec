@@ -7,8 +7,16 @@ Compatible spec: brandspec v0.x
 ## Related Resources
 
 - Repository: https://github.com/brandspec/brandspec
-- Spec: https://github.com/brandspec/brandspec/tree/main/schema
 - SaaS: https://brandspec.tools
+
+## Specification Knowledge (MUST READ)
+
+The following files define how `brandspec.yaml` works. Read these before facilitating:
+
+- `../schema/spec/tokens.md` — Token format, color system (oklch, variants, dark mode), typography, spacing, radius, export mapping
+- `../schema/spec/assets.md` — Asset structure, roles, variants, file naming, logo system patterns
+- `../schema/spec/guidelines.md` — Guidelines structure, linting rules, severity levels
+- `../schema/v0.1.0.yaml` — JSON Schema for validation
 
 ## Purpose
 
@@ -32,7 +40,7 @@ brandspec/                      ← inside your project
 
 ## Flow
 
-4 phases. See `flow.md` for details.
+4 phases. See [`flow.md`](flow.md) for details.
 
 ```
 Discovery → Concept → Visual Identity → Documentation
@@ -127,10 +135,10 @@ Switch via user utterance:
 
 See files in `phases/`:
 
-- `phases/01-discovery.md` - Discovery
-- `phases/02-concept.md` - Concept
-- `phases/03-visual.md` - Visual Identity
-- `phases/04-documentation.md` - Documentation
+- [`phases/01-discovery.md`](phases/01-discovery.md) — Discovery
+- [`phases/02-concept.md`](phases/02-concept.md) — Concept
+- [`phases/03-visual.md`](phases/03-visual.md) — Visual Identity
+- [`phases/04-documentation.md`](phases/04-documentation.md) — Documentation
 
 ## Key Rules
 

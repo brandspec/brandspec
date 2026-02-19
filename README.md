@@ -8,6 +8,14 @@ Define Brand Identity as code.
 
 Brand identity lives in Figma, PDFs, Notion pages, Slack threads — scattered, inconsistent, out of date. **brandspec** puts it in one file: `brandspec.yaml`. Structured for machines, readable by humans. An open format built on [W3C Design Tokens](https://tr.designtokens.org/format/).
 
+This repository has three components:
+
+| Component | Path | Role |
+|-----------|------|------|
+| **schema** | `schema/` | Specification — the definition of `brandspec.yaml` (JSON Schema + machine-friendly spec knowledge) |
+| **workshop** | `workshop/` | Facilitation — AI-guided 4-phase process to create a brand identity. References schema as SSoT. |
+| **cli** | `cli/` | Tooling — validate, generate, push/pull. Consumes schema for validation and export. |
+
 ## Quick Start
 
 ```bash
@@ -24,7 +32,7 @@ my-app/
 │   ├── brandspec.yaml          # Brand definition (edit this)
 │   ├── assets/                 # Logo, symbol, favicon, etc.
 │   └── .workshop/              # Workshop state (AI-resumable)
-└── src/
+└── src/                       # Your app source
 ```
 
 From here, either edit `brandspec.yaml` directly or run the Workshop to build your brand with AI. Then generate tokens:
@@ -168,7 +176,7 @@ File naming convention: `{role}-{variant}.{ext}` (e.g., `logo-primary.svg`, `log
 
 Full asset spec: [`docs/assets.md`](docs/assets.md)
 
-Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`examples/`](examples/)
+Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`docs/examples/`](docs/examples/)
 
 > **Live example:** The [`brandspec/`](brandspec/) directory in this repository is brandspec's own brand definition — built with the Workshop.
 

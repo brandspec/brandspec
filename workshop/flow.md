@@ -35,7 +35,7 @@ brandspec/
     └── session.md
 ```
 
-## Phase 1: Discovery
+## [Phase 1: Discovery](phases/01-discovery.md)
 
 **Goal**: Understand what we're branding
 
@@ -59,7 +59,7 @@ brandspec/
 
 ---
 
-## Phase 2: Concept
+## [Phase 2: Concept](phases/02-concept.md)
 
 **Goal**: Define brand personality and voice
 
@@ -86,7 +86,7 @@ brandspec/
 
 ---
 
-## Phase 3: Visual Identity
+## [Phase 3: Visual Identity](phases/03-visual.md)
 
 **Goal**: Create visual language
 
@@ -112,7 +112,7 @@ brandspec/
 
 ---
 
-## Phase 4: Documentation
+## [Phase 4: Documentation](phases/04-documentation.md)
 
 **Goal**: Generate final deliverables into brandspec repository
 

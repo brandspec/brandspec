@@ -2,6 +2,19 @@ node_modules/
 dist/
 out/
 *.tsbuildinfo
+
+# OS
 .DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
 .env
 .env.local
+
+# AI tools
+CLAUDE.md

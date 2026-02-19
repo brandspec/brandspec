@@ -25,10 +25,10 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit",
-    "test": "node --test test/index.test.mjs",
+    "build": "tsup --config cli/tsup.config.ts",
+    "dev": "tsup --config cli/tsup.config.ts --watch",
+    "typecheck": "tsc -p cli/tsconfig.json --noEmit",
+    "test": "node --test cli/test/*.test.mjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {

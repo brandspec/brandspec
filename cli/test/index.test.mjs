@@ -3,13 +3,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parse, serialize, validate, schema, toCss, toTailwindCss, toFigmaTokens, toStyleDictionary, flattenTokens } from "../dist/index.js";
+import { parse, serialize, validate, schema, toCss, toTailwindCss, toFigmaTokens, toStyleDictionary, flattenTokens } from "../../dist/index.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, "..");
+const root = resolve(__dirname, "../..");
 
 function readExample(name) {
-  return readFileSync(resolve(root, "examples", name), "utf-8");
+  return readFileSync(resolve(root, "docs/examples", name), "utf-8");
 }
 
 // ─── parse ───────────────────────────────────────────────────
