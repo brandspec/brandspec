@@ -5,7 +5,7 @@
 <title>brandspec OGP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -19,10 +19,13 @@
     position: relative;
   }
 
-  /* Top edge — the blade */
+  /* ── Top blade ── */
   body::before {
     content: '';
-    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 2px;
     background: linear-gradient(
       90deg,
@@ -32,17 +35,38 @@
       oklch(0.55 0.10 68 / 0.3) 80%,
       transparent 100%
     );
+    z-index: 10;
   }
 
+  /* ── Ember radial glow behind mark ── */
+  .glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      oklch(0.55 0.12 68 / 0.08) 0%,
+      oklch(0.45 0.10 65 / 0.03) 40%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  /* ── Layout ── */
   .container {
+    position: relative;
     display: flex;
     align-items: center;
-    height: 628px; /* 630 - 2px blade */
+    height: 630px;
     padding: 0 80px;
-    gap: 64px;
+    gap: 72px;
   }
 
-  /* ── Left side: brand text ── */
+  /* ── Left: mark + brand ── */
   .left {
     flex: 1;
     display: flex;
@@ -51,79 +75,178 @@
     min-width: 0;
   }
 
+  .mark-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .mark {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+
+  .mark svg {
+    width: 64px;
+    height: 64px;
+  }
+
   .brand-name {
-    font-size: 64px;
+    font-size: 56px;
     font-weight: 900;
     letter-spacing: -0.045em;
     color: oklch(0.92 0.005 80);
     line-height: 1;
-    margin-bottom: 16px;
   }
 
   .tagline {
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 400;
-    color: oklch(0.55 0.01 70);
+    color: oklch(0.60 0.01 72);
     line-height: 1.4;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .sub {
-    font-size: 14px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 300;
     color: oklch(0.45 0.01 75);
     line-height: 1.5;
+    max-width: 395px;
   }
 
   .site-url {
-    font-size: 15px;
-    font-weight: 400;
-    color: oklch(0.70 0.12 70);
-    margin-top: 36px;
-    letter-spacing: 0.01em;
+    font-size: 14px;
+    font-weight: 500;
+    color: oklch(0.65 0.10 70);
+    margin-top: 32px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  /* ── Right side: code block ── */
+  /* ── Right: code block ── */
   .right {
-    flex: 0 0 480px;
+    flex: 0 0 440px;
     display: flex;
     align-items: center;
   }
 
   .code-block {
+    position: relative;
     background: oklch(0.12 0.01 55);
     border-radius: 12px;
-    padding: 32px 36px;
-    border-left: 2px solid oklch(0.55 0.12 68 / 0.5);
+    padding: 28px 32px;
     width: 100%;
+    border: 1px solid oklch(0.24 0.015 65);
+  }
+
+  /* Ember left accent — thicker, stronger */
+  .code-block::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 3px;
+    border-radius: 2px;
+    background: linear-gradient(
+      180deg,
+      oklch(0.65 0.14 70 / 0.2) 0%,
+      oklch(0.65 0.14 70 / 0.9) 30%,
+      oklch(0.65 0.14 70 / 0.9) 70%,
+      oklch(0.65 0.14 70 / 0.2) 100%
+    );
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid oklch(0.22 0.01 60);
+  }
+
+  .code-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: oklch(0.35 0.01 65);
+  }
+
+  .code-dot.active {
+    background: oklch(0.60 0.10 70);
+  }
+
+  .code-filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: oklch(0.50 0.01 70);
+    margin-left: 8px;
+    letter-spacing: 0.02em;
   }
 
   .code-block pre {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    line-height: 1.75;
-    color: oklch(0.75 0.008 80);
+    font-size: 13px;
+    line-height: 1.85;
+    color: oklch(0.70 0.008 80);
     white-space: pre;
   }
 
-  .code-block .c  { color: oklch(0.45 0.01 75); }
-  .code-block .k  { color: oklch(0.88 0.01 80); }
-  .code-block .v  { color: oklch(0.72 0.10 70); }
-  .code-block .s  { color: oklch(0.78 0.08 75); }
+  .code-block .c  { color: oklch(0.40 0.01 75); }
+  .code-block .k  { color: oklch(0.85 0.01 80); }
+  .code-block .v  { color: oklch(0.68 0.10 70); }
+  .code-block .s  { color: oklch(0.75 0.06 75); }
+  .code-block .n  { color: oklch(0.55 0.008 75); }  /* line numbers */
+
+  /* ── Bottom rule ── */
+  .bottom-rule {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.28 0.015 65) 30%,
+      oklch(0.28 0.015 65) 70%,
+      transparent 100%
+    );
+  }
 </style>
 </head>
 <body>
+<div class="glow"></div>
 <div class="container">
   <div class="left">
-    <div class="brand-name">brandspec</div>
+    <div class="mark-row">
+      <div class="mark">
+        <!-- bs mark (inline from logo-primary-mark.svg) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="64" height="64">
+          <rect width="256" height="256" rx="32" fill="oklch(0.22 0.015 60)"/>
+          <path d="M820.0 -14.0 C741.3 -14.0 675.8 4.8 623.5 42.5 C571.2 80.2 533.3 127.3 510.0 184.0 L500.0 184.0 L500.0 0.0 L102.0 0.0 L102.0 1490.0 L504.0 1490.0 L504.0 922.0 L510.0 922.0 C531.3 979.3 568.3 1028.7 621.0 1070.0 C673.7 1111.3 741.3 1132.0 824.0 1132.0 C898.0 1132.0 968.2 1112.3 1034.5 1073.0 C1100.8 1033.7 1155.0 971.8 1197.0 887.5 C1239.0 803.2 1260.0 693.3 1260.0 558.0 C1260.0 429.3 1240.0 322.7 1200.0 238.0 C1160.0 153.3 1106.7 90.2 1040.0 48.5 C973.3 6.8 900.0 -14.0 820.0 -14.0 Z M672.0 294.0 C727.3 294.0 770.2 317.3 800.5 364.0 C830.8 410.7 846.0 475.3 846.0 558.0 C846.0 641.3 830.8 706.5 800.5 753.5 C770.2 800.5 727.3 824.0 672.0 824.0 C617.3 824.0 574.0 800.5 542.0 753.5 C510.0 706.5 494.0 641.3 494.0 558.0 C494.0 477.3 510.0 413.2 542.0 365.5 C574.0 317.8 617.3 294.0 672.0 294.0 Z" fill="white" transform="translate(40.00,181.88) scale(0.072316,-0.072316)"/>
+          <path d="M601.0 -20.0 C449.0 -20.0 324.3 11.7 227.0 75.0 C129.7 138.3 71.3 225.0 52.0 335.0 L424.0 389.0 C437.3 345.0 459.0 311.2 489.0 287.5 C519.0 263.8 562.3 252.0 619.0 252.0 C702.3 252.0 744.0 275.3 744.0 322.0 C744.0 361.3 701.3 388.7 616.0 404.0 L418.0 440.0 C191.3 480.7 78.0 590.0 78.0 768.0 C78.0 884.7 124.0 974.5 216.0 1037.5 C308.0 1100.5 434.0 1132.0 594.0 1132.0 C742.0 1132.0 861.7 1103.5 953.0 1046.5 C1044.3 989.5 1098.7 910.3 1116.0 809.0 L762.0 758.0 C753.3 794.7 734.3 821.5 705.0 838.5 C675.7 855.5 641.3 864.0 602.0 864.0 C567.3 864.0 538.0 857.8 514.0 845.5 C490.0 833.2 478.0 815.3 478.0 792.0 C478.0 775.3 485.2 759.7 499.5 745.0 C513.8 730.3 542.0 719.3 584.0 712.0 L812.0 672.0 C1038.7 632.0 1152.0 531.3 1152.0 370.0 C1152.0 290.0 1128.2 220.8 1080.5 162.5 C1032.8 104.2 967.7 59.2 885.0 27.5 C802.3 -4.2 707.7 -20.0 601.0 -20.0 Z" fill="white" transform="translate(128.93,181.88) scale(0.072316,-0.072316)"/>
+        </svg>
+      </div>
+      <div class="brand-name">brandspec</div>
+    </div>
     <div class="tagline">Define once. Brand everywhere.</div>
-    <div class="sub">Forge your brand with any AI. One open format out.</div>
+    <div class="sub">The single source of your brand. One open YAML format — machine-readable, human-clear, every platform.</div>
     <div class="site-url">brandspec.dev</div>
   </div>
   <div class="right">
     <div class="code-block">
-<pre><span class="c"># brandspec.yaml</span>
-<span class="k">meta:</span>
+      <div class="code-header">
+        <div class="code-dot active"></div>
+        <div class="code-dot"></div>
+        <div class="code-dot"></div>
+        <span class="code-filename">brandspec.yaml</span>
+      </div>
+<pre><span class="k">meta:</span>
   <span class="k">name:</span> <span class="s">"Acme Corp"</span>
 
 <span class="k">core:</span>
@@ -132,10 +255,14 @@
 <span class="k">tokens:</span>
   <span class="k">colors:</span>
     <span class="k">primary:</span>
-      <span class="k">$value:</span> <span class="s">"oklch(0.7 0.15 250)"</span>
-      <span class="k">$type:</span> <span class="v">color</span></pre>
+      <span class="k">$value:</span> <span class="v">"oklch(0.7 0.15 250)"</span>
+      <span class="k">$type:</span>  <span class="v">color</span>
+    <span class="k">accent:</span>
+      <span class="k">$value:</span> <span class="v">"oklch(0.8 0.12 150)"</span>
+      <span class="k">$type:</span>  <span class="v">color</span></pre>
     </div>
   </div>
+  <div class="bottom-rule"></div>
 </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brandspec/assets/lockup-horizontal.svg" height="40" alt="brandspec">
+  <img src="brandspec/assets/lockup-horizontal-h80.png" height="40" alt="brandspec">
 </p>
 
 # brandspec
@@ -169,6 +169,8 @@ File naming convention: `{role}-{variant}.{ext}` (e.g., `logo-primary.svg`, `log
 Full asset spec: [`docs/assets.md`](docs/assets.md)
 
 Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`examples/`](examples/)
+
+> **Live example:** The [`brandspec/`](brandspec/) directory in this repository is brandspec's own brand definition — built with the Workshop.
 
 ## Exports
 
