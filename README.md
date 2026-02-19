@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="brandspec/assets/lockup-horizontal.svg" height="40" alt="brandspec">
+</p>
+
 # brandspec
 
 Define Brand Identity as code.

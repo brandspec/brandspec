@@ -1,0 +1,251 @@
+# brandspec.yaml — brandspec itself
+# Dogfooding: the spec defines its own brand.
+
+meta:
+  name: "brandspec"
+  version: "0.1.0"
+  updated: "2026-02-19"
+  description: "An open specification for defining Brand Identity as code."
+  url: "https://github.com/brandspec/brandspec"
+
+core:
+  essence: "Consistent Polymorphism — one definition, infinite manifestations"
+  tagline: "Define once. Brand everywhere."
+  personality:
+    - polymorphic
+    - consistent
+    - open
+    - rigorous
+    - pragmatic
+    - forge & sharpen
+  voice:
+    tone:
+      - measured
+      - direct
+      - no fluff
+    principles:
+      - "Technical accuracy is non-negotiable"
+      - "Short sentences. Cut unnecessary modifiers"
+      - "Treat users as intelligent — don't talk down, don't pander"
+      - "Avoid marketing language (revolutionary, game-changing, etc.)"
+
+tokens:
+  colors:
+    titanium-50:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Background"
+    titanium-100:
+      $value: "oklch(0.93 0.008 80)"
+      $type: color
+      $description: "Card background"
+    titanium-200:
+      $value: "oklch(0.87 0.010 75)"
+      $type: color
+      $description: "Border, divider"
+    titanium-300:
+      $value: "oklch(0.78 0.012 72)"
+      $type: color
+      $description: "Subtle border"
+    titanium-400:
+      $value: "oklch(0.65 0.015 70)"
+      $type: color
+      $description: "Subtext, placeholder"
+    titanium-600:
+      $value: "oklch(0.45 0.015 65)"
+      $type: color
+      $description: "Body text"
+    titanium-900:
+      $value: "oklch(0.22 0.015 60)"
+      $type: color
+      $description: "Heading, emphasis"
+    ember-subtle:
+      $value: "oklch(0.80 0.05 75)"
+      $type: color
+      $description: "Hover, light accent"
+    ember:
+      $value: "oklch(0.65 0.10 70)"
+      $type: color
+      $description: "Primary accent — CTA, links"
+    ember-strong:
+      $value: "oklch(0.55 0.12 65)"
+      $type: color
+      $description: "Hover accent, strong emphasis"
+  typography:
+    heading:
+      $value: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+      $type: fontFamily
+      $description: "All headings and body — single font family"
+    mono:
+      $value: "JetBrains Mono, monospace"
+      $type: fontFamily
+      $description: "Code blocks and technical content"
+
+assets:
+  - file: assets/logo-primary.svg
+    id: logo-primary
+    role: logo
+    variant: primary
+    description: "Brand mark (bs, outlined stroke) for light backgrounds"
+  - file: assets/logo-primary-512.png
+    id: logo-primary-512
+    role: logo
+    variant: primary
+    description: "Brand mark 512px PNG — GitHub avatar, social"
+  - file: assets/logo-primary-256.png
+    id: logo-primary-256
+    role: logo
+    variant: primary
+    description: "Brand mark 256px PNG — README, npm"
+  - file: assets/logo-primary-32.png
+    id: logo-primary-32
+    role: icon
+    variant: primary
+    description: "Brand mark 32px PNG — small icon contexts"
+  - file: assets/lockup-horizontal.svg
+    id: lockup-horizontal
+    role: lockup
+    variant: horizontal
+    description: "Lockup (bs | brandspec) for headers and README"
+  - file: assets/lockup-horizontal-h80.png
+    id: lockup-horizontal-h80
+    role: lockup
+    variant: horizontal
+    description: "Lockup 80px height PNG — README fallback"
+  - file: assets/icon-favicon.ico
+    id: icon-favicon
+    role: favicon
+    description: "Browser favicon"
+
+guidelines:
+  typography-usage:
+    content: |
+      ## Typography System
+
+      One font. Weight and tracking create every expression.
+
+      | Role            | Weight | Tracking  |
+      |-----------------|--------|-----------|
+      | Display / Logo  | 900    | -0.045em  |
+      | Section heading | 600    | -0.02em   |
+      | Body            | 400    | 0         |
+      | Label           | 500    | 0.06em (uppercase) |
+      | Code            | Mono 400 | 0       |
+    rules:
+      - id: type-single-family
+        description: "Only Inter and JetBrains Mono are permitted"
+        severity: error
+        applies_to: typography
+        criteria:
+          - "No additional font families"
+          - "Inter for all non-code text"
+          - "JetBrains Mono for code only"
+      - id: type-display-weight
+        description: "Display and logo text must use weight 900 with tight tracking"
+        severity: error
+        applies_to: typography
+        criteria:
+          - "font-weight: 900"
+          - "letter-spacing: -0.045em or tighter"
+
+  color-usage:
+    content: |
+      ## Color System
+
+      Titanium (near-neutral warm greys) + Ember (accent).
+
+      ### Titanium
+      Primary palette. Hue 60-80, chroma 0.005-0.015.
+      Not pure grey — subtly warm.
+
+      ### Ember
+      Accent only. Used sparingly for CTAs, links, labels.
+      Never as background for large areas.
+
+      ### Design intent
+      brandspec is a vessel — its visual identity must not
+      compete with the user's brand. Restrained, structural, receding.
+    rules:
+      - id: color-no-cold
+        description: "No cool-toned colors in the brandspec palette"
+        severity: error
+        applies_to: color
+        criteria:
+          - "All colors must have hue between 55-85 (warm range)"
+          - "No blue, green, or purple hues"
+      - id: color-ember-sparingly
+        description: "Ember accent must be used sparingly"
+        severity: warning
+        applies_to: color
+        criteria:
+          - "Ember should not be used as large area background"
+          - "Primary use: CTA, links, labels, small highlights"
+      - id: color-contrast
+        description: "Text must meet WCAG AA contrast"
+        severity: error
+        applies_to: color
+        criteria:
+          - "Normal text: contrast ratio >= 4.5:1"
+          - "Large text (>=18pt or >=14pt bold): contrast ratio >= 3:1"
+
+  voice-guidelines:
+    content: |
+      ## Voice
+
+      Measured. Direct. No fluff.
+
+      The voice of a forge master — few words, each one precise.
+      Quality speaks for itself.
+
+      ### Do
+      - "brandspec.yaml is the single source of truth."
+      - "Define your brand in one file."
+      - "Linting found 2 errors."
+
+      ### Don't
+      - "brandspec.yaml is your amazing, powerful source of truth!"
+      - "Revolutionize your brand workflow with our cutting-edge platform."
+      - "Oops! We found some issues with your brand."
+    rules:
+      - id: voice-no-marketing
+        description: "Copy must avoid marketing superlatives"
+        severity: error
+        applies_to: voice
+        criteria:
+          - "No 'revolutionary', 'game-changing', 'cutting-edge', 'amazing', 'powerful'"
+          - "No exclamation marks in product copy"
+      - id: voice-direct
+        description: "Copy must be direct and concise"
+        severity: warning
+        applies_to: voice
+        criteria:
+          - "Prefer short sentences"
+          - "Active voice over passive"
+          - "State facts, not feelings"
+
+  brand-philosophy:
+    content: |
+      ## Brand Philosophy
+
+      > The hardest thing in the world? Brand.
+      > Forge it. Keep the edge. Cut through everything.
+
+      ### Identity
+      Consistent Polymorphism — one definition, infinite manifestations.
+
+      ### Ecosystem layers
+      | Layer      | Copy                    | Component  |
+      |------------|-------------------------|------------|
+      | Confront   | "The hardest thing..."  | spec       |
+      | Forge      | "Forge it."             | workshop   |
+      | Maintain   | "Keep the edge."        | CLI        |
+      | Penetrate  | "Cut through everything"| vision     |
+
+      ### Sub-identities
+      - **Workshop**: Brand Forger
+
+extensions:
+  copy:
+    hero_en: "The hardest thing in the world? Brand. Forge it. Keep the edge. Cut through everything."
+    hero_ja: "鍛えろ。研げ。貫け。"
+    tagline: "Define once. Brand everywhere."
