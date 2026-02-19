@@ -1,16 +1,51 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync, cpSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  mkdirSync,
+  cpSync,
+  readdirSync,
+  unlinkSync,
+} from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createInterface } from "node:readline";
 import { parse } from "./parser.js";
 import { validate } from "./validate.js";
 import { serialize } from "./parser.js";
 import { toCss, toTailwindCss, toFigmaTokens, toStyleDictionary } from "./tokens.js";
+import {
+  API_BASE,
+  getCredentialsPath,
+  loadToken,
+  loadRemote,
+  ensureBrandspecrc,
+  saveCredentials,
+} from "./remote.js";
 import type { BrandspecYaml } from "./types.js";
 
 const VERSION = "0.1.0";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+function requireToken(): string {
+  const token = loadToken();
+  if (!token) {
+    console.error("Not logged in. Run 'brandspec login' first or set BRANDSPEC_TOKEN.");
+    process.exit(1);
+  }
+  return token;
+}
+
+function requireRemote(args: string[]): { org: string; brand: string } {
+  const remote = loadRemote(args);
+  if (!remote) {
+    console.error("No remote specified. Use 'brandspec push org/brand' or create .brandspecrc.");
+    process.exit(1);
+  }
+  return remote;
+}
 
 const HELP = `
 brandspec v${VERSION}
@@ -31,6 +66,12 @@ Commands:
   workshop start          Print start prompt for AI workshop
   workshop resume         Print resume prompt for AI workshop
   workshop status         Show current workshop position
+
+  login             Save API token for brandspec.tools
+  logout            Remove saved API token
+  pull [org/brand]  Pull brand from brandspec.tools
+  push [org/brand]  Push brand to brandspec.tools
+    --include-workshop   Include .workshop/ files
 
 Options:
   --help, -h       Show this help
@@ -675,9 +716,179 @@ function cmdConsult(args: string[]) {
   console.log(lines.join("\n"));
 }
 
+// ── Login / Logout ──
+
+async function cmdLogin(args: string[]) {
+  let token: string | undefined;
+
+  // --token flag for non-interactive (CI)
+  const tokenIdx = args.indexOf("--token");
+  if (tokenIdx !== -1 && args[tokenIdx + 1]) {
+    token = args[tokenIdx + 1];
+  }
+
+  if (!token) {
+    // Interactive prompt
+    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    token = await new Promise<string>((resolve) => {
+      rl.question("API token: ", (answer) => {
+        rl.close();
+        resolve(answer.trim());
+      });
+    });
+  }
+
+  if (!token || !token.startsWith("bst_")) {
+    console.error("Invalid token. Token must start with 'bst_'.");
+    process.exit(1);
+  }
+
+  saveCredentials(token);
+  console.log(`Token saved to ${getCredentialsPath()}`);
+}
+
+function cmdLogout() {
+  const credPath = getCredentialsPath();
+  if (existsSync(credPath)) {
+    unlinkSync(credPath);
+    console.log("Logged out. Token removed.");
+  } else {
+    console.log("No saved token found.");
+  }
+}
+
+// ── Pull ──
+
+function collectFiles(dir: string, base: string): Array<{ path: string; data: Buffer }> {
+  const results: Array<{ path: string; data: Buffer }> = [];
+  if (!existsSync(dir)) return results;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    const relPath = join(base, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectFiles(fullPath, relPath));
+    } else {
+      results.push({ path: relPath, data: readFileSync(fullPath) });
+    }
+  }
+  return results;
+}
+
+async function cmdPull(args: string[]) {
+  const token = requireToken();
+  const remote = requireRemote(args);
+  const includeWorkshop = args.includes("--include-workshop");
+
+  const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/pull${includeWorkshop ? "?include_workshop=true" : ""}`;
+
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`Pull failed (${res.status}): ${body}`);
+    process.exit(1);
+  }
+
+  const arrayBuf = await res.arrayBuffer();
+  const JSZip = (await import("jszip")).default;
+  const zip = await JSZip.loadAsync(arrayBuf);
+
+  const outDir = resolve("brandspec");
+  mkdirSync(outDir, { recursive: true });
+
+  for (const [filePath, zipEntry] of Object.entries(zip.files)) {
+    if (zipEntry.dir) {
+      mkdirSync(join(outDir, filePath), { recursive: true });
+    } else {
+      const dest = join(outDir, filePath);
+      mkdirSync(dirname(dest), { recursive: true });
+      const content = await zipEntry.async("nodebuffer");
+      writeFileSync(dest, content);
+    }
+  }
+
+  ensureBrandspecrc(remote.org, remote.brand);
+
+  const fileCount = Object.values(zip.files).filter((f) => !f.dir).length;
+  console.log(`Pulled ${remote.org}/${remote.brand} → brandspec/ (${fileCount} files)`);
+}
+
+// ── Push ──
+
+async function cmdPush(args: string[]) {
+  const token = requireToken();
+  const remote = requireRemote(args);
+  const includeWorkshop = args.includes("--include-workshop");
+
+  // Read brandspec.yaml
+  const yamlPath = resolve("brandspec.yaml");
+  if (!existsSync(yamlPath)) {
+    console.error("brandspec.yaml not found in current directory.");
+    process.exit(1);
+  }
+  const yamlContent = readFileSync(yamlPath, "utf-8");
+
+  // Build FormData
+  const formData = new FormData();
+  formData.append("yaml", new Blob([yamlContent], { type: "text/yaml" }), "brandspec.yaml");
+
+  // Collect assets/
+  const assetsDir = resolve("assets");
+  const assetFiles = collectFiles(assetsDir, "");
+  for (const file of assetFiles) {
+    formData.append("assets", new Blob([file.data]), file.path);
+  }
+
+  // Optionally collect .workshop/
+  if (includeWorkshop) {
+    const workshopDir = resolve(".workshop");
+    const workshopFiles = collectFiles(workshopDir, "");
+    for (const file of workshopFiles) {
+      formData.append("workshop", new Blob([file.data]), file.path);
+    }
+  }
+
+  const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/push`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`Push failed (${res.status}): ${body}`);
+    process.exit(1);
+  }
+
+  const result = await res.json() as {
+    action?: string;
+    warnings?: string[];
+    assetErrors?: string[];
+  };
+
+  console.log(`Pushed to ${remote.org}/${remote.brand}: ${result.action ?? "ok"}`);
+
+  if (result.warnings?.length) {
+    for (const w of result.warnings) {
+      console.warn(`  warn: ${w}`);
+    }
+  }
+  if (result.assetErrors?.length) {
+    for (const e of result.assetErrors) {
+      console.error(`  asset error: ${e}`);
+    }
+  }
+
+  ensureBrandspecrc(remote.org, remote.brand);
+}
+
 // ── Main ──
 
-function main() {
+async function main() {
   const args = process.argv.slice(2);
   const command = args[0];
 
@@ -706,6 +917,18 @@ function main() {
       break;
     case "consult":
       cmdConsult(args.slice(1));
+      break;
+    case "login":
+      await cmdLogin(args.slice(1));
+      break;
+    case "logout":
+      cmdLogout();
+      break;
+    case "pull":
+      await cmdPull(args.slice(1));
+      break;
+    case "push":
+      await cmdPush(args.slice(1));
       break;
     default:
       console.error(`Unknown command: ${command}`);
