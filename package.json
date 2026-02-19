@@ -21,11 +21,15 @@
     "schema",
     "workshop"
   ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "test": "node --test dist/index.test.js"
+    "test": "node --test test/index.test.mjs",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "ajv": "^8.17.1",
