@@ -8,8 +8,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "cli",
     "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["cli"]
 }

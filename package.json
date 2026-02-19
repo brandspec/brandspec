@@ -28,7 +28,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/index.test.mjs",
+    "test": "node --test cli/test/*.test.mjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {

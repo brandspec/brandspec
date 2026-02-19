@@ -4,7 +4,7 @@ import { writeFileSync, readFileSync, mkdirSync, rmSync, existsSync } from "node
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
-import { parseOrgBrand, loadToken, getCredentialsPath, saveCredentials } from "../dist/index.js";
+import { parseOrgBrand, loadToken, getCredentialsPath, saveCredentials } from "../../dist/index.js";
 
 function makeTmpDir() {
   const dir = join(tmpdir(), `brandspec-test-${randomBytes(4).toString("hex")}`);

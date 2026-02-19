@@ -12,7 +12,7 @@ A unified CLI and specification for creating, validating, and generating brand t
 
 ```
 brandspec/
-├── src/                    # TypeScript CLI source
+├── cli/                    # TypeScript CLI source
 │   ├── cli.ts              # CLI entry (init, validate, generate, workshop)
 │   ├── parser.ts           # YAML parse/serialize
 │   ├── validate.ts         # Schema validation (ajv)
@@ -20,13 +20,12 @@ brandspec/
 │   ├── schema.ts           # JSON Schema loading
 │   ├── types.ts            # TypeScript type definitions
 │   └── index.ts            # Library entry point
-├── schema/v0.1.0.yaml      # JSON Schema (draft 2020-12) for brandspec.yaml
-├── docs/                   # Specification docs (tokens, assets, exports)
-│   └── exports/            # Export format docs (css, tailwind, figma)
-├── examples/               # Example brandspec.yaml files
-│   ├── minimal.yaml
-│   ├── standard.yaml
-│   └── full.yaml
+├── schema/                 # Specification (SSoT)
+│   ├── v0.1.0.yaml         # JSON Schema (draft 2020-12) for validation
+│   └── spec/               # Machine-friendly spec knowledge (tokens, assets, guidelines)
+├── docs/                   # Human-readable docs and examples
+│   ├── exports/            # Export format docs (css, tailwind, figma)
+│   └── examples/           # Example brandspec.yaml files
 ├── workshop/               # AI-facilitated brand creation toolkit
 │   ├── SKILL.md            # Claude Code integration entry point (Japanese)
 │   ├── flow.md             # 4-phase process overview
