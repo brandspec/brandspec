@@ -4,13 +4,13 @@ export default defineConfig([
   {
     entry: ["cli/index.ts"],
     format: ["esm", "cjs"],
-    outDir: "../dist",
+    outDir: "dist",
     dts: true,
     clean: true,
   },
   {
     entry: ["cli/cli.ts"],
-    outDir: "../dist",
+    outDir: "dist",
     format: ["esm"],
     banner: { js: "#!/usr/bin/env node" },
   },

@@ -13,6 +13,8 @@ import { createInterface } from "node:readline";
 import { parse } from "./parser.js";
 import { validate } from "./validate.js";
 import { serialize } from "./parser.js";
+import { lintBrandspec } from "./lint.js";
+import type { LintReport } from "./lint.js";
 import { toCss, toTailwindCss, toFigmaTokens, toStyleDictionary } from "./tokens.js";
 import {
   API_BASE,
@@ -56,7 +58,10 @@ Usage:
 
 Commands:
   init              Create a brandspec/ directory with templates
-  validate [path]   Validate a brandspec.yaml file (default: ./brandspec.yaml)
+  lint [path]       Lint a brandspec.yaml (validate + rules + score)
+    --json           Output as JSON (for CI/pipe)
+    --quiet          Exit code only, no output
+  validate [path]   Alias for lint
   generate [path]   Generate token files from brandspec.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
     --out <dir>      Output directory (default: ./out)
@@ -163,11 +168,52 @@ function cmdInit() {
   console.log("  npx brandspec generate --format tailwind");
 }
 
-function cmdValidate(filePath?: string) {
+function formatLintReport(report: LintReport): string {
+  const lines: string[] = [];
+
+  const errors = report.results.filter((r) => r.severity === "error");
+  const warnings = report.results.filter((r) => r.severity === "warning");
+  const infos = report.results.filter((r) => r.severity === "info");
+
+  if (errors.length > 0) {
+    lines.push("");
+    lines.push(`Errors (${errors.length}):`);
+    for (const r of errors) {
+      lines.push(`  \u2717 [${r.rule}] ${r.message}`);
+    }
+  }
+
+  if (warnings.length > 0) {
+    lines.push("");
+    lines.push(`Warnings (${warnings.length}):`);
+    for (const r of warnings) {
+      lines.push(`  \u26A0 [${r.rule}] ${r.message}`);
+    }
+  }
+
+  if (infos.length > 0) {
+    lines.push("");
+    lines.push(`Info (${infos.length}):`);
+    for (const r of infos) {
+      lines.push(`  \u2139 [${r.rule}] ${r.message}`);
+    }
+  }
+
+  return lines.join("\n");
+}
+
+function cmdLint(args: string[]) {
+  const jsonMode = args.includes("--json");
+  const quietMode = args.includes("--quiet");
+  const filePath = args.find((a) => !a.startsWith("-"));
   const target = resolve(filePath ?? "brandspec.yaml");
 
   if (!existsSync(target)) {
-    console.error(`File not found: ${target}`);
+    if (jsonMode) {
+      console.log(JSON.stringify({ error: `File not found: ${target}` }));
+    } else if (!quietMode) {
+      console.error(`File not found: ${target}`);
+    }
     process.exit(1);
   }
 
@@ -176,41 +222,59 @@ function cmdValidate(filePath?: string) {
   // Step 1: Parse
   const parseResult = parse(content);
   if (!parseResult.success) {
-    console.error("Parse errors:");
-    for (const err of parseResult.errors) {
-      console.error(`  - ${err}`);
+    if (jsonMode) {
+      console.log(JSON.stringify({ error: "parse", details: parseResult.errors }));
+    } else if (!quietMode) {
+      console.error("Parse errors:");
+      for (const err of parseResult.errors) {
+        console.error(`  - ${err}`);
+      }
     }
     process.exit(1);
   }
 
   // Step 2: Schema validation
   const validationResult = validate(parseResult.data);
-
-  // Output warnings
-  for (const w of parseResult.warnings) {
-    console.warn(`  warn: ${w}`);
-  }
-  for (const w of validationResult.warnings) {
-    console.warn(`  warn: ${w}`);
-  }
-
   if (!validationResult.valid) {
-    console.error("Schema validation errors:");
-    for (const err of validationResult.errors) {
-      console.error(`  - ${err}`);
+    if (jsonMode) {
+      console.log(JSON.stringify({ error: "schema", details: validationResult.errors }));
+    } else if (!quietMode) {
+      console.error("Schema validation errors:");
+      for (const err of validationResult.errors) {
+        console.error(`  - ${err}`);
+      }
     }
     process.exit(1);
   }
 
-  // Summary
+  // Step 3: Lint
   const data = parseResult.data!;
-  const colorCount = data.tokens?.colors ? Object.keys(data.tokens.colors).length : 0;
-  const assetCount = data.assets?.length ?? 0;
-  const guidelineCount = data.guidelines ? Object.keys(data.guidelines).length : 0;
+  const report = lintBrandspec(data);
 
-  console.log(`Valid: ${data.meta.name}`);
-  if (data.core?.essence) console.log(`  "${data.core.essence}"`);
-  console.log(`  ${colorCount} colors, ${assetCount} assets, ${guidelineCount} guideline sections`);
+  if (jsonMode) {
+    console.log(JSON.stringify({
+      name: data.meta.name,
+      score: report.score,
+      errors: report.errors,
+      warnings: report.warnings,
+      infos: report.infos,
+      results: report.results,
+    }));
+  } else if (!quietMode) {
+    console.log(`${data.meta.name} \u2014 Score: ${report.score}/100`);
+    console.log(formatLintReport(report));
+  }
+
+  if (report.errors > 0) {
+    process.exit(1);
+  }
+}
+
+function cmdValidate(args: string[]) {
+  if (!args.includes("--json") && !args.includes("--quiet")) {
+    console.error("Hint: 'validate' now runs 'lint'. Use 'brandspec lint' directly.");
+  }
+  cmdLint(args);
 }
 
 type Format = "css" | "tailwind" | "figma" | "sd" | "all";
@@ -906,8 +970,11 @@ async function main() {
     case "init":
       cmdInit();
       break;
+    case "lint":
+      cmdLint(args.slice(1));
+      break;
     case "validate":
-      cmdValidate(args[1]);
+      cmdValidate(args.slice(1));
       break;
     case "generate":
       cmdGenerate(args.slice(1));
