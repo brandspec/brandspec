@@ -154,7 +154,7 @@ Recommended:
 
 ```
 brandspec/
-├── brandspec.yaml
+├── brand.yaml
 └── assets/
     ├── logo-primary.svg
     ├── logo-primary.png

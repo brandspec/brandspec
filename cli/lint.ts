@@ -1,5 +1,5 @@
 /**
- * Lint engine for brandspec.yaml files.
+ * Lint engine for brand.yaml files.
  * Ported from brandspec-tools SaaS — single source of truth.
  */
 

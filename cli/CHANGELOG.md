@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - **CLI commands**: `init`, `validate`, `generate`, `consult`, `workshop`
 - **Token generation**: 4 output formats — CSS custom properties, Tailwind v4 `@theme`, Figma Tokens Studio JSON, Style Dictionary (DTCG)
-- **Schema validation**: JSON Schema (draft 2020-12) for `brandspec.yaml`
+- **Schema validation**: JSON Schema (draft 2020-12) for `brand.yaml`
 - **Workshop skill**: 4-phase AI-facilitated brand creation (Discovery → Concept → Visual Identity → Documentation), model-agnostic, session resume support
-- **Specification**: `brandspec.yaml` single-file brand definition format with W3C DTCG-compliant design tokens
-- **Examples**: minimal, standard, and full `brandspec.yaml` examples
+- **Specification**: `brand.yaml` single-file brand definition format with W3C DTCG-compliant design tokens
+- **Examples**: minimal, standard, and full `brand.yaml` examples

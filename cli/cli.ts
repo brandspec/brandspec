@@ -58,11 +58,11 @@ Usage:
 
 Commands:
   init              Create a brandspec/ directory with templates
-  lint [path]       Lint a brandspec.yaml (validate + rules + score)
+  lint [path]       Lint a brand.yaml (validate + rules + score)
     --json           Output as JSON (for CI/pipe)
     --quiet          Exit code only, no output
   validate [path]   Alias for lint
-  generate [path]   Generate token files from brandspec.yaml
+  generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
     --out <dir>      Output directory (default: ./out)
 
@@ -164,7 +164,7 @@ function cmdInit() {
   console.log("  # Start the brand workshop with any AI:");
   console.log("  npx brandspec workshop start | pbcopy");
   console.log();
-  console.log("  # Or edit brandspec.yaml directly, then:");
+  console.log("  # Or edit brand.yaml directly, then:");
   console.log("  npx brandspec generate --format tailwind");
 }
 
@@ -206,7 +206,7 @@ function cmdLint(args: string[]) {
   const jsonMode = args.includes("--json");
   const quietMode = args.includes("--quiet");
   const filePath = args.find((a) => !a.startsWith("-"));
-  const target = resolve(filePath ?? "brandspec.yaml");
+  const target = resolve(filePath ?? "brand.yaml");
 
   if (!existsSync(target)) {
     if (jsonMode) {
@@ -339,7 +339,7 @@ function cmdGenerate(args: string[]) {
     formats = ["all"];
   }
 
-  const target = resolve(filePath ?? "brandspec.yaml");
+  const target = resolve(filePath ?? "brand.yaml");
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
     process.exit(1);
@@ -599,7 +599,7 @@ Commands:
 
 function cmdConsult(args: string[]) {
   const filePath = args.find((a) => !a.startsWith("-"));
-  const target = resolve(filePath ?? "brandspec.yaml");
+  const target = resolve(filePath ?? "brand.yaml");
 
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
@@ -887,17 +887,17 @@ async function cmdPush(args: string[]) {
   const remote = requireRemote(args);
   const includeWorkshop = args.includes("--include-workshop");
 
-  // Read brandspec.yaml
-  const yamlPath = resolve("brandspec.yaml");
+  // Read brand.yaml
+  const yamlPath = resolve("brand.yaml");
   if (!existsSync(yamlPath)) {
-    console.error("brandspec.yaml not found in current directory.");
+    console.error("brand.yaml not found in current directory.");
     process.exit(1);
   }
   const yamlContent = readFileSync(yamlPath, "utf-8");
 
   // Build FormData
   const formData = new FormData();
-  formData.append("yaml", new Blob([yamlContent], { type: "text/yaml" }), "brandspec.yaml");
+  formData.append("yaml", new Blob([yamlContent], { type: "text/yaml" }), "brand.yaml");
 
   // Collect assets/
   const assetsDir = resolve("assets");

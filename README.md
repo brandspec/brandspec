@@ -6,13 +6,13 @@
 
 Define Brand Identity as code.
 
-Brand identity lives in Figma, PDFs, Notion pages, Slack threads — scattered, inconsistent, out of date. **brandspec** puts it in one file: `brandspec.yaml`. Structured for machines, readable by humans. An open format built on [W3C Design Tokens](https://tr.designtokens.org/format/).
+Brand identity lives in Figma, PDFs, Notion pages, Slack threads — scattered, inconsistent, out of date. **brandspec** puts it in one file: `brand.yaml`. Structured for machines, readable by humans. An open format built on [W3C Design Tokens](https://tr.designtokens.org/format/).
 
 This repository has three components:
 
 | Component | Path | Role |
 |-----------|------|------|
-| **schema** | `schema/` | Specification — the definition of `brandspec.yaml` (JSON Schema + machine-friendly spec knowledge) |
+| **schema** | `schema/` | Specification — the definition of `brand.yaml` (JSON Schema + machine-friendly spec knowledge) |
 | **workshop** | `workshop/` | Facilitation — AI-guided 4-phase process to create a brand identity. References schema as SSoT. |
 | **cli** | `cli/` | Tooling — validate, generate, push/pull. Consumes schema for validation and export. |
 
@@ -29,13 +29,13 @@ This gives you:
 ```
 my-app/
 ├── brandspec/
-│   ├── brandspec.yaml          # Brand definition (edit this)
+│   ├── brand.yaml          # Brand definition (edit this)
 │   ├── assets/                 # Logo, symbol, favicon, etc.
 │   └── .workshop/              # Workshop state (AI-resumable)
 └── src/                       # Your app source
 ```
 
-From here, either edit `brandspec.yaml` directly or run the Workshop to build your brand with AI. Then generate tokens:
+From here, either edit `brand.yaml` directly or run the Workshop to build your brand with AI. Then generate tokens:
 
 ```bash
 npx brandspec validate                     # Check against schema
@@ -53,7 +53,7 @@ npx brandspec workshop start | pbcopy
 
 Paste the prompt into your AI and start the session. The workshop asks your preferred language at the start and runs the entire session in it.
 
-**4 phases → one `brandspec.yaml`:**
+**4 phases → one `brand.yaml`:**
 
 ```
 Discovery → Concept → Visual Identity → Documentation
@@ -71,7 +71,7 @@ The resume prompt includes all previous decisions and current position — paste
 
 ## Consult — Brand-aligned AI in one command
 
-Already have a `brandspec.yaml`? Turn any AI into a brand consultant:
+Already have a `brand.yaml`? Turn any AI into a brand consultant:
 
 ```bash
 npx brandspec consult
@@ -92,8 +92,8 @@ brandspec <command> [options]
 
 Commands:
   init              Create a brandspec/ directory with templates
-  validate [path]   Validate against schema (default: ./brandspec.yaml)
-  generate [path]   Generate token files from brandspec.yaml
+  validate [path]   Validate against schema (default: ./brand.yaml)
+  generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
     --out <dir>      Output directory (default: ./out)
 

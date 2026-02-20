@@ -23,7 +23,7 @@ Workshop populates the `brandspec/` directory created by `brandspec init`:
 
 ```
 brandspec/
-├── brandspec.yaml              # source of truth
+├── brand.yaml              # source of truth
 ├── assets/                     # brand assets
 ├── out/                       # generated from yaml
 │   ├── tokens.css
@@ -121,12 +121,12 @@ brandspec/
 1. **spacing-radius** - Confirm spacing/radius defaults or customize
 2. **assets** - Register existing assets or note next actions
 3. **export-selection** - Choose export formats (css, tailwind, html, etc.)
-4. **yaml** - Generate `brandspec.yaml`
+4. **yaml** - Generate `brand.yaml`
 5. **dist** - Generate selected exports into `out/`
 
 ### Outputs
 
-- `brandspec.yaml` - Machine-readable spec (repository root)
+- `brand.yaml` - Machine-readable spec (repository root)
 - `out/tokens.css` - CSS variables
 - `out/brand.md` - Human-readable document
 - `out/brand.html` - Visual preview (if selected)
@@ -134,7 +134,7 @@ brandspec/
 
 ### Complete When
 
-- [ ] `brandspec.yaml` generated and valid
+- [ ] `brand.yaml` generated and valid
 - [ ] Selected dist files generated
 - [ ] User has reviewed and approved
 

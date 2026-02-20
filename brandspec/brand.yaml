@@ -1,4 +1,4 @@
-# brandspec.yaml — brandspec itself
+# brand.yaml — brandspec itself
 # Dogfooding: the spec defines its own brand.
 
 meta:
@@ -198,12 +198,12 @@ guidelines:
       Quality speaks for itself.
 
       ### Do
-      - "brandspec.yaml is the single source of truth."
+      - "brand.yaml is the single source of truth."
       - "Define your brand in one file."
       - "Linting found 2 errors."
 
       ### Don't
-      - "brandspec.yaml is your amazing, powerful source of truth!"
+      - "brand.yaml is your amazing, powerful source of truth!"
       - "Revolutionize your brand workflow with our cutting-edge platform."
       - "Oops! We found some issues with your brand."
     rules:

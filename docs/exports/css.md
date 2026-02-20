@@ -1,6 +1,6 @@
 # Export: CSS Custom Properties
 
-Export rules for generating CSS custom properties from `brandspec.yaml`.
+Export rules for generating CSS custom properties from `brand.yaml`.
 
 ## Token Mapping
 

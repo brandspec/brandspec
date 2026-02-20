@@ -1,6 +1,6 @@
 # Assets Specification
 
-Machine-readable specification for the `assets` section of brandspec.yaml.
+Machine-readable specification for the `assets` section of brand.yaml.
 
 ## Structure
 
@@ -128,7 +128,7 @@ Pattern: `{role}-{variant}[-{context}].{ext}`
 
 ```
 brandspec/
-├── brandspec.yaml
+├── brand.yaml
 └── assets/
     ├── logo-primary.svg
     ├── logo-monochrome.svg
@@ -138,7 +138,7 @@ brandspec/
     └── icon-app.png
 ```
 
-Assets are stored in `brandspec/assets/` and referenced from `brandspec.yaml` with relative paths.
+Assets are stored in `brandspec/assets/` and referenced from `brand.yaml` with relative paths.
 
 ---
 

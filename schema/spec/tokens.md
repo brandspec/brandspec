@@ -1,6 +1,6 @@
 # Tokens Specification
 
-Machine-readable specification for the `tokens` section of brandspec.yaml.
+Machine-readable specification for the `tokens` section of brand.yaml.
 
 Follows the [W3C Design Tokens Community Group (DTCG)](https://tr.designtokens.org/format/) format.
 

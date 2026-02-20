@@ -1,6 +1,6 @@
 # Guidelines Specification
 
-Machine-readable specification for the `guidelines` section of brandspec.yaml.
+Machine-readable specification for the `guidelines` section of brand.yaml.
 
 ## Structure
 

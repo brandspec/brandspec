@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **brandspec** — Define Brand Identity as code.
 
-A unified CLI and specification for creating, validating, and generating brand tokens from `brandspec.yaml`. Includes an AI-facilitated Workshop for brand creation with any LLM (BYOM — Bring Your Own Model).
+A unified CLI and specification for creating, validating, and generating brand tokens from `brand.yaml`. Includes an AI-facilitated Workshop for brand creation with any LLM (BYOM — Bring Your Own Model).
 
 ## Repository Structure
 
@@ -14,27 +14,29 @@ A unified CLI and specification for creating, validating, and generating brand t
 brandspec/
 ├── cli/                    # TypeScript CLI source
 │   ├── cli.ts              # CLI entry (init, validate, generate, workshop)
+│   ├── index.ts            # Library entry point
 │   ├── parser.ts           # YAML parse/serialize
 │   ├── validate.ts         # Schema validation (ajv)
 │   ├── tokens.ts           # Token export generators (CSS, Tailwind, Figma, SD)
 │   ├── schema.ts           # JSON Schema loading
 │   ├── types.ts            # TypeScript type definitions
-│   └── index.ts            # Library entry point
+│   ├── test/               # CLI tests
+│   ├── tsconfig.json
+│   ├── tsup.config.ts
+│   └── CHANGELOG.md
 ├── schema/                 # Specification (SSoT)
 │   ├── v0.1.0.yaml         # JSON Schema (draft 2020-12) for validation
 │   └── spec/               # Machine-friendly spec knowledge (tokens, assets, guidelines)
 ├── docs/                   # Human-readable docs and examples
 │   ├── exports/            # Export format docs (css, tailwind, figma)
-│   └── examples/           # Example brandspec.yaml files
+│   └── examples/           # Example brand.yaml files
 ├── workshop/               # AI-facilitated brand creation toolkit
 │   ├── SKILL.md            # Claude Code integration entry point (Japanese)
 │   ├── flow.md             # 4-phase process overview
 │   ├── phases/             # 01-discovery, 02-concept, 03-visual, 04-documentation
 │   └── templates/          # Scaffolded when running `brandspec workshop start`
-├── .workshop/              # LP/site assets (visual-preview.html, ogp, etc.)
-├── package.json
-├── tsconfig.json
-└── tsup.config.ts
+├── site/                   # LP (brandspec.dev)
+└── package.json
 ```
 
 ## Build & Development
@@ -50,7 +52,7 @@ npm run typecheck      # TypeScript type checking
 
 ```bash
 brandspec init                          # Create brandspec/ directory with templates
-brandspec validate [path]               # Validate a brandspec.yaml
+brandspec validate [path]               # Validate a brand.yaml
 brandspec generate [path] --format all  # Generate out/ (css, tailwind, figma, sd)
 brandspec consult [path]                # Print brand context for AI consultation
 brandspec workshop start                # Print start prompt for AI workshop
@@ -58,7 +60,7 @@ brandspec workshop resume               # Print resume prompt for AI workshop
 brandspec workshop status               # Show workshop position
 ```
 
-## Specification (brandspec.yaml)
+## Specification (brand.yaml)
 
 - Single-file brand definition format
 - Only required field: `meta.name`

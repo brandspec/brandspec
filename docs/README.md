@@ -9,7 +9,7 @@ Human-readable documentation for brandspec users. Intended to be published as a 
 | `assets.md` | Asset system — roles, variants, file naming |
 | `tokens.md` | Token format and color system overview |
 | `exports/` | Export format guides (CSS, Tailwind, Figma) |
-| `examples/` | Example `brandspec.yaml` files (minimal, standard, full) |
+| `examples/` | Example `brand.yaml` files (minimal, standard, full) |
 
 ## Relationship to schema/spec/
 

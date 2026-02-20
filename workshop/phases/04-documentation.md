@@ -78,17 +78,17 @@ You can generate additional formats later with:
 
 ### 4.4 YAML Generation
 
-Generate `brandspec.yaml` from all decisions (using latest non-superseded decisions).
+Generate `brand.yaml` from all decisions (using latest non-superseded decisions).
 
 **Process:**
 
 1. Gather all decisions from `decisions.yml` (latest non-superseded for each key)
 2. Structure into brandspec format following the spec files (tokens.md, assets.md, guidelines.md)
-3. Write to `brandspec.yaml` (repository root)
+3. Write to `brand.yaml` (repository root)
 4. Validate against schema:
 
 ```bash
-npx brandspec validate brandspec.yaml
+npx brandspec validate brand.yaml
 ```
 
 If validation fails, fix the YAML and re-validate before proceeding.
@@ -96,7 +96,7 @@ If validation fails, fix the YAML and re-validate before proceeding.
 If dark mode was defined, add `$extensions.dark` to surface and brand color tokens.
 If compat values are needed, add `$extensions.compat` with hsl/hex to key brand colors.
 
-**Output:** `brandspec.yaml` (repository root)
+**Output:** `brand.yaml` (repository root)
 
 ---
 
@@ -135,7 +135,7 @@ The CLI produces machine-precise output. The AI-generated `brand.md` is still be
 
 - [ ] Spacing/radius confirmed
 - [ ] Assets registered (or next action documented)
-- [ ] `brandspec.yaml` generated and valid
+- [ ] `brand.yaml` generated and valid
 - [ ] Selected export files generated
 - [ ] User has reviewed and approved
 
@@ -146,7 +146,7 @@ Before marking complete, review with user:
 ```
 Here's your brandspec directory:
 
-📄 brandspec.yaml - Source of truth
+📄 brand.yaml - Source of truth
 📁 assets/        - Brand assets
 
 Run `npx brandspec generate --format <fmt>` to generate token files.

@@ -1,6 +1,6 @@
 # brandspec workshop
 
-A Brand Identity forge. Through dialogue — pressure, refinement, and sharpening — produce a complete `brandspec.yaml` and brand assets.
+A Brand Identity forge. Through dialogue — pressure, refinement, and sharpening — produce a complete `brand.yaml` and brand assets.
 
 Compatible spec: brandspec v0.x
 
@@ -11,7 +11,7 @@ Compatible spec: brandspec v0.x
 
 ## Specification Knowledge (MUST READ)
 
-The following files define how `brandspec.yaml` works. Read these before facilitating:
+The following files define how `brand.yaml` works. Read these before facilitating:
 
 - `../schema/spec/tokens.md` — Token format, color system (oklch, variants, dark mode), typography, spacing, radius, export mapping
 - `../schema/spec/assets.md` — Asset structure, roles, variants, file naming, logo system patterns
@@ -22,7 +22,7 @@ The following files define how `brandspec.yaml` works. Read these before facilit
 
 Brand Forger — forge a Brand Identity through dialogue with the user, producing a standalone brandspec repository.
 
-The workshop is a forge. Apply pressure to raw material, refine it, put an edge on it. The resulting `brandspec.yaml` becomes a SSoT of Consistent Polymorphism — ensuring the same brand appears with different faces at every touchpoint.
+The workshop is a forge. Apply pressure to raw material, refine it, put an edge on it. The resulting `brand.yaml` becomes a SSoT of Consistent Polymorphism — ensuring the same brand appears with different faces at every touchpoint.
 
 ## Deliverables
 
@@ -30,7 +30,7 @@ The workshop populates the `brandspec/` directory created by `brandspec init`.
 
 ```
 brandspec/                      ← inside your project
-├── brandspec.yaml              # SSoT — everything expands polymorphically from here
+├── brand.yaml              # SSoT — everything expands polymorphically from here
 ├── assets/                     # brand assets (logos, icons, etc.)
 └── .workshop/                  # process records (keep for AI resumability)
     ├── decisions.yml
@@ -79,8 +79,8 @@ The workshop supports any language. The session language is determined at initia
 
 **Rules:**
 - All facilitator dialogue, questions, and explanations MUST be in the session language
-- `brandspec.yaml` field keys remain English (they are part of the spec)
-- `brandspec.yaml` values (essence, tagline, personality, etc.) are written in the session language unless the user prefers otherwise
+- `brand.yaml` field keys remain English (they are part of the spec)
+- `brand.yaml` values (essence, tagline, personality, etc.) are written in the session language unless the user prefers otherwise
 - `decisions.yml` values follow the session language
 - On session resume, read `session_language` from decisions and continue in that language
 

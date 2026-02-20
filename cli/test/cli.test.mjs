@@ -158,16 +158,16 @@ describe("push FormData construction", () => {
   });
 
   it("builds FormData with yaml and assets", () => {
-    // Create brandspec.yaml
-    writeFileSync(join(tmpDir, "brandspec.yaml"), 'meta:\n  name: "Test"\n', "utf-8");
+    // Create brand.yaml
+    writeFileSync(join(tmpDir, "brand.yaml"), 'meta:\n  name: "Test"\n', "utf-8");
 
     // Create assets/
     mkdirSync(join(tmpDir, "assets"), { recursive: true });
     writeFileSync(join(tmpDir, "assets", "logo.svg"), "<svg></svg>", "utf-8");
 
-    const yamlContent = readFileSync(join(tmpDir, "brandspec.yaml"), "utf-8");
+    const yamlContent = readFileSync(join(tmpDir, "brand.yaml"), "utf-8");
     const formData = new FormData();
-    formData.append("yaml", new Blob([yamlContent], { type: "text/yaml" }), "brandspec.yaml");
+    formData.append("yaml", new Blob([yamlContent], { type: "text/yaml" }), "brand.yaml");
 
     // Verify yaml field
     const yamlBlob = formData.get("yaml");
@@ -182,12 +182,12 @@ describe("push FormData construction", () => {
   });
 
   it("includes workshop files when requested", () => {
-    writeFileSync(join(tmpDir, "brandspec.yaml"), 'meta:\n  name: "Test"\n', "utf-8");
+    writeFileSync(join(tmpDir, "brand.yaml"), 'meta:\n  name: "Test"\n', "utf-8");
     mkdirSync(join(tmpDir, ".workshop"), { recursive: true });
     writeFileSync(join(tmpDir, ".workshop", "decisions.yml"), "decisions: []\n", "utf-8");
 
     const formData = new FormData();
-    formData.append("yaml", new Blob(["yaml"]), "brandspec.yaml");
+    formData.append("yaml", new Blob(["yaml"]), "brand.yaml");
 
     const workshopData = readFileSync(join(tmpDir, ".workshop", "decisions.yml"));
     formData.append("workshop", new Blob([workshopData]), "decisions.yml");
@@ -215,7 +215,7 @@ describe("pull ZIP extraction", async () => {
 
     // Create a ZIP in memory
     const zip = new JSZip();
-    zip.file("brandspec.yaml", 'meta:\n  name: "Pulled Brand"\n');
+    zip.file("brand.yaml", 'meta:\n  name: "Pulled Brand"\n');
     zip.file("assets/logo.svg", "<svg>test</svg>");
 
     const zipBuf = await zip.generateAsync({ type: "nodebuffer" });
@@ -238,10 +238,10 @@ describe("pull ZIP extraction", async () => {
     }
 
     // Verify extracted files
-    assert.ok(existsSync(join(outDir, "brandspec.yaml")));
+    assert.ok(existsSync(join(outDir, "brand.yaml")));
     assert.ok(existsSync(join(outDir, "assets", "logo.svg")));
 
-    const yaml = readFileSync(join(outDir, "brandspec.yaml"), "utf-8");
+    const yaml = readFileSync(join(outDir, "brand.yaml"), "utf-8");
     assert.ok(yaml.includes("Pulled Brand"));
 
     const svg = readFileSync(join(outDir, "assets", "logo.svg"), "utf-8");

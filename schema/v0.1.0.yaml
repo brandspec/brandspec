@@ -1,5 +1,5 @@
 # brandspec Schema v0.1.0
-# This document defines the structure of a brandspec.yaml file.
+# This document defines the structure of a brand.yaml file.
 
 $schema: "https://json-schema.org/draft/2020-12/schema"
 $id: "https://brandspec.tools/schema/v0.1.0"

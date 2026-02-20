@@ -1,6 +1,6 @@
 # Export: Figma Variables
 
-Export rules for generating Figma-compatible variables from `brandspec.yaml`.
+Export rules for generating Figma-compatible variables from `brand.yaml`.
 
 ## Token Mapping
 

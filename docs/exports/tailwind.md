@@ -1,6 +1,6 @@
 # Export: Tailwind CSS Config
 
-Export rules for generating a Tailwind CSS configuration from `brandspec.yaml`.
+Export rules for generating a Tailwind CSS configuration from `brand.yaml`.
 
 ## Token Mapping
 
