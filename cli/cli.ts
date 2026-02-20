@@ -2,6 +2,7 @@ import {
   readFileSync,
   writeFileSync,
   existsSync,
+  statSync,
   mkdirSync,
   cpSync,
   readdirSync,
@@ -64,7 +65,7 @@ Commands:
   validate [path]   Alias for lint
   generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
-    --out <dir>      Output directory (default: ./out)
+    --out <dir>      Output directory (default: out/ next to brand.yaml)
 
   consult [path]          Print brand context for AI consultation
 
@@ -130,6 +131,14 @@ const MINIMAL_TEMPLATE: BrandspecYaml = {
     },
   },
 };
+
+function resolveBrandYaml(filePath?: string): string {
+  let target = resolve(filePath ?? "brand.yaml");
+  if (existsSync(target) && statSync(target).isDirectory()) {
+    target = join(target, "brand.yaml");
+  }
+  return target;
+}
 
 function cmdInit() {
   const targetDir = resolve("brandspec");
@@ -206,7 +215,7 @@ function cmdLint(args: string[]) {
   const jsonMode = args.includes("--json");
   const quietMode = args.includes("--quiet");
   const filePath = args.find((a) => !a.startsWith("-"));
-  const target = resolve(filePath ?? "brand.yaml");
+  const target = resolveBrandYaml(filePath);
 
   if (!existsSync(target)) {
     if (jsonMode) {
@@ -339,7 +348,7 @@ function cmdGenerate(args: string[]) {
     formats = ["all"];
   }
 
-  const target = resolve(filePath ?? "brand.yaml");
+  const target = resolveBrandYaml(filePath);
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
     process.exit(1);
@@ -356,7 +365,7 @@ function cmdGenerate(args: string[]) {
   }
 
   const data = parseResult.data!;
-  const out = resolve(outDir ?? "out");
+  const out = resolve(outDir ?? join(dirname(target), "out"));
   mkdirSync(out, { recursive: true });
 
   const generated: string[] = [];
@@ -599,7 +608,7 @@ Commands:
 
 function cmdConsult(args: string[]) {
   const filePath = args.find((a) => !a.startsWith("-"));
-  const target = resolve(filePath ?? "brand.yaml");
+  const target = resolveBrandYaml(filePath);
 
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
