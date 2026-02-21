@@ -1,0 +1,396 @@
+decisions:
+  # ── Brand Concept ──────────────────────────────
+
+  - id: "d001"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "brand_concept"
+    value: |
+      Identity: Brand Forger
+      Hero (EN): >
+        The hardest thing in the world? Brand.
+        Forge it. Keep the edge. Cut through everything.
+      Hero (JA): 鍛えろ。研げ。貫け。
+      Tagline (SaaS): Define once. Brand everywhere.
+      Target: ブランドマネージャー、経営者
+    rationale: |
+      "hardest" のダブルミーニング: 最も困難 / 最も硬い物質。
+      3命令がエコシステム各層に対応:
+        Forge it (workshop) → Keep the edge (tools) → Cut through everything (全体)。
+      Tagline は Java "Write once, run everywhere" と同構造。
+      hero = 哲学、tagline = SaaS の機能的約束。
+
+  - id: "d002"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "copy_layers"
+    value: |
+      Layer 1 - 共感 (spec):     "The hardest thing in the world? Brand."
+      Layer 2 - 鍛造 (workshop): "Forge it."
+      Layer 3 - 維持 (tools):    "Keep the edge."
+      Layer 4 - 貫通 (全体):     "Cut through everything."
+      Layer 5 - 機能的約束 (SaaS): "Define once. Brand everywhere."
+    rationale: >
+      各レイヤーがエコシステムの層に対応。
+      裏に鍛冶/Katana の世界観が流れるが、表には出さない。
+      Forge → Keep the edge → Cut through = 鍛造 → 研ぎ → 斬る。
+
+  # ── Core Concepts ──────────────────────────────
+
+  - id: "d003"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "consistent_polymorphism"
+    value: |
+      一貫性のある多態性 (Consistent Polymorphism)。
+      ブランドは一つだが、現れ方は無数にある。
+      brandspec は SSoT から polymorphic に展開する。
+      Ads部署、新商品開発、UGC施策、採用、社内 —
+      全て違う顔をしているが、全て同じブランドでなければならない。
+      これら全てのシチュエーションに、AI を主軸としつつ
+      アセットとして入り込む。
+    rationale: >
+      "Define once. Brand everywhere." の実体。
+      "Cut through everything" の "everything" が具体的に何を指すか。
+
+  - id: "d004"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "raison_detre"
+    value: |
+      ブランド資産の共有は元々「フォルダに入れて共有する」原始的行為。
+      brandspec はこれを3方向に拡張する:
+        下 (技術拡張): CLI, Tailwind, CSS tokens, Design Tokens, CI/CD
+        上 (抽象化):   標準フォーマット (spec) として SaaS 化
+        横 (管理基盤): AI エージェントが仲介するブランド運用
+      CLI 方面だけでは課題の一端にしか触れない。
+      旧来的な世界にも取り込み、AI を介して管理する基盤と世界観を提供する。
+    rationale: >
+      「開発者ツール」でも「また別の Drive」でもない。
+      両方を一つの spec で繋ぎ、AI が間を仲介する点が不可替性。
+
+  - id: "d005"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "why_now"
+    value: |
+      1. JSON Schema / YAML による厳密な定義 → 前からあった
+      2. W3C DTCG による Design Tokens 標準 → 最近整った
+      3. AI エージェントによる文脈適応的な仲介 → 今できるようになった
+      3つが揃い「定義の厳密さ」と「運用の柔軟さ」の矛盾が初めて解消された。
+    rationale: >
+      曖昧さが支配していたブランド運用に、スキーマの厳密さを持ち込みつつ、
+      AI が文脈に応じた柔軟な表出を仲介する。新時代の製品。
+
+  # ── Value Pillars ──────────────────────────────
+
+  - id: "d006"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "value_pillars"
+    value: |
+      1. 対話的ブランド策定 (Workshop)
+         AI ファシリテーションで BI を鍛造する
+
+      2. 実用的フォーマット指針 (Spec Advocacy)
+         CLI にも落とせるほど明確で実用的な標準仕様
+
+      3. 監査付き Storage (Brand Linting)
+         フォーマット準拠性を lint できる SSoT ホスティング
+         spec の guidelines が判断基準、AI が審査員
+         Severity: INFO / WARNING / ERROR
+         対象: 静的アセット → ドキュメント → Web → 動画 (段階的拡張)
+
+      4. 汎用的な配布 (Living SSoT)
+         一方向 rsync (publish/subscribe)
+         外注・非技術者にも URL 一つで渡せる
+         Google Drive, Dropbox 等と一方向 sync
+         desktop app 不要。通知 + URL で完結
+
+      5. 技術的挑戦 = 信頼感 (Roadmap)
+         Figma 対応、ロゴ生成内製、動画チェック等
+         直接の売上以上に「本気のサービス」というシグナル
+    rationale: >
+      1-4 が実体的な価値、5 が信頼のシグナル。
+      Asset creation は Maker が自分のツールで制作 → add。
+      brandspec のスコープ外。ロードマップに記載。
+
+  # ── Service Architecture ───────────────────────
+
+  - id: "d007"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "distribution_model"
+    value: |
+      モデル: 一方向 rsync (publish/subscribe)
+      Source of truth: brandspec.tools (S3 backed 論理 FS)
+      配布先:
+        - プロジェクトリポジトリ (CLI: brandspec pull)
+        - Google Drive / Dropbox (API sync)
+        - 社内ファイルサーバー
+        - CDN (直リンク)
+      原則: 常に source → 各所への一方向。変更したければ source に戻れ。
+      課金ポイント: source → everywhere の rsync レイヤーに介入
+      軽量化の根拠:
+        - ファイル数が少ない
+        - 一方向 (conflict resolution 不要)
+        - 変更頻度が低い
+    rationale: >
+      git の distributed collaboration を、git を知らない人に実現する。
+      アーキテクチャの複雑さではなく、運用のシンプルさがクレバーさ。
+
+  - id: "d008"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "roles"
+    value: |
+      Keeper (Owner):       ブランド定義の管理。"Keep the edge" する人
+      Maker (Contributor):  アセット追加・バリエーション展開
+      User (Member):        一方向で受け取るだけ
+      Fallback: Owner / Contributor / Member (GitHub 準拠)
+      ドキュメント初出で Keeper (Owner) と併記、以降は Keeper で統一
+    rationale: >
+      hero copy "Keep the edge" と Keeper が自然に繋がる。
+      短く覚えやすく、権限階層が名前だけで直感的にわかる。
+
+  # ── Market Feasibility ─────────────────────────
+
+  - id: "d009"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "market_feasibility"
+    value: |
+      競合ポジション: Code-first × Full Brand Identity の象限に競合なし
+      市場規模: Brand Management Software $500-600M (2026), CAGR 12-15%
+
+      競合の価格帯:
+        Enterprise: $25K-150K+/年 (Bynder, Brandfolder)
+        Mid:        $200-500+/月 (Frontify)
+        SMB:        $8-19/月/brand (Corebook — DAM/API/AI/tokens なし)
+
+      brandspec の優位性:
+        - AI 活用低固定費企業 → 価格破壊が可能
+        - S3/R2 + rsync でインフラコスト最小
+        - $8 は安すぎ。$15-30/月(Pro) でも十分に破壊的
+        - Brand Linting を本格的にやってるプレイヤーが不在
+
+      ユーザーの不満 (G2/Capterra/Reddit):
+        1. 価格が不透明で高い → 明朗会計で解決
+        2. ブランドが既にある前提 → Workshop で策定から対応
+        3. CSS/Tailwind が欲しいのに PDF → spec-first で tokens 生成
+        4. CI/CD 統合できない → YAML + CLI
+        5. 結局 Notion で済ませてる → 同等の手軽さ + machine-readable
+    rationale: >
+      市場は空いている。価格で勝てる。ユーザーの不満は明確。
+      コスト構造の優位性により、価格破壊が容易。
+
+  - id: "d010"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "feasibility_complete"
+    value: |
+      技術 feasibility: ブロッカーなし
+        - MVP 全要素が低〜中難易度
+        - dist 生成はサーバー側 (source of truth が生成した dist が正)
+        - Drive sync は Keeper が対象選択可能
+        - DTCG 依存リスクは低 (業界全体が同方向)
+        - Style Dictionary をパイプラインに噛ませれば出力フォーマット無限
+
+      事業 feasibility: 成り立つ
+        - 1ブランドあたりコスト $0.15-0.70/月 → 粗利率 95%+
+        - Pricing: Free ($0) / Pro ($9/月) / Team ($49/月, 将来)
+        - $9/月: 心理的障壁が低く、インディー開発者が試しやすい
+        - 段階1-2 (インディー〜技術創業者) で十分に事業成立
+        - 段階3-4 (非技術者, BM) は SaaS 機能充実後に自然に攻める
+
+      リーチ戦略:
+        段階0: dogfooding (済み)
+        段階1: インディー開発者 → OSS, Dev.to, Product Hunt, X
+        段階2: 技術創業者 → 口コミ, GitHub stars
+        段階3: 非技術創業者 → Workshop SaaS化, Brand Linting 可視化
+        段階4: SMB ブランドマネージャー → SaaS 充実後
+
+      最大リスク: リーチ (段階3以降への到達方法)
+      対策: 段階1-2で完成度を上げ、AI多態性の波に備える
+
+      配布 UX (ロール別):
+        Web Dev:  CLI (brandspec pull) → tokens.css, tailwind.config.ts
+        Designer: brandspec.tools → Figma tokens JSON
+        営業:     brandspec.tools → ブラウザ閲覧 / ZIP DL
+        外注:     URL 共有 → ガイドライン確認 + 素材DL
+        Keeper:   ダッシュボード → Linting 結果, 承認
+        Drive連携: Keeper 設定 → 共有フォルダに自動sync → 営業は知らなくていい
+    rationale: >
+      3軸 (市場/技術/事業) 全て feasible。
+      低固定費 AI 企業としてのコスト優位性が全てを支える。
+      急いでリーチを取りに行くより、spec と tools の完成度を上げて
+      波が来たときに準備できている状態を目指す。
+
+  - id: "d011"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "pricing"
+    value: |
+      モデル: Open Core + brand 逓減制 + seats 無制限
+
+      Free: public brands 無制限, seats 無制限
+      Pro (private, 全機能, seats 無制限):
+        1 brand:  $14/月
+        2-4:      +$10/brand
+        5-20:     +$7/brand
+        21+:      +$4/brand
+
+      seats 無制限の理由:
+        seats で壁を作ると組織内浸透を妨げる。
+        全員がアクセスできてこそ "Cut through everything"。
+        浸透 = 価値向上 = チャーン低下。
+
+      メイン課金ターゲット: デザインエージェンシー (10-50 brands)
+      社会的ポジション: OSS ベースの薄いインフラ
+
+      エージェンシー経由の成長モデル:
+        エージェンシーがクライアントのブランドを管理
+        → クライアントが brandspec を知る
+        → 自社契約に転換 ($14/月が積み上がる)
+    rationale: >
+      $14 起点は個人でも企業でも払いやすい。
+      逓減制でエージェンシーの大量利用を促進。
+      seats 無制限で浸透を最大化し、チャーンを抑制。
+      OSS の社会的信頼とエージェンシー収益の二重構造。
+
+  # ── Personality & Voice ──────────────────────────
+
+  - id: "d012"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "personality_and_voice"
+    value: |
+      Personality: core concepts から導出（独立セクション不要）
+        polymorphic, consistent, open, rigorous, pragmatic, forge & sharpen
+
+      Voice:
+        tone: measured, direct, no fluff
+        principles:
+          - 技術的正確さを犠牲にしない
+          - 短い文。余計な修飾語を削る
+          - ユーザーを賢い人として扱う（上から教えない、下から媚びない）
+          - マーケティング語を避ける（revolutionary, game-changing 等）
+
+      Do / Don't:
+        ✓ "brandspec.yaml is the single source of truth."
+        ✗ "brandspec.yaml is your amazing, powerful source of truth!"
+        ✓ "Define your brand in one file."
+        ✗ "Revolutionize your brand workflow with our cutting-edge platform."
+        ✓ "Linting found 2 errors."
+        ✗ "Oops! We found some issues with your brand."
+    rationale: >
+      traits を独立セクションにせず、core concepts = personality として統合。
+      brandspec の性格はその概念そのもの。voice だけ独立して定義。
+      forge の職人 — 口数が少ない。やることを淡々とやる。品質で語る。
+
+  - id: "d013"
+    timestamp: "2026-02-15"
+    phase: 2
+    key: "identity"
+    supersedes: "d001"
+    value: |
+      brandspec Identity: Consistent Polymorphism
+        一つの定義、無数の表出。これが brandspec の本質。
+
+      サブ Identity:
+        workshop: Brand Forger（鍛造プロセス）
+        tools:    なし（"Keep the edge" の担い手として機能で語る）
+
+      Hero / Tagline は d001 から変更なし:
+        Hero: The hardest thing in the world? Brand.
+              Forge it. Keep the edge. Cut through everything.
+        Tagline: Define once. Brand everywhere.
+    rationale: >
+      Brand Forger は workshop の性格であり、brandspec 全体を表せない。
+      Consistent Polymorphism こそが全レイヤーを貫く本質。
+      forge はプロセス、polymorphism は成果物の性質。
+
+  # ── Visual Identity ─────────────────────────────
+
+  - id: "d014"
+    timestamp: "2026-02-15"
+    phase: 3
+    key: "color_palette"
+    value: |
+      カラーシステム: Titanium + Ember (oklch)
+
+      Titanium (warm near-neutral greys):
+        titanium-50:   oklch(0.97 0.005 80)   BG
+        titanium-100:  oklch(0.93 0.008 80)   カード背景
+        titanium-200:  oklch(0.87 0.010 75)   ボーダー
+        titanium-300:  oklch(0.78 0.012 72)
+        titanium-400:  oklch(0.65 0.015 70)   サブテキスト
+        titanium-600:  oklch(0.45 0.015 65)   メインテキスト
+        titanium-900:  oklch(0.22 0.015 60)   見出し
+
+      Ember (accent):
+        ember-subtle:  oklch(0.80 0.05 75)    hover、軽い強調
+        ember:         oklch(0.65 0.10 70)    CTA、リンク
+        ember-strong:  oklch(0.55 0.12 65)    hover強調
+
+      設計意図:
+        - hue 60-80 に統一（寒色なし）
+        - chroma 極低（0.005-0.015）= ほぼ無彩色だが純粋グレーではない
+        - チタン = 鍛造金属の質感。硬質だが冷たくない
+        - ember = forge の残り火。控えめな温度感
+        - 器として退く（ユーザーのブランドの邪魔をしない）
+    rationale: >
+      Apple 的なミニマル + forge の硬質さ。
+      brandspec は器 — ユーザーのブランドを引き立てる。
+      主張しすぎないが、品質感は伝わる。
+
+  - id: "d015"
+    timestamp: "2026-02-15"
+    phase: 3
+    key: "typography"
+    value: |
+      フォント: Inter + JetBrains Mono（2種のみ）
+
+      Display / Logo:  Inter 900  letter-spacing: -0.045em
+      Hero:            Inter 900  letter-spacing: -0.045em
+      Section heading: Inter 600  letter-spacing: -0.02em
+      Body:            Inter 400  letter-spacing: 0
+      Label:           Inter 500  letter-spacing: 0.06em (uppercase)
+      Code:            JetBrains Mono 400
+
+      設計意図:
+        - フォント1種類で全表情を出す = Consistent Polymorphism の体現
+        - weight と tracking だけで Display から Body まで変化
+        - Inter 900 + tight tracking = 重量感、authority、骨太
+        - フォントを増やさないシンプルさ = 品質で語る姿勢
+    rationale: >
+      Steve Jobs 的な重厚感。ブレない骨太さ。
+      フォント追加なしで別の顔を出す — まさに polymorphism。
+
+  - id: "d016"
+    timestamp: "2026-02-15"
+    phase: 3
+    key: "logo"
+    value: |
+      ロゴ: 未定（後日策定）
+      ロゴタイプ（暫定）: "brandspec" in Inter 900, -0.045em
+      ロゴマーク: 未定
+    rationale: >
+      タイポグラフィが確定したため、ロゴタイプは暫定で機能する。
+      ロゴマークは別セッションで策定。
+
+  # ── Documentation ────────────────────────────────
+
+  - id: "d017"
+    timestamp: "2026-02-15"
+    phase: 4
+    key: "brandspec_yaml"
+    value: |
+      brandspec 自身の brandspec.yaml を生成（dogfooding）。
+      場所: .workshop/brandspec.yaml
+      全決定 (d001-d016) を単一 YAML に統合。
+      assets は空（ロゴ未定）。
+      guidelines に rules 付きで voice, color, typography, philosophy を記述。
+    rationale: >
+      自分自身の仕様で自分を定義する。
+      schema v0.1.0 の guidelines.rules 構造も実証。
