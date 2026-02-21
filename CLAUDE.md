@@ -53,7 +53,7 @@ npm run typecheck      # TypeScript type checking
 ```bash
 brandspec init                          # Create brandspec/ directory with templates
 brandspec validate [path]               # Validate a brand.yaml
-brandspec generate [path] --format all  # Generate out/ (css, tailwind, figma, sd)
+brandspec generate [path] --format all  # Generate output/ (css, tailwind, figma, sd)
 brandspec consult [path]                # Print brand context for AI consultation
 brandspec workshop start                # Print start prompt for AI workshop
 brandspec workshop resume               # Print resume prompt for AI workshop

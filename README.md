@@ -39,8 +39,8 @@ From here, either edit `brand.yaml` directly or run the Workshop to build your b
 
 ```bash
 npx brandspec validate                     # Check against schema
-npx brandspec generate --format tailwind   # → out/theme.css
-npx brandspec generate --format all        # → out/tokens.css, theme.css, figma-tokens.json, style-dictionary/
+npx brandspec generate --format tailwind   # → output/theme.css
+npx brandspec generate --format all        # → output/tokens.css, theme.css, figma-tokens.json, style-dictionary/
 ```
 
 ## Workshop — Forge your brand with any AI
@@ -95,7 +95,7 @@ Commands:
   validate [path]   Validate against schema (default: ./brand.yaml)
   generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
-    --out <dir>      Output directory (default: ./out)
+    --out <dir>      Output directory (default: ./output)
 
   consult [path]          Print brand context for AI consultation
 
@@ -182,7 +182,7 @@ Full schema: [`schema/v0.1.0.yaml`](schema/v0.1.0.yaml) | Examples: [`docs/examp
 
 ## Exports
 
-`brandspec generate --format <fmt>` produces files in `out/` (override with `--out`):
+`brandspec generate --format <fmt>` produces files in `output/` (override with `--out`):
 
 | Format | File | Description |
 |--------|------|-------------|

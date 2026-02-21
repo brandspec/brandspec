@@ -65,7 +65,7 @@ Commands:
   validate [path]   Alias for lint
   generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
-    --out <dir>      Output directory (default: out/ next to brand.yaml)
+    --out <dir>      Output directory (default: output/ next to brand.yaml)
 
   consult [path]          Print brand context for AI consultation
 
@@ -365,7 +365,7 @@ function cmdGenerate(args: string[]) {
   }
 
   const data = parseResult.data!;
-  const out = resolve(outDir ?? join(dirname(target), "out"));
+  const out = resolve(outDir ?? join(dirname(target), "output"));
   mkdirSync(out, { recursive: true });
 
   const generated: string[] = [];

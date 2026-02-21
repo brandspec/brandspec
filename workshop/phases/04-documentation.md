@@ -121,8 +121,8 @@ Human-readable brand documentation. Three-layer pattern for each section:
 Use the CLI:
 
 ```bash
-npx brandspec generate --format css            # → out/tokens.css
-npx brandspec generate --format tailwind        # → out/theme.css
+npx brandspec generate --format css            # → output/tokens.css
+npx brandspec generate --format tailwind        # → output/theme.css
 npx brandspec generate --format css,tailwind    # → both
 npx brandspec generate --format all             # → all formats
 ```

@@ -19,4 +19,4 @@ If `$extensions.dark` is present, create a "Dark" mode within the same Figma var
 
 ## Output File
 
-`dist/figma-tokens.json` (Figma Variables REST API compatible format)
+`output/figma-tokens.json` (Figma Variables REST API compatible format)

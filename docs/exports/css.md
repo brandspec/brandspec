@@ -31,4 +31,4 @@ If `$extensions.dark` is present on a token, emit a `.dark` block:
 
 ## Output File
 
-`dist/tokens.css`
+`output/tokens.css`

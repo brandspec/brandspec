@@ -35,4 +35,4 @@ Dark mode is handled at the CSS level (`.dark` class), not in the Tailwind confi
 
 ## Output File
 
-`dist/tailwind.config.ts`
+`output/theme.css`
