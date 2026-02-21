@@ -368,7 +368,7 @@
 
   /* Detail 3: Section titles — letter-spacing breathes on hover */
   .section-title {
-    font-size: 36px;
+    font-size: 42px;
     font-weight: 900;
     letter-spacing: -0.04em;
     line-height: 1.1;
@@ -383,37 +383,13 @@
   }
 
   .section-desc {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--text-sub);
     max-width: 560px;
     margin: 0 auto;
     line-height: 1.6;
   }
 
-  /* ── Problem / Why ── */
-  .why {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 0 40px 100px;
-    text-align: center;
-  }
-
-  .why blockquote {
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.35;
-    color: var(--text-heading);
-    margin-bottom: 24px;
-  }
-
-  .why p {
-    font-size: 16px;
-    color: var(--text-sub);
-    line-height: 1.7;
-    max-width: 520px;
-    margin: 0 auto;
-  }
 
   /* ── Three pillars ── */
   .pillars {
@@ -446,7 +422,7 @@
   }
 
   .pillar h3 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--text-heading);
@@ -454,7 +430,7 @@
   }
 
   .pillar p {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--text-sub);
     line-height: 1.65;
   }
@@ -558,7 +534,7 @@
   }
 
   .byom-block p {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--text);
     line-height: 1.65;
   }
@@ -594,7 +570,7 @@
   }
 
   .how-step h3 {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     letter-spacing: -0.01em;
     color: var(--text-heading);
@@ -602,7 +578,7 @@
   }
 
   .how-step p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-sub);
     line-height: 1.65;
   }
@@ -638,14 +614,14 @@
   }
 
   .audience-card h4 {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--text-heading);
     margin-bottom: 4px;
   }
 
   .audience-card p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-sub);
     line-height: 1.6;
   }
@@ -674,7 +650,7 @@
   }
 
   .why-now-item p {
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.6;
     color: var(--text);
   }
@@ -700,7 +676,7 @@
   }
 
   .oss-inner h2 {
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 900;
     letter-spacing: -0.04em;
     color: var(--text-heading);
@@ -708,7 +684,7 @@
   }
 
   .oss-inner p {
-    font-size: 16px;
+    font-size: 17px;
     color: var(--text-sub);
     line-height: 1.7;
     margin-bottom: 32px;
@@ -781,11 +757,10 @@
     .pillars { grid-template-columns: 1fr; }
     .how-grid { grid-template-columns: 1fr; }
     .audience-grid { grid-template-columns: 1fr; }
-    .section-title { font-size: 28px; }
+    .section-title { font-size: 32px; }
     .nav { padding: 20px 24px; }
     .nav-links { gap: 16px; }
     .code-section { padding: 0 24px 80px; }
-    .why { padding: 0 24px 80px; }
     .why-now { padding: 0 24px 80px; }
     .oss { padding: 60px 24px; }
     .final-cta { padding: 0 24px 80px; }
@@ -828,35 +803,52 @@
   </div>
 </section>
 
-<!-- Why -->
-<div class="section-divider"></div>
-<section class="why reveal">
-  <blockquote>Your brand guidelines are in a PDF no one opens.</blockquote>
-  <p>Colors drift across teams. Logos get stretched, cropped, recolored. A new hire picks the wrong font. A partner uses last year's palette. Every new channel is another place to get it wrong. brandspec exists to make that stop.</p>
-</section>
-
-<!-- Pillars -->
+<!-- For small teams -->
 <div class="section-divider"></div>
 <div class="section">
   <div class="section-header reveal">
-    <div class="section-label">What's inside</div>
-    <div class="section-title">A spec, a forge, an ecosystem</div>
+    <div class="section-label">For small teams</div>
+    <div class="section-title">No designer? No budget?<br>No problem.</div>
+    <p class="section-desc">Brand workshop, facilitated by AI.<br>Built for solo devs, side projects, and early-stage teams.</p>
   </div>
-  <div class="pillars reveal-stagger">
-    <div class="pillar">
-      <div class="pillar-icon">The format</div>
-      <h3>brand.yaml</h3>
-      <p>One file defines your entire brand. Personality, tokens, assets, guidelines — machine-readable, human-friendly. Built on JSON Schema and W3C Design Tokens.</p>
+</div>
+<section class="why-now reveal-stagger" style="max-width:640px;margin:0 auto;padding:0 40px 100px">
+  <div class="why-now-item">
+    <span class="why-now-marker">Pain</span>
+    <p>Your product needs a consistent identity. But you don't have a designer, a brand agency, or the budget for either. You pick a color, a font, ship it — and six months later nothing matches.</p>
+  </div>
+  <div class="why-now-item">
+    <span class="why-now-marker" style="width:auto">Solve</span>
+    <p><strong>AI asks the right questions, you make the decisions.</strong> Four phases of structured dialogue. It'll dig into your industry, hunt for references, and iterate with you until it clicks. Out comes a brand.yaml: your single source of truth.</p>
+  </div>
+  <div class="why-now-item">
+    <span class="why-now-marker" style="width:auto">After</span>
+    <p>One command generates CSS tokens, Tailwind theme, Figma variables. Another command turns any AI into your brand consultant. Your team grows from 1 to 10 — the brand doesn't drift.</p>
+  </div>
+</section>
+
+
+<!-- How it works -->
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Three steps</div>
+  </div>
+  <div class="how-grid reveal-stagger">
+    <div class="how-step">
+      <div class="how-number">01</div>
+      <h3>Define</h3>
+      <p>Already have a brand? <code style="font-family:'JetBrains Mono',monospace;font-size:12px">npx brandspec init</code>. Starting fresh? Let <a href="https://github.com/brandspec/brandspec#workshop--forge-your-brand-with-any-ai" style="color:var(--accent)">Workshop</a> forge it with your AI — four phases, any model, structured output.</p>
     </div>
-    <div class="pillar">
-      <div class="pillar-icon">Forge it</div>
-      <h3>Workshop</h3>
-      <p>An open harness that turns any LLM into a brand facilitator. AI asks the right questions, you make the decisions, out comes a complete brand.yaml. Bring your own model.</p>
+    <div class="how-step">
+      <div class="how-number">02</div>
+      <h3>Commit</h3>
+      <p>Put the <code style="font-family:'JetBrains Mono',monospace;font-size:12px">brandspec/</code> directory in your repo. Brand definition, assets, workshop history — version it, diff it, review it in a PR.</p>
     </div>
-    <div class="pillar">
-      <div class="pillar-icon">Build on it</div>
-      <h3>Ecosystem</h3>
-      <p>Turn any AI into your brand consultant with one command. Generate CSS, Tailwind v4, Figma tokens, Style Dictionary — all from one file. Or build your own tools on the open schema. <a href="https://brandspec.tools" style="color:var(--accent)">brandspec.tools</a> is one of them.</p>
+    <div class="how-step">
+      <div class="how-number">03</div>
+      <h3>Consume</h3>
+      <p>One command generates CSS variables, Tailwind v4 theme, Figma tokens, Style Dictionary config. From there — scss, Swift, Android, anything.</p>
     </div>
   </div>
 </div>
@@ -913,7 +905,7 @@
   <div class="section-header reveal">
     <div class="section-label">Forge</div>
     <div class="section-title">Your AI. Your brand.</div>
-    <p class="section-desc">Workshop is an open-source harness that turns any LLM into a brand strategist. Four phases. Structured decisions. One output format. Bring Claude, GPT, Gemini — whatever you have access to.</p>
+    <p class="section-desc">An open harness that turns any LLM into a brand strategist. Four phases, structured decisions, one output. Bring Claude, GPT, Gemini — whatever you have.</p>
   </div>
   <div class="workshop-phases reveal-stagger">
     <div class="workshop-phase">
@@ -948,143 +940,66 @@
   </div>
 </div>
 
-<!-- Generate everywhere -->
+<!-- Consistent Polymorphism -->
 <div class="section-divider"></div>
-<div class="section">
-  <div class="section-header reveal">
-    <div class="section-label">Generate</div>
-    <div class="section-title">One file in. Every platform out.</div>
-    <p class="section-desc">brand.yaml is the input. The CLI generates everything your team needs.</p>
-  </div>
-  <div class="how-grid reveal-stagger" style="margin-bottom:100px">
-    <div class="how-step">
-      <div class="how-number" style="font-size:20px;color:var(--accent)">Web</div>
-      <h3>CSS + Tailwind v4</h3>
-      <p>Custom properties for vanilla CSS. <code style="font-family:'JetBrains Mono',monospace;font-size:12px">@theme</code> block for Tailwind. Drop in and go.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-number" style="font-size:20px;color:var(--accent)">Design</div>
-      <h3>Figma + Tokens Studio</h3>
-      <p>JSON tokens ready for Figma Variables or Tokens Studio import. Designers stay in sync.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-number" style="font-size:20px;color:var(--accent)">Multi-platform</div>
-      <h3>Style Dictionary</h3>
-      <p>DTCG tokens + config. One build generates scss, Swift, Android XML, and any format Style Dictionary supports.</p>
-    </div>
-  </div>
-</div>
-
-<!-- How it works -->
-<div class="section">
-  <div class="section-header reveal">
-    <div class="section-label">How it works</div>
-    <div class="section-title">Three steps</div>
-  </div>
-  <div class="how-grid reveal-stagger">
-    <div class="how-step">
-      <div class="how-number">01</div>
-      <h3>Define</h3>
-      <p>Already have a brand? <code style="font-family:'JetBrains Mono',monospace;font-size:12px">npx brandspec init</code>. Starting fresh? Let <a href="https://github.com/brandspec/brandspec#workshop--forge-your-brand-with-any-ai" style="color:var(--accent)">Workshop</a> forge it with your AI — four phases, any model, structured output.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-number">02</div>
-      <h3>Commit</h3>
-      <p>Put it in your repo. It's a file — version it, diff it, review it in a PR like any other code.</p>
-    </div>
-    <div class="how-step">
-      <div class="how-number">03</div>
-      <h3>Consume</h3>
-      <p>One command generates CSS variables, Tailwind v4 theme, Figma tokens, Style Dictionary config. From there — scss, Swift, Android, anything.</p>
-    </div>
-  </div>
-</div>
-
-<!-- For everyone -->
 <div class="section">
   <div class="section-header reveal">
     <div class="section-label">Consistent Polymorphism</div>
-    <div class="section-title">One definition.<br>Every output. Every agent.</div>
-    <p class="section-desc">The same brand, manifested differently for every team, every tool, every channel — and every AI that touches it.</p>
+    <div class="section-title">One definition. Every platform out.</div>
+    <p class="section-desc">The same brand.yaml, manifested differently<br>for every team, every tool, every AI.</p>
   </div>
-  <div class="audience-grid reveal-stagger">
+  <div class="audience-grid reveal-stagger" style="margin-bottom:100px">
     <div class="audience-card">
-      <div class="audience-role">Developer</div>
-      <h4>brandspec generate</h4>
-      <p>CSS variables, Tailwind v4 theme, Style Dictionary, Figma tokens — one command. Or <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent)">brandspec pull</code> from the cloud.</p>
+      <div class="audience-role">Web</div>
+      <h4>CSS + Tailwind v4</h4>
+      <p>Custom properties for vanilla CSS. <code style="font-family:'JetBrains Mono',monospace;font-size:12px">@theme</code> block for Tailwind. Drop in and go.</p>
     </div>
     <div class="audience-card">
-      <div class="audience-role">Designer</div>
-      <h4>Single source of truth</h4>
-      <p>Every token, asset, and guideline in one file. Sync to Figma via Tokens Studio. Read it, reference it, trust it.</p>
+      <div class="audience-role">Design</div>
+      <h4>Figma + Tokens Studio</h4>
+      <p>JSON tokens ready for Figma Variables or Tokens Studio import. Designers stay in sync.</p>
     </div>
     <div class="audience-card">
-      <div class="audience-role">AI agent</div>
-      <h4>Machine-readable rules</h4>
-      <p>Machine-readable brand rules with severity levels. AI agents can lint, generate, and enforce within your brand constraints.</p>
+      <div class="audience-role">AI</div>
+      <h4>consult + rules</h4>
+      <p>One command turns any AI into your brand consultant. Structured rules let agents lint, generate, and enforce on-brand.</p>
     </div>
     <div class="audience-card">
-      <div class="audience-role">Tool builder</div>
+      <div class="audience-role">Ecosystem</div>
       <h4>Open schema</h4>
-      <p>JSON Schema, MIT licensed. Build converters, linters, MCP servers, CI integrations — the spec is yours to extend.</p>
+      <p>JSON Schema, MIT licensed. Style Dictionary, MCP servers, CI integrations — build your own tools on the spec.</p>
     </div>
   </div>
 </div>
 
-<!-- Differentiation -->
-<div class="section-divider"></div>
-<section class="why reveal">
-  <blockquote>Brand platforms lock your brand in their UI. brandspec sets it free.</blockquote>
-  <p>It's a file in your repo. You own it. You version it. You decide what tools read it. The spec is open. The ecosystem is optional.</p>
-</section>
-
-<!-- AI Harness -->
+<!-- Consult — why workshop context matters -->
 <div class="section-divider"></div>
 <div class="section">
   <div class="section-header reveal">
-    <div class="section-label">AI Harness</div>
-    <div class="section-title">Brand rules AI can read.</div>
-    <p class="section-desc">One command turns any AI into your brand consultant. Structured rules keep AI agents on-brand at scale. The harness, not the cage.</p>
+    <div class="section-label">Consult</div>
+    <div class="section-title">AI that knows your brand — and its history.</div>
   </div>
-</div>
-
-<!-- Consult -->
-<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
-  <div class="why-now reveal-stagger" style="padding:0 0 48px">
-    <div class="why-now-item">
-      <span class="why-now-marker" style="width:auto">Consult</span>
-      <p><strong>One command, any model.</strong> <code style="font-family:'JetBrains Mono',monospace;font-size:13px">brandspec consult</code> reads your brand.yaml and prints a system prompt — personality, voice, do/don't, colors, typography, logo system, guidelines. Paste it into Claude, GPT, Gemini, or any AI. Instant brand consultant.</p>
+  <div class="pillars reveal-stagger">
+    <div class="pillar">
+      <div class="pillar-icon">brand.yaml</div>
+      <h3>What you defined</h3>
+      <p>Personality, voice, tokens, assets, guidelines — the complete identity in one file. Machine-readable, human-clear.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">.workshop/</div>
+      <h3>Why you decided it</h3>
+      <p>Every decision from discovery to documentation, logged. The reasoning behind your colors, your tone, your trade-offs — preserved.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">consult</div>
+      <h3>AI answers in context</h3>
+      <p>One command feeds both to any AI. Not just rules — rationale. Your brand consultant knows the intent, not just the spec.</p>
     </div>
   </div>
 </div>
-<section class="code-section reveal" style="padding-bottom:48px">
-  <div class="code-block">
-<pre><span class="c"># Turn any AI into your brand consultant</span>
-<span class="v">$ npx brandspec consult | pbcopy</span>
-
-<span class="c"># Output (system prompt):</span>
-<span class="k"># You are a brand consultant for Acme Corp.</span>
-<span class="c"># You evaluate business decisions, creative work,</span>
-<span class="c"># and communications against this brand's identity.</span>
-<span class="c"># ...</span>
-<span class="c"># ## Voice & Tone</span>
-<span class="c"># Tone: direct, helpful</span>
-<span class="c"># ## Do / Don't</span>
-<span class="c"># ## Visual Identity</span>
-<span class="c"># ## Guidelines</span></pre>
-  </div>
-</section>
 
 <!-- Rules -->
-<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
-  <div class="why-now reveal-stagger" style="padding:0 0 48px">
-    <div class="why-now-item">
-      <span class="why-now-marker" style="width:auto">Rules</span>
-      <p><strong>Machine-readable constraints.</strong> <code style="font-family:'JetBrains Mono',monospace;font-size:13px">guidelines.rules</code> gives AI agents structured rules with severity, criteria, and scope. They lint, generate, and enforce — within your brand.</p>
-    </div>
-  </div>
-</div>
-<section class="code-section reveal">
+<section class="code-section reveal" style="padding-top:0">
   <div class="code-block">
 <pre><span class="k">guidelines:</span>
   <span class="k">logo-usage:</span>
@@ -1108,51 +1023,16 @@
           <span class="v">- "No internal system terminology"</span></pre>
   </div>
 </section>
-<div class="section" style="max-width:680px;margin:0 auto;padding:0 40px">
-  <div class="why-now reveal-stagger" style="padding:0 0 100px">
-    <div class="why-now-item">
-      <span class="why-now-marker">Lint</span>
-      <p>AI checks assets and copy against <strong>severity: error</strong> rules before shipping.</p>
-    </div>
-    <div class="why-now-item">
-      <span class="why-now-marker" style="width:auto">Generate</span>
-      <p>AI reads <strong>criteria</strong> to stay within constraints while creating.</p>
-    </div>
-    <div class="why-now-item">
-      <span class="why-now-marker" style="width:auto">Enforce</span>
-      <p>CI pipelines fail on <strong>error</strong>, warn on <strong>warning</strong>, note on <strong>info</strong>.</p>
-    </div>
-  </div>
-</div>
 
-<!-- Why Now -->
-<div class="section-divider"></div>
-<div class="section">
-  <div class="section-header reveal">
-    <div class="section-label">Why now</div>
-    <div class="section-title">Three things converged</div>
-  </div>
-</div>
-<section class="why-now reveal-stagger">
-  <div class="why-now-item">
-    <span class="why-now-marker">01</span>
-    <p><strong>Schema-level precision.</strong> JSON Schema and YAML bring rigor to what was always informal.</p>
-  </div>
-  <div class="why-now-item">
-    <span class="why-now-marker">02</span>
-    <p><strong>W3C Design Tokens standard.</strong> A shared language for design values across tools.</p>
-  </div>
-  <div class="why-now-item">
-    <span class="why-now-marker">03</span>
-    <p><strong>AI needs a harness.</strong> Agents generate copy, code, assets at scale — but drift without structured rules. brandspec gives them machine-readable constraints. That's new.</p>
-  </div>
-</section>
+
+
+
 
 <!-- Open source -->
 <section class="oss">
   <div class="oss-inner reveal">
     <h2>Open at the core</h2>
-    <p>The specification, schema, and workshop are open source. MIT licensed. The format belongs to everyone.</p>
+    <p>The specification, schema, and workshop are open source.<br>MIT licensed. The format belongs to everyone.</p>
     <div class="oss-links">
       <a class="btn btn-secondary" href="https://github.com/brandspec/brandspec">GitHub</a>
     </div>
@@ -1162,7 +1042,7 @@
 <!-- Final CTA -->
 <section class="final-cta reveal">
   <h2>Define once.<br>Brand everywhere.</h2>
-  <p>Forge your brand with Workshop. Or start from the spec and build your own way.</p>
+  <p>Forge your brand with Workshop.<br>Or start from the spec and build your own way.</p>
   <div class="hero-cta">
     <a class="btn btn-primary" href="https://github.com/brandspec/brandspec#workshop--forge-your-brand-with-any-ai">Start Workshop</a>
     <a class="btn btn-secondary" href="https://github.com/brandspec/brandspec#format">Read the spec</a>
