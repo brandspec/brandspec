@@ -183,13 +183,13 @@ describe("push FormData construction", () => {
 
   it("includes workshop files when requested", () => {
     writeFileSync(join(tmpDir, "brand.yaml"), 'meta:\n  name: "Test"\n', "utf-8");
-    mkdirSync(join(tmpDir, ".workshop"), { recursive: true });
-    writeFileSync(join(tmpDir, ".workshop", "decisions.yml"), "decisions: []\n", "utf-8");
+    mkdirSync(join(tmpDir, "_workshop"), { recursive: true });
+    writeFileSync(join(tmpDir, "_workshop", "decisions.yml"), "decisions: []\n", "utf-8");
 
     const formData = new FormData();
     formData.append("yaml", new Blob(["yaml"]), "brand.yaml");
 
-    const workshopData = readFileSync(join(tmpDir, ".workshop", "decisions.yml"));
+    const workshopData = readFileSync(join(tmpDir, "_workshop", "decisions.yml"));
     formData.append("workshop", new Blob([workshopData]), "decisions.yml");
 
     const workshopBlob = formData.get("workshop");

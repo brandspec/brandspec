@@ -29,7 +29,7 @@ brandspec/
 │   ├── tokens.css
 │   ├── theme.css
 │   └── figma-tokens.json
-└── .workshop/                  # process records
+└── _workshop/                  # process records
     ├── decisions.yml
     ├── memo.md
     └── session.md

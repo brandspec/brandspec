@@ -77,10 +77,10 @@ brandspec workshop status               # Show workshop position
 - Entry point for Claude Code: `workshop/SKILL.md`
 - Phase guides: `workshop/phases/01-04`
 - State management (in brandspec/ directory):
-  - `.workshop/position.yml` — current phase/step tracker
-  - `.workshop/decisions.yml` — append-only decision log
-  - `.workshop/memo.md` — working notes
-  - `.workshop/session.md` — handoff context
+  - `_workshop/position.yml` — current phase/step tracker
+  - `_workshop/decisions.yml` — append-only decision log
+  - `_workshop/memo.md` — working notes
+  - `_workshop/session.md` — handoff context
 - Two modes: **Facilitation** (AI presents options) / **Execution** (AI works autonomously)
 - CSS output targets **shadcn/ui + Tailwind v4** compatibility
 

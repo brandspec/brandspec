@@ -32,7 +32,7 @@ The workshop populates the `brandspec/` directory created by `brandspec init`.
 brandspec/                      ← inside your project
 ├── brand.yaml              # SSoT — everything expands polymorphically from here
 ├── assets/                     # brand assets (logos, icons, etc.)
-└── .workshop/                  # process records (keep for AI resumability)
+└── _workshop/                  # process records (keep for AI resumability)
     ├── decisions.yml
     ├── memo.md
     └── session.md
@@ -60,7 +60,7 @@ Activate this skill on utterances like:
 
 1. **Ask session language**: Ask the user which language they prefer for the workshop session. Record as the first decision (`session_language`). Conduct the entire session in that language from this point forward.
 2. Confirm brand name
-3. Read `.workshop/position.yml` to determine current position
+3. Read `_workshop/position.yml` to determine current position
 4. Load the corresponding phase `.md`
 
 ## Session Language
@@ -87,7 +87,7 @@ The workshop supports any language. The session language is determined at initia
 ## State Management
 
 ```
-.workshop/
+_workshop/
 ├── position.yml    # current phase/step
 ├── decisions.yml   # confirmed decisions (append-only)
 ├── memo.md         # working notes (overwritable)

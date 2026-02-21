@@ -76,8 +76,8 @@ Commands:
   login             Save API token for brandspec.tools
   logout            Remove saved API token
   pull [org/brand]  Pull brand from brandspec.tools
+    --no-workshop    Exclude _workshop/ files
   push [org/brand]  Push brand to brandspec.tools
-    --include-workshop   Include .workshop/ files
 
 Options:
   --help, -h       Show this help
@@ -154,11 +154,11 @@ function cmdInit() {
     process.exit(1);
   }
 
-  // Create brandspec/ with templates (yaml + assets/ + .workshop/)
+  // Create brandspec/ with templates (yaml + assets/ + _workshop/)
   cpSync(templatesDir, targetDir, { recursive: true });
 
   // Update position.yml with timestamp
-  const positionPath = join(targetDir, ".workshop", "position.yml");
+  const positionPath = join(targetDir, "_workshop", "position.yml");
   if (existsSync(positionPath)) {
     let pos = readFileSync(positionPath, "utf-8");
     pos = pos.replace('updated: ""', `updated: "${new Date().toISOString()}"`);
@@ -417,11 +417,11 @@ function getWorkshopDir(): string {
 }
 
 function ensureWorkshopState(): { positionPath: string; decisionsPath: string } {
-  const positionPath = resolve(".workshop", "position.yml");
-  const decisionsPath = resolve(".workshop", "decisions.yml");
+  const positionPath = resolve("_workshop", "position.yml");
+  const decisionsPath = resolve("_workshop", "decisions.yml");
 
   if (!existsSync(positionPath) || !existsSync(decisionsPath)) {
-    console.error("No .workshop/ state found in current directory.");
+    console.error("No _workshop/ state found in current directory.");
     console.error("Run 'brandspec init' first, then cd into brandspec/.");
     process.exit(1);
   }
@@ -482,9 +482,9 @@ function cmdWorkshopStart() {
 }
 
 function cmdWorkshopStatus() {
-  const positionPath = resolve(".workshop", "position.yml");
+  const positionPath = resolve("_workshop", "position.yml");
   if (!existsSync(positionPath)) {
-    console.error("No .workshop/position.yml found in current directory.");
+    console.error("No _workshop/position.yml found in current directory.");
     console.error("Are you inside a brandspec project?");
     process.exit(1);
   }
@@ -548,7 +548,7 @@ function cmdWorkshopResume() {
   lines.push("");
 
   // Include memo if present
-  const memoPath = resolve(".workshop", "memo.md");
+  const memoPath = resolve("_workshop", "memo.md");
   if (existsSync(memoPath)) {
     const memo = readFileSync(memoPath, "utf-8").trim();
     if (memo) {
@@ -851,9 +851,9 @@ function collectFiles(dir: string, base: string): Array<{ path: string; data: Bu
 async function cmdPull(args: string[]) {
   const token = requireToken();
   const remote = requireRemote(args);
-  const includeWorkshop = args.includes("--include-workshop");
+  const excludeWorkshop = args.includes("--no-workshop");
 
-  const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/pull${includeWorkshop ? "?include_workshop=true" : ""}`;
+  const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/pull${excludeWorkshop ? "" : "?include_workshop=true"}`;
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },
@@ -894,7 +894,6 @@ async function cmdPull(args: string[]) {
 async function cmdPush(args: string[]) {
   const token = requireToken();
   const remote = requireRemote(args);
-  const includeWorkshop = args.includes("--include-workshop");
 
   // Read brand.yaml
   const yamlPath = resolve("brand.yaml");
@@ -915,13 +914,11 @@ async function cmdPush(args: string[]) {
     formData.append("assets", new Blob([file.data]), file.path);
   }
 
-  // Optionally collect .workshop/
-  if (includeWorkshop) {
-    const workshopDir = resolve(".workshop");
-    const workshopFiles = collectFiles(workshopDir, "");
-    for (const file of workshopFiles) {
-      formData.append("workshop", new Blob([file.data]), file.path);
-    }
+  // Collect _workshop/
+  const workshopDir = resolve("_workshop");
+  const workshopFiles = collectFiles(workshopDir, "");
+  for (const file of workshopFiles) {
+    formData.append("workshop", new Blob([file.data]), file.path);
   }
 
   const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/push`;

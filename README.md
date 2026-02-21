@@ -31,7 +31,7 @@ my-app/
 ├── brandspec/
 │   ├── brand.yaml          # Brand definition (edit this)
 │   ├── assets/                 # Logo, symbol, favicon, etc.
-│   └── .workshop/              # Workshop state (AI-resumable)
+│   └── _workshop/              # Workshop state (AI-resumable)
 └── src/                       # Your app source
 ```
 
@@ -59,7 +59,7 @@ Paste the prompt into your AI and start the session. The workshop asks your pref
 Discovery → Concept → Visual Identity → Documentation
 ```
 
-The AI guides you through brand essence, personality, colors, typography. All decisions are recorded in `.workshop/decisions.yml` — resumable, auditable, model-independent.
+The AI guides you through brand essence, personality, colors, typography. All decisions are recorded in `_workshop/decisions.yml` — resumable, auditable, model-independent.
 
 **Resume a session:**
 
