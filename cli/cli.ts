@@ -29,6 +29,17 @@ import type { BrandspecYaml } from "./types.js";
 
 const VERSION = "0.1.0";
 
+// ── Color utilities (NO_COLOR + TTY aware) ──
+
+function color(code: string, text: string): string {
+  if (process.env.NO_COLOR || !process.stdout.isTTY) return text;
+  return `\x1b[${code}m${text}\x1b[0m`;
+}
+const green = (t: string) => color("32", t);
+const yellow = (t: string) => color("33", t);
+const red = (t: string) => color("31", t);
+const dim = (t: string) => color("2", t);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -55,6 +66,7 @@ brandspec v${VERSION}
 Define Brand Identity as code.
 
 Usage:
+  brandspec                Lint brand.yaml in current directory
   brandspec <command> [options]
 
 Commands:
@@ -144,7 +156,7 @@ function cmdInit() {
   const targetDir = resolve("brandspec");
 
   if (existsSync(targetDir)) {
-    console.error("brandspec/ already exists in this directory.");
+    console.error("brandspec/ already exists. cd brandspec to start working.");
     process.exit(1);
   }
 
@@ -165,13 +177,19 @@ function cmdInit() {
     writeFileSync(positionPath, pos, "utf-8");
   }
 
+  const clipCmd =
+    process.platform === "darwin" ? "pbcopy" :
+    process.platform === "win32" ? "clip" :
+    "xclip -sel c";
+
   console.log("Created brandspec/");
   console.log();
   console.log("Next steps:");
   console.log("  cd brandspec");
   console.log();
   console.log("  # Start the brand workshop with any AI:");
-  console.log("  npx brandspec workshop start | pbcopy");
+  console.log(`  npx brandspec workshop start | ${clipCmd}`);
+  console.log("  npx brandspec workshop start > prompt.txt  # or save to file");
   console.log();
   console.log("  # Or edit brand.yaml directly, then:");
   console.log("  npx brandspec generate --format tailwind");
@@ -186,25 +204,25 @@ function formatLintReport(report: LintReport): string {
 
   if (errors.length > 0) {
     lines.push("");
-    lines.push(`Errors (${errors.length}):`);
+    lines.push(red(`Errors (${errors.length}):`));
     for (const r of errors) {
-      lines.push(`  \u2717 [${r.rule}] ${r.message}`);
+      lines.push(red(`  \u2717 [${r.rule}] ${r.message}`));
     }
   }
 
   if (warnings.length > 0) {
     lines.push("");
-    lines.push(`Warnings (${warnings.length}):`);
+    lines.push(yellow(`Warnings (${warnings.length}):`));
     for (const r of warnings) {
-      lines.push(`  \u26A0 [${r.rule}] ${r.message}`);
+      lines.push(yellow(`  \u26A0 [${r.rule}] ${r.message}`));
     }
   }
 
   if (infos.length > 0) {
     lines.push("");
-    lines.push(`Info (${infos.length}):`);
+    lines.push(dim(`Info (${infos.length}):`));
     for (const r of infos) {
-      lines.push(`  \u2139 [${r.rule}] ${r.message}`);
+      lines.push(dim(`  \u2139 [${r.rule}] ${r.message}`));
     }
   }
 
@@ -222,6 +240,7 @@ function cmdLint(args: string[]) {
       console.log(JSON.stringify({ error: `File not found: ${target}` }));
     } else if (!quietMode) {
       console.error(`File not found: ${target}`);
+      console.error("Run 'brandspec init' to create one, or specify a path.");
     }
     process.exit(1);
   }
@@ -234,7 +253,7 @@ function cmdLint(args: string[]) {
     if (jsonMode) {
       console.log(JSON.stringify({ error: "parse", details: parseResult.errors }));
     } else if (!quietMode) {
-      console.error("Parse errors:");
+      console.error(`Parse errors in ${target}:`);
       for (const err of parseResult.errors) {
         console.error(`  - ${err}`);
       }
@@ -248,7 +267,7 @@ function cmdLint(args: string[]) {
     if (jsonMode) {
       console.log(JSON.stringify({ error: "schema", details: validationResult.errors }));
     } else if (!quietMode) {
-      console.error("Schema validation errors:");
+      console.error(`Schema validation errors in ${target}:`);
       for (const err of validationResult.errors) {
         console.error(`  - ${err}`);
       }
@@ -270,7 +289,9 @@ function cmdLint(args: string[]) {
       results: report.results,
     }));
   } else if (!quietMode) {
-    console.log(`${data.meta.name} \u2014 Score: ${report.score}/100`);
+    const scoreText = `${report.score}/100`;
+    const coloredScore = report.score >= 80 ? green(scoreText) : report.score >= 50 ? yellow(scoreText) : red(scoreText);
+    console.log(`${data.meta.name} \u2014 Score: ${coloredScore}`);
     console.log(formatLintReport(report));
   }
 
@@ -336,28 +357,31 @@ function cmdGenerate(args: string[]) {
     }
   }
 
-  // If no format specified, suggest based on project or default to all
+  // If no format specified, auto-detect from project or default to all
   let formats: Format[];
   if (formatArg) {
     formats = parseFormats(formatArg);
   } else {
     const detected = detectProjectFormat();
     if (detected) {
-      console.log(`Hint: ${detected} project detected. You can use --format ${detected} to generate only what you need.`);
+      console.log(`Detected ${detected} project. Use --format all to generate everything.`);
+      formats = [detected as Format];
+    } else {
+      formats = ["all"];
     }
-    formats = ["all"];
   }
 
   const target = resolveBrandYaml(filePath);
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
+    console.error("Run 'brandspec init' to create one, or specify a path.");
     process.exit(1);
   }
 
   const content = readFileSync(target, "utf-8");
   const parseResult = parse(content);
   if (!parseResult.success) {
-    console.error("Parse errors:");
+    console.error(`Parse errors in ${target}:`);
     for (const err of parseResult.errors) {
       console.error(`  - ${err}`);
     }
@@ -439,12 +463,12 @@ function cmdWorkshopStart() {
   const position = readFileSync(positionPath, "utf-8");
   const decisions = readFileSync(decisionsPath, "utf-8");
 
-  // Guard: if workshop has progressed, tell user to use resume
+  // Guard: if workshop has progressed, auto-fallback to resume
   const hasDecisions = !/decisions:\s*\[\]/.test(decisions);
   if (!isInitialPosition(position) || hasDecisions) {
-    console.error("Workshop already in progress.");
-    console.error("Use 'brandspec workshop resume' to continue.");
-    process.exit(1);
+    console.error("Workshop already in progress — resuming.");
+    cmdWorkshopResume();
+    return;
   }
 
   // Load workshop materials
@@ -600,6 +624,11 @@ Commands:
       break;
     default:
       console.error(`Unknown workshop command: ${sub}`);
+      console.error("");
+      console.error("Available commands:");
+      console.error("  start    Print start prompt for AI (initial state only)");
+      console.error("  resume   Print resume prompt for AI (any state)");
+      console.error("  status   Show current workshop position");
       process.exit(1);
   }
 }
@@ -612,13 +641,14 @@ function cmdConsult(args: string[]) {
 
   if (!existsSync(target)) {
     console.error(`File not found: ${target}`);
+    console.error("Run 'brandspec init' to create one, or specify a path.");
     process.exit(1);
   }
 
   const content = readFileSync(target, "utf-8");
   const parseResult = parse(content);
   if (!parseResult.success) {
-    console.error("Parse errors:");
+    console.error(`Parse errors in ${target}:`);
     for (const err of parseResult.errors) {
       console.error(`  - ${err}`);
     }
@@ -963,6 +993,11 @@ async function main() {
   const command = args[0];
 
   if (!command || command === "--help" || command === "-h") {
+    // No args + brand.yaml exists → default to lint
+    if (!command && existsSync(resolveBrandYaml())) {
+      cmdLint([]);
+      return;
+    }
     console.log(HELP);
     process.exit(0);
   }
