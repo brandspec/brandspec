@@ -13,6 +13,7 @@ Compatible spec: brandspec v0.x
 
 The following files define how `brand.yaml` works. Read these before facilitating:
 
+- `../schema/spec/core.md` — Core fields: essence, tagline, personality, voice structure (tone + principles)
 - `../schema/spec/tokens.md` — Token format, color system (oklch, variants, dark mode), typography, spacing, radius, export mapping
 - `../schema/spec/assets.md` — Asset structure, roles, variants, file naming, logo system patterns
 - `../schema/spec/guidelines.md` — Guidelines structure, linting rules, severity levels

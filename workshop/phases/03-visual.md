@@ -266,6 +266,6 @@ When all items are checked:
 ```yaml
 # Update position.yml
 phase: 4
-step: "spacing-radius"
+step: "defaults"
 mode: "facilitation"
 ```

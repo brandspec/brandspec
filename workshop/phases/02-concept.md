@@ -4,6 +4,8 @@
 
 Define the brand's personality, voice, and verbal identity.
 
+**Spec reference:** Read `../../schema/spec/core.md` for core field definitions, voice structure, and what belongs in `core` vs `guidelines` vs `extensions`.
+
 ## Steps
 
 ### 2.1 Personality
@@ -59,8 +61,10 @@ What words are "on brand" vs "off brand"?
 
 **Output: Voice Guidelines**
 
+The schema `core.voice` contains only `tone` and `principles`. Do/Don't examples belong in `guidelines` as enforceable rules (see `../../schema/spec/core.md` §Voice: What Goes Where).
+
 ```yaml
-# Example
+# core.voice — tone and principles only
 voice:
   tone:
     - friendly
@@ -70,13 +74,23 @@ voice:
     - "Use active voice"
     - "Keep sentences short"
     - "Celebrate user wins"
-  do:
-    - "Hey there" (not "Dear user")
-    - "Oops" (not "Error")
-  dont:
-    - Corporate jargon
-    - Passive voice
-    - Negative framing
+```
+
+Voice do/don't examples should be recorded in `guidelines.voice-examples`:
+
+```yaml
+# guidelines.voice-examples — enforceable voice rules
+guidelines:
+  voice-examples:
+    content: |
+      ## Voice Examples
+      - Greeting: "Hey there!" (not "Dear user")
+      - Error: "Oops, something went wrong" (not "Error 500")
+    rules:
+      - id: "voice-no-jargon"
+        description: "No corporate jargon in user-facing messages"
+        severity: warning
+        applies_to: voice
 ```
 
 ---
@@ -112,10 +126,17 @@ c) Compound: BrandBox, AssetFlow
 
 **Output: Confirmed Name**
 
+The confirmed name goes into `meta.name`. The rationale is recorded in `_workshop/decisions.yml` (not in `core` or `meta`). If you want to preserve it in the final brand.yaml, use `extensions.naming.rationale`.
+
 ```yaml
-# Example  
-name: "Prism"
-rationale: "Evokes clarity, multiple facets of brand, light/modern feel"
+# meta.name — the only required field in brandspec
+meta:
+  name: "Prism"
+
+# rationale recorded in decisions.yml, or optionally:
+extensions:
+  naming:
+    rationale: "Evokes clarity, multiple facets of brand, light/modern feel"
 ```
 
 ---

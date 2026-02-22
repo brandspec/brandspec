@@ -3,18 +3,17 @@
 ## Overview
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                         brandspec workshop                               │
-├─────────────┬─────────────┬─────────────────┬────────────────────────────┤
-│  Phase 1    │  Phase 2    │    Phase 3      │      Phase 4               │
-│  Discovery  │  Concept    │ Visual Identity │   Documentation            │
-├─────────────┼─────────────┼─────────────────┼────────────────────────────┤
-│ • product   │ • personality│ • mood         │ • spacing/radius confirm   │
-│ • users     │ • voice     │ • colors        │ • asset registration       │
-│ • context   │ • naming    │ • typography    │ • export format selection   │
-│             │ • tagline   │ • logo          │ • yaml generation          │
-│             │             │                 │ • dist generation          │
-└─────────────┴─────────────┴─────────────────┴────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                       brandspec workshop                        │
+├─────────────┬─────────────┬─────────────────┬───────────────────┤
+│  Phase 1    │  Phase 2    │    Phase 3      │    Phase 4        │
+│  Discovery  │  Concept    │ Visual Identity │  Documentation    │
+├─────────────┼─────────────┼─────────────────┼───────────────────┤
+│ • product   │ • personality│ • mood         │ • defaults confirm│
+│ • users     │ • voice     │ • colors        │ • yaml generation │
+│ • context   │ • naming    │ • typography    │ • final review    │
+│             │ • tagline   │ • logo          │                   │
+└─────────────┴─────────────┴─────────────────┴───────────────────┘
 ```
 
 ## Output
@@ -118,24 +117,19 @@ brandspec/
 
 ### Steps
 
-1. **spacing-radius** - Confirm spacing/radius defaults or customize
-2. **assets** - Register existing assets or note next actions
-3. **export-selection** - Choose export formats (css, tailwind, html, etc.)
-4. **yaml** - Generate `brand.yaml`
-5. **dist** - Generate selected exports into `output/`
+1. **defaults** - Confirm standard spacing/radius (customize if needed)
+2. **yaml** - Generate `brand.yaml` (+ register assets if any)
+3. **review** - Final review and approval
 
 ### Outputs
 
-- `brand.yaml` - Machine-readable spec (repository root)
-- `output/tokens.css` - CSS variables
-- `output/brand.md` - Human-readable document
-- `output/brand.html` - Visual preview (if selected)
-- `output/theme.css` - Tailwind v4 theme (if selected)
+- `brand.yaml` - Machine-readable spec (brandspec directory root)
+- `assets/` - Brand assets (if any)
+- `_workshop/` - Process records (decisions.yml, memo.md, session.md)
 
 ### Complete When
 
 - [ ] `brand.yaml` generated and valid
-- [ ] Selected dist files generated
 - [ ] User has reviewed and approved
 
 ---
