@@ -3,6 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J1HWBN3Y2Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-J1HWBN3Y2Q');
+</script>
 <title>brandspec — Define once. Brand everywhere.</title>
 <meta name="description" content="An open specification for defining Brand Identity as code. One YAML file becomes the source of truth for your entire brand.">
 
@@ -25,25 +34,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --titanium-50:  oklch(0.97 0.005 80);
-    --titanium-100: oklch(0.93 0.008 80);
-    --titanium-200: oklch(0.87 0.010 75);
-    --titanium-300: oklch(0.78 0.012 72);
-    --titanium-400: oklch(0.65 0.015 70);
-    --titanium-600: oklch(0.45 0.015 65);
-    --titanium-900: oklch(0.22 0.015 60);
+    /* Brand tokens (semantic) */
+    --primary:             oklch(0.65 0.10 70);
+    --primary-foreground:  oklch(0.97 0.005 80);
+    --secondary:           oklch(0.55 0.12 65);
+    --secondary-foreground:oklch(0.97 0.005 80);
 
-    --ember:        oklch(0.65 0.10 70);
-    --ember-subtle: oklch(0.80 0.05 75);
-    --ember-strong: oklch(0.55 0.12 65);
+    /* Surface tokens */
+    --background:          oklch(0.97 0.005 80);
+    --foreground:          oklch(0.45 0.015 65);
+    --muted:               oklch(0.93 0.008 80);
+    --muted-foreground:    oklch(0.65 0.015 70);
+    --border-color:        oklch(0.87 0.010 75);
+    --heading:             oklch(0.22 0.015 60);
+    --accent-subtle:       oklch(0.80 0.05 75);
 
-    --bg:           var(--titanium-50);
+    /* LP layout aliases */
+    --bg:           var(--background);
     --bg-card:      white;
-    --text:         var(--titanium-600);
-    --text-heading: var(--titanium-900);
-    --text-sub:     var(--titanium-400);
-    --border:       var(--titanium-200);
-    --accent:       var(--ember);
+    --text:         var(--foreground);
+    --text-heading: var(--heading);
+    --text-sub:     var(--muted-foreground);
+    --border:       var(--border-color);
+    --accent:       var(--primary);
   }
 
   /* ── Dark mode ── */
@@ -55,7 +68,7 @@
     --text-sub:     oklch(0.55 0.01 70);
     --border:       oklch(0.28 0.015 65);
     --accent:       oklch(0.70 0.12 70);
-    --ember-strong: oklch(0.62 0.14 68);
+    --secondary:    oklch(0.62 0.14 68);
   }
 
   [data-theme="dark"] .code-block {
@@ -68,7 +81,7 @@
   }
 
   [data-theme="dark"] .nav-links .btn-nav:hover {
-    background: var(--ember-strong);
+    background: var(--secondary);
   }
 
   [data-theme="dark"] .btn-primary {
@@ -77,7 +90,7 @@
   }
 
   [data-theme="dark"] .btn-primary:hover {
-    background: var(--ember-strong);
+    background: var(--secondary);
   }
 
   [data-theme="dark"] .how-number {
@@ -217,13 +230,13 @@
   .nav-links .btn-nav {
     padding: 8px 20px;
     background: var(--text-heading);
-    color: var(--titanium-50);
+    color: var(--primary-foreground);
     border-radius: 6px;
     font-size: 13px;
     font-weight: 600;
   }
 
-  .nav-links .btn-nav:hover { background: var(--titanium-600); }
+  .nav-links .btn-nav:hover { background: var(--foreground); }
 
   /* ── Hero ── */
   .hero {
@@ -253,7 +266,7 @@
 
   .hero h1 em {
     font-style: normal;
-    color: var(--ember-strong);
+    color: var(--secondary);
   }
 
   /* Detail 1 — Hero "Brand." emphasis variants (switch class on <em>) */
@@ -327,16 +340,16 @@
 
   .btn-primary {
     background: var(--text-heading);
-    color: var(--titanium-50);
+    color: var(--primary-foreground);
   }
-  .btn-primary:hover { background: var(--titanium-600); }
+  .btn-primary:hover { background: var(--foreground); }
 
   .btn-secondary {
     background: transparent;
     color: var(--text-heading);
     border: 1.5px solid var(--border);
   }
-  .btn-secondary:hover { border-color: var(--titanium-400); }
+  .btn-secondary:hover { border-color: var(--muted-foreground); }
 
   /* ── Section utility ── */
   .section {
@@ -444,7 +457,7 @@
 
   /* Detail 2: Code block — ember accent line on left edge */
   .code-block {
-    background: var(--titanium-900);
+    background: var(--heading);
     border-radius: 12px;
     padding: 32px 36px;
     overflow-x: auto;
@@ -565,7 +578,7 @@
     font-size: 48px;
     font-weight: 900;
     letter-spacing: -0.045em;
-    color: var(--titanium-200);
+    color: var(--border-color);
     margin-bottom: 12px;
   }
 
@@ -838,18 +851,18 @@
   <div class="how-grid reveal-stagger">
     <div class="how-step">
       <div class="how-number">01</div>
-      <h3>Define</h3>
-      <p>Already have a brand? <code style="font-family:'JetBrains Mono',monospace;font-size:12px">npx brandspec init</code>. Starting fresh? Let <a href="https://github.com/brandspec/brandspec#workshop--forge-your-brand-with-any-ai" style="color:var(--accent)">Workshop</a> forge it with your AI — four phases, any model, structured output.</p>
+      <h3>Workshop</h3>
+      <p>Brand workshop, facilitated by AI. Four phases, any model, structured decisions. Or start from <code style="font-family:'JetBrains Mono',monospace;font-size:12px">npx brandspec init</code> and write it yourself.</p>
     </div>
     <div class="how-step">
       <div class="how-number">02</div>
-      <h3>Commit</h3>
-      <p>Put the <code style="font-family:'JetBrains Mono',monospace;font-size:12px">brandspec/</code> directory in your repo. Brand definition, assets, workshop history — version it, diff it, review it in a PR.</p>
+      <h3>Format</h3>
+      <p>Conclusions and history in one format. <code style="font-family:'JetBrains Mono',monospace;font-size:12px">brand.yaml</code> — version it, diff it, review it in a PR. The workshop trail stays with it.</p>
     </div>
     <div class="how-step">
       <div class="how-number">03</div>
-      <h3>Consume</h3>
-      <p>One command generates CSS variables, Tailwind v4 theme, Figma tokens, Style Dictionary config. From there — scss, Swift, Android, anything.</p>
+      <h3>Generate</h3>
+      <p>One command generates CSS, Tailwind v4, Figma tokens, Style Dictionary. Another turns any AI into your brand consultant. Consistent everywhere.</p>
     </div>
   </div>
   <div class="reveal" style="text-align:center;margin-top:-60px;margin-bottom:100px;font-size:15px;color:var(--text-sub)">
