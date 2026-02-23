@@ -213,8 +213,8 @@ You chose: Symbol + Wordmark
 Assets you'll need:
   ✓ symbol (primary, inverse, monochrome)
   ✓ wordmark (primary, inverse, monochrome)
-  ○ lockup-horizontal (recommended)
-  ○ lockup-vertical (recommended)
+  ○ logo-horizontal (recommended, combined layout)
+  ○ logo-vertical (recommended, combined layout)
 
 Plus for digital use:
   ✓ favicon derived from symbol
@@ -238,8 +238,8 @@ logo:
     - role: wordmark
       variants: [primary, inverse, monochrome]
   optional_assets:
-    - role: lockup-horizontal
-    - role: lockup-vertical
+    - role: logo
+      variants: [horizontal, vertical]
     - role: favicon
       note: "Derived from symbol"
   requirements:

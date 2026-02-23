@@ -117,7 +117,7 @@ properties:
           description: "Asset variant"
           # Recommended values:
           # primary, secondary, monochrome, inverse,
-          # simplified, stacked, horizontal
+          # simplified, vertical, horizontal
         context:
           type: string
           description: "Usage context"
