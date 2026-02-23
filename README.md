@@ -1,20 +1,22 @@
 <p align="center">
-  <img src="brandspec/assets/lockup-horizontal-h80.png" height="40" alt="brandspec">
+  <img src="brandspec/assets/logo-horizontal-h80.png" height="40" alt="brandspec">
 </p>
 
 # brandspec
 
 Define Brand Identity as code.
 
-Brand identity lives in Figma, PDFs, Notion pages, Slack threads — scattered, inconsistent, out of date. **brandspec** puts it in one file: `brand.yaml`. Structured for machines, readable by humans. An open format built on [W3C Design Tokens](https://tr.designtokens.org/format/).
+1. Brand workshop, facilitated by AI. Any model, four phases, structured decisions.
+2. Conclusions and history in one format. `brand.yaml` — structured for machines, readable by humans.
+3. Connects consistently to every use — CSS, Tailwind, Figma, Style Dictionary, AI consultation.
 
-This repository has three components:
+An open format built on [W3C Design Tokens](https://tr.designtokens.org/format/). MIT licensed.
 
 | Component | Path | Role |
 |-----------|------|------|
 | **schema** | `schema/` | Specification — the definition of `brand.yaml` (JSON Schema + machine-friendly spec knowledge) |
-| **workshop** | `workshop/` | Facilitation — AI-guided 4-phase process to create a brand identity. References schema as SSoT. |
-| **cli** | `cli/` | Tooling — validate, generate, push/pull. Consumes schema for validation and export. |
+| **workshop** | `workshop/` | Facilitation — AI-guided 4-phase process to create a brand identity |
+| **cli** | `cli/` | Tooling — validate, generate, consult, push/pull |
 
 ## Quick Start
 
@@ -83,7 +85,7 @@ This prints a system prompt to stdout — paste it into any LLM (Claude, GPT, Ge
 npx brandspec consult | pbcopy   # macOS — copy to clipboard
 ```
 
-The prompt includes your brand's personality, voice principles, do/don't boundaries, color palette, typography, logo system, and guidelines — everything the AI needs to stay on-brand.
+The prompt includes your brand's personality, voice principles, color palette, typography, logo system, and guidelines — everything the AI needs to stay on-brand.
 
 ## CLI
 
@@ -92,7 +94,10 @@ brandspec <command> [options]
 
 Commands:
   init              Create a brandspec/ directory with templates
-  validate [path]   Validate against schema (default: ./brand.yaml)
+  validate [path]   Validate against schema (alias for lint)
+  lint [path]       Lint brand.yaml (score, errors, warnings)
+    --json           Machine-readable JSON output
+    --quiet          Errors only
   generate [path]   Generate token files from brand.yaml
     --format <fmt>   css, tailwind, figma, sd, all (comma-separated)
     --out <dir>      Output directory (default: ./output)
@@ -102,6 +107,14 @@ Commands:
   workshop start          Print start prompt for AI workshop
   workshop resume         Print resume prompt for AI workshop
   workshop status         Show current workshop position
+
+  login                   Authenticate with brandspec.tools
+    --token <tok>          Non-interactive (CI)
+  logout                  Remove saved credentials
+  push [org/brand]        Push brandspec/ to brandspec.tools
+    --no-workshop          Exclude _workshop/ files
+  pull [org/brand]        Pull brandspec/ from brandspec.tools
+    --no-workshop          Exclude _workshop/ files
 ```
 
 ## Format
@@ -124,11 +137,21 @@ tokens:
     primary:
       $value: "oklch(0.65 0.18 250)"
       $type: color
+    primary-foreground:
+      $value: "oklch(0.99 0.005 250)"
+      $type: color
     background:
       $value: "oklch(0.99 0.005 250)"
       $type: color
+    foreground:
+      $value: "oklch(0.25 0.02 250)"
+      $type: color
+    # ... (see docs/examples/ for complete token set)
   typography:
     heading:
+      $value: "Inter, system-ui, sans-serif"
+      $type: fontFamily
+    body:
       $value: "Inter, system-ui, sans-serif"
       $type: fontFamily
 
@@ -145,15 +168,22 @@ assets:
   - file: assets/symbol.svg
     id: symbol
     role: symbol
-  - file: assets/icon-favicon.ico
-    id: icon-favicon
+  - file: assets/favicon.ico
+    id: favicon
     role: favicon
 
 guidelines:
   logo-usage:
     content: |
       Use the primary logo on light backgrounds.
-      Minimum size: 120px width.
+    rules:
+      - id: logo-min-size
+        description: "Logo must meet minimum size requirements"
+        severity: error
+        applies_to: logo
+        criteria:
+          - "Digital: minimum 120px width"
+          - "Print: minimum 25mm width"
 ```
 
 Only `meta.name` is required. Everything else is opt-in.
@@ -172,7 +202,7 @@ The `assets` section uses `role` + `variant` to describe a logo system. Common r
 
 Variants: `primary`, `inverse`, `monochrome`, `simplified`, etc. Custom roles are also allowed.
 
-File naming convention: `{role}-{variant}.{ext}` (e.g., `logo-primary.svg`, `logo-inverse.svg`, `icon-favicon.ico`).
+File naming convention: `{role}-{variant}.{ext}` (e.g., `logo-primary.svg`, `logo-inverse.svg`, `favicon.ico`).
 
 Full asset spec: [`docs/assets.md`](docs/assets.md)
 
