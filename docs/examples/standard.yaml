@@ -75,6 +75,32 @@ tokens:
     body:
       $value: "Inter, system-ui, sans-serif"
       $type: fontFamily
+  spacing:
+    xs:
+      $value: "0.25rem"
+      $type: dimension
+    sm:
+      $value: "0.5rem"
+      $type: dimension
+    md:
+      $value: "1rem"
+      $type: dimension
+    lg:
+      $value: "1.5rem"
+      $type: dimension
+    xl:
+      $value: "2rem"
+      $type: dimension
+  radius:
+    sm:
+      $value: "0.25rem"
+      $type: dimension
+    md:
+      $value: "0.5rem"
+      $type: dimension
+    lg:
+      $value: "1rem"
+      $type: dimension
 
 assets:
   - file: assets/logo-primary.svg
@@ -89,7 +115,7 @@ assets:
     variant: monochrome
     description: "Single-color version for limited color contexts"
 
-  - file: assets/icon-favicon.png
-    id: icon-favicon
+  - file: assets/favicon.png
+    id: favicon
     role: favicon
     description: "Browser favicon"

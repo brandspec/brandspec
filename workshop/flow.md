@@ -24,11 +24,8 @@ Workshop populates the `brandspec/` directory created by `brandspec init`:
 brandspec/
 ├── brand.yaml              # source of truth
 ├── assets/                     # brand assets
-├── output/                    # generated from yaml
-│   ├── tokens.css
-│   ├── theme.css
-│   └── figma-tokens.json
 └── _workshop/                  # process records
+    ├── position.yml
     ├── decisions.yml
     ├── memo.md
     └── session.md

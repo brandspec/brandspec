@@ -68,7 +68,7 @@ Which variation of the asset.
 | `monochrome` | Single color |
 | `inverse` | Inverted (for dark backgrounds) |
 | `simplified` | Simplified version (small sizes) |
-| `stacked` | Vertical layout |
+| `vertical` | Vertical layout |
 | `horizontal` | Horizontal layout |
 
 Custom values are allowed.
@@ -119,7 +119,7 @@ Pattern: `{role}-{variant}[-{context}].{ext}`
 | `logo-primary.svg` | logo | primary | — |
 | `logo-monochrome.svg` | logo | monochrome | — |
 | `logo-inverse-dark-bg.svg` | logo | inverse | dark-bg |
-| `icon-favicon.ico` | favicon | — | — |
+| `favicon.ico` | favicon | — | — |
 | `symbol-simplified.svg` | symbol | simplified | — |
 
 ---
@@ -134,7 +134,7 @@ brandspec/
     ├── logo-monochrome.svg
     ├── logo-inverse.svg
     ├── symbol.svg
-    ├── icon-favicon.ico
+    ├── favicon.ico
     └── icon-app.png
 ```
 
@@ -148,25 +148,24 @@ Brands use one of four fundamental logo system patterns. Each determines require
 
 ### Pattern A: Wordmark
 
-Typography is the identity. Text-only or stylized lettermark.
+Typography is the identity. Text-only or stylized text mark.
 
 | Attribute | Detail |
 |-----------|--------|
 | Examples | Google, FedEx, Coca-Cola, Supreme, IBM |
 | Best for | Strong names, text-centric brands |
 | Required assets | `wordmark` (+ variants) |
-| Optional assets | `lettermark` (initials for compact use) |
 
 ### Pattern B: Symbol + Wordmark (separated)
 
-Independent symbol and wordmark, used separately or in lockups.
+Independent symbol and wordmark, used separately or combined.
 
 | Attribute | Detail |
 |-----------|--------|
 | Examples | Apple, Nike, Spotify, Slack, Airbnb |
 | Best for | Apps needing an icon, long-term symbol recognition |
 | Required assets | `symbol`, `wordmark` |
-| Optional assets | `lockup-horizontal`, `lockup-vertical` |
+| Optional assets | `logo-horizontal`, `logo-vertical` (combined layouts) |
 
 ### Pattern C: Combination Mark (integrated)
 
@@ -192,14 +191,15 @@ Text enclosed within or integral to a shape.
 
 ### Pattern Summary
 
+> Shorthand names map to `role` + `variant` fields (e.g. `logo-simplified` = `role: logo, variant: simplified`).
+
 ```yaml
 logo_system_patterns:
   wordmark:
     required: [wordmark]
-    optional: [lettermark]
   symbol_wordmark:
     required: [symbol, wordmark]
-    optional: [lockup-horizontal, lockup-vertical]
+    optional: [logo-horizontal, logo-vertical]
   combined:
     required: [logo]
     optional: [symbol]
@@ -216,4 +216,4 @@ logo_system_patterns:
 | `inverse` | Use on dark backgrounds | High |
 | `monochrome` | Single-color constraints | High |
 | `simplified` | Small sizes (favicon, 16–32px) | Medium |
-| `stacked` / `horizontal` | Layout-specific lockups | Pattern B only |
+| `vertical` / `horizontal` | Layout variants (Pattern B: symbol + wordmark combined) | Pattern B only |

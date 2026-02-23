@@ -83,6 +83,8 @@ Contrast requirement: base + `-foreground` pair MUST meet WCAG AA (4.5:1 normal 
 
 ### Required Color Tokens
 
+> "Required" means needed for a complete brandspec, not schema-enforced. `brandspec lint` reports missing required tokens as warnings.
+
 These tokens MUST be defined for a complete brandspec:
 
 ```yaml

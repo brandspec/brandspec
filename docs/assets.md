@@ -76,7 +76,7 @@ Variation of the asset.
 | `monochrome` | Single color |
 | `inverse` | Inverted (e.g., white on dark) |
 | `simplified` | Simplified version |
-| `stacked` | Vertical layout |
+| `vertical` | Vertical layout |
 | `horizontal` | Horizontal layout |
 
 Custom values are allowed.
@@ -140,7 +140,7 @@ Examples:
 - `logo-primary.svg`
 - `logo-monochrome.svg`
 - `logo-inverse-dark-bg.svg`
-- `icon-favicon.ico`
+- `favicon.ico`
 - `symbol-simplified.svg`
 
 Benefits:
@@ -161,7 +161,7 @@ brandspec/
     ├── logo-monochrome.svg
     ├── logo-inverse.svg
     ├── symbol.svg
-    ├── icon-favicon.ico
+    ├── favicon.ico
     └── icon-app.png
 ```
 

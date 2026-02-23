@@ -123,6 +123,8 @@ Adjectives describing the emotional quality of brand communication. Overlaps wit
 
 Actionable writing rules the brand follows. Each principle should be a concrete, checkable guideline.
 
+> **Note:** The schema allows additional keys on `voice` for extensibility, but only `tone` and `principles` are standard. Linting may warn on unrecognized keys.
+
 ---
 
 ## Required vs Recommended

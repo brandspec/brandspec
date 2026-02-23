@@ -13,7 +13,6 @@ import { fileURLToPath } from "node:url";
 import { createInterface } from "node:readline";
 import { parse } from "./parser.js";
 import { validate } from "./validate.js";
-import { serialize } from "./parser.js";
 import { lintBrandspec } from "./lint.js";
 import type { LintReport } from "./lint.js";
 import { toCss, toTailwindCss, toFigmaTokens, toStyleDictionary } from "./tokens.js";
@@ -697,25 +696,6 @@ function cmdConsult(args: string[]) {
     lines.push("");
   }
 
-  // Do / Don't from extensions.brand-voice.boundaries
-  const brandVoice = data.extensions?.["brand-voice"] as
-    | { metaphor?: string; boundaries?: { do?: string[]; dont?: string[] } }
-    | undefined;
-  if (brandVoice?.boundaries) {
-    const b = brandVoice.boundaries;
-    lines.push("## Do / Don't");
-    if (brandVoice.metaphor) lines.push(`Voice metaphor: ${brandVoice.metaphor}`);
-    if (b.do?.length) {
-      lines.push("Do:");
-      for (const d of b.do) lines.push(`- ${d}`);
-    }
-    if (b.dont?.length) {
-      lines.push("Don't:");
-      for (const d of b.dont) lines.push(`- ${d}`);
-    }
-    lines.push("");
-  }
-
   // Visual Identity
   const hasColors = data.tokens?.colors && Object.keys(data.tokens.colors).length > 0;
   const hasTypography = data.tokens?.typography && Object.keys(data.tokens.typography).length > 0;
@@ -749,8 +729,7 @@ function cmdConsult(args: string[]) {
       const parts: string[] = [];
       if (roles.has("symbol")) parts.push("symbol");
       if (roles.has("wordmark")) parts.push("wordmark");
-      if (roles.has("lockup-horizontal") || roles.has("lockup-vertical") || roles.has("lockup"))
-        parts.push("lockup");
+      if (roles.has("logo")) parts.push("logo");
       if (roles.has("favicon")) parts.push("favicon");
 
       if (parts.length) {
@@ -785,9 +764,9 @@ function cmdConsult(args: string[]) {
     }
   }
 
-  // Additional Context from extensions (excluding brand-voice already handled)
+  // Additional Context from extensions
   if (data.extensions) {
-    const extKeys = Object.keys(data.extensions).filter((k) => k !== "brand-voice");
+    const extKeys = Object.keys(data.extensions);
     if (extKeys.length > 0) {
       lines.push("## Additional Context");
       for (const key of extKeys) {
@@ -941,14 +920,14 @@ async function cmdPush(args: string[]) {
   const assetsDir = resolve("assets");
   const assetFiles = collectFiles(assetsDir, "");
   for (const file of assetFiles) {
-    formData.append("assets", new Blob([file.data]), file.path);
+    formData.append("assets", new Blob([new Uint8Array(file.data)]), file.path);
   }
 
   // Collect _workshop/
   const workshopDir = resolve("_workshop");
   const workshopFiles = collectFiles(workshopDir, "");
   for (const file of workshopFiles) {
-    formData.append("workshop", new Blob([file.data]), file.path);
+    formData.append("workshop", new Blob([new Uint8Array(file.data)]), file.path);
   }
 
   const url = `${API_BASE}/api/v1/${remote.org}/${remote.brand}/push`;
