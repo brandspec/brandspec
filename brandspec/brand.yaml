@@ -31,51 +31,97 @@ core:
 
 tokens:
   colors:
-    titanium-50:
-      $value: "oklch(0.97 0.005 80)"
-      $type: color
-      $description: "Background"
-    titanium-100:
-      $value: "oklch(0.93 0.008 80)"
-      $type: color
-      $description: "Card background"
-    titanium-200:
-      $value: "oklch(0.87 0.010 75)"
-      $type: color
-      $description: "Border, divider"
-    titanium-300:
-      $value: "oklch(0.78 0.012 72)"
-      $type: color
-      $description: "Subtle border"
-    titanium-400:
-      $value: "oklch(0.65 0.015 70)"
-      $type: color
-      $description: "Subtext, placeholder"
-    titanium-600:
-      $value: "oklch(0.45 0.015 65)"
-      $type: color
-      $description: "Body text"
-    titanium-900:
-      $value: "oklch(0.22 0.015 60)"
-      $type: color
-      $description: "Heading, emphasis"
-    ember-subtle:
-      $value: "oklch(0.80 0.05 75)"
-      $type: color
-      $description: "Hover, light accent"
-    ember:
+    # Brand colors
+    primary:
       $value: "oklch(0.65 0.10 70)"
       $type: color
       $description: "Primary accent — CTA, links"
-    ember-strong:
+    primary-foreground:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Text on primary"
+    secondary:
       $value: "oklch(0.55 0.12 65)"
       $type: color
-      $description: "Hover accent, strong emphasis"
+      $description: "Strong accent — hover, emphasis"
+    secondary-foreground:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Text on secondary"
+
+    # Surface colors
+    background:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Page background"
+    foreground:
+      $value: "oklch(0.45 0.015 65)"
+      $type: color
+      $description: "Body text"
+    muted:
+      $value: "oklch(0.93 0.008 80)"
+      $type: color
+      $description: "Card background, subtle fill"
+    muted-foreground:
+      $value: "oklch(0.65 0.015 70)"
+      $type: color
+      $description: "Subtext, placeholder"
+    border:
+      $value: "oklch(0.87 0.010 75)"
+      $type: color
+      $description: "Border, divider"
+    heading:
+      $value: "oklch(0.22 0.015 60)"
+      $type: color
+      $description: "Heading, emphasis"
+    accent:
+      $value: "oklch(0.80 0.05 75)"
+      $type: color
+      $description: "Hover, light accent"
+
+    # Status colors (warm hue 60-80 only — color-no-cold compliant)
+    destructive:
+      $value: "oklch(0.55 0.12 60)"
+      $type: color
+      $description: "Error, destructive action"
+    destructive-foreground:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Text on destructive"
+    success:
+      $value: "oklch(0.60 0.08 80)"
+      $type: color
+      $description: "Success state"
+    success-foreground:
+      $value: "oklch(0.22 0.015 60)"
+      $type: color
+      $description: "Text on success"
+    warning:
+      $value: "oklch(0.75 0.10 75)"
+      $type: color
+      $description: "Warning state"
+    warning-foreground:
+      $value: "oklch(0.22 0.015 60)"
+      $type: color
+      $description: "Text on warning"
+    info:
+      $value: "oklch(0.65 0.06 72)"
+      $type: color
+      $description: "Info state"
+    info-foreground:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+      $description: "Text on info"
+
   typography:
     heading:
       $value: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
       $type: fontFamily
-      $description: "All headings and body — single font family"
+      $description: "Headings"
+    body:
+      $value: "Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+      $type: fontFamily
+      $description: "Body text"
     mono:
       $value: "JetBrains Mono, monospace"
       $type: fontFamily
@@ -102,35 +148,25 @@ assets:
     role: icon
     variant: primary
     description: "Brand mark 32px PNG — small icon contexts"
-  - file: assets/lockup-horizontal.svg
-    id: lockup-horizontal
-    role: lockup
+  - file: assets/logo-horizontal.svg
+    id: logo-horizontal
+    role: logo
     variant: horizontal
-    description: "Lockup (bs | brandspec) for headers and README"
-  - file: assets/lockup-horizontal-h80.png
-    id: lockup-horizontal-h80
-    role: lockup
+    description: "Logo horizontal layout (bs | brandspec) for headers and README"
+  - file: assets/logo-horizontal-h80.png
+    id: logo-horizontal-h80
+    role: logo
     variant: horizontal
-    description: "Lockup 80px height PNG — README fallback"
-  - file: assets/icon-favicon.ico
-    id: icon-favicon
+    description: "Logo horizontal 80px height PNG — README fallback"
+  - file: assets/favicon.ico
+    id: favicon
     role: favicon
     description: "Browser favicon"
 
 guidelines:
   typography-usage:
     content: |
-      ## Typography System
-
-      One font. Weight and tracking create every expression.
-
-      | Role            | Weight | Tracking  |
-      |-----------------|--------|-----------|
-      | Display / Logo  | 900    | -0.045em  |
-      | Section heading | 600    | -0.02em   |
-      | Body            | 400    | 0         |
-      | Label           | 500    | 0.06em (uppercase) |
-      | Code            | Mono 400 | 0       |
+      One font family. Weight and tracking create every expression.
     rules:
       - id: type-single-family
         description: "Only Inter and JetBrains Mono are permitted"
@@ -147,24 +183,20 @@ guidelines:
         criteria:
           - "font-weight: 900"
           - "letter-spacing: -0.045em or tighter"
+      - id: type-weight-scale
+        description: "Weight assignments by role"
+        severity: info
+        applies_to: typography
+        criteria:
+          - "Display / Logo: 900, tracking -0.045em"
+          - "Section heading: 600, tracking -0.02em"
+          - "Body: 400, tracking 0"
+          - "Label: 500, tracking 0.06em (uppercase)"
+          - "Code: Mono 400, tracking 0"
 
   color-usage:
     content: |
-      ## Color System
-
-      Titanium (near-neutral warm greys) + Ember (accent).
-
-      ### Titanium
-      Primary palette. Hue 60-80, chroma 0.005-0.015.
-      Not pure grey — subtly warm.
-
-      ### Ember
-      Accent only. Used sparingly for CTAs, links, labels.
-      Never as background for large areas.
-
-      ### Design intent
-      brandspec is a vessel — its visual identity must not
-      compete with the user's brand. Restrained, structural, receding.
+      Titanium (warm greys) + Ember (accent). brandspec is a vessel — its visual identity must not compete with the user's brand.
     rules:
       - id: color-no-cold
         description: "No cool-toned colors in the brandspec palette"
@@ -173,6 +205,7 @@ guidelines:
         criteria:
           - "All colors must have hue between 55-85 (warm range)"
           - "No blue, green, or purple hues"
+          - "Status colors (destructive, success, warning, info) also stay within warm hue range 60-80"
       - id: color-ember-sparingly
         description: "Ember accent must be used sparingly"
         severity: warning
@@ -190,22 +223,7 @@ guidelines:
 
   voice-guidelines:
     content: |
-      ## Voice
-
-      Measured. Direct. No fluff.
-
       The voice of a forge master — few words, each one precise.
-      Quality speaks for itself.
-
-      ### Do
-      - "brand.yaml is the single source of truth."
-      - "Define your brand in one file."
-      - "Linting found 2 errors."
-
-      ### Don't
-      - "brand.yaml is your amazing, powerful source of truth!"
-      - "Revolutionize your brand workflow with our cutting-edge platform."
-      - "Oops! We found some issues with your brand."
     rules:
       - id: voice-no-marketing
         description: "Copy must avoid marketing superlatives"
@@ -222,29 +240,65 @@ guidelines:
           - "Prefer short sentences"
           - "Active voice over passive"
           - "State facts, not feelings"
-
-  brand-philosophy:
-    content: |
-      ## Brand Philosophy
-
-      > The hardest thing in the world? Brand.
-      > Forge it. Keep the edge. Cut through everything.
-
-      ### Identity
-      Consistent Polymorphism — one definition, infinite manifestations.
-
-      ### Ecosystem layers
-      | Layer      | Copy                    | Component  |
-      |------------|-------------------------|------------|
-      | Confront   | "The hardest thing..."  | spec       |
-      | Forge      | "Forge it."             | workshop   |
-      | Maintain   | "Keep the edge."        | CLI        |
-      | Penetrate  | "Cut through everything"| vision     |
-
-      ### Sub-identities
-      - **Workshop**: Brand Forger
+      - id: voice-examples
+        description: "Voice tone reference"
+        severity: info
+        applies_to: voice
+        criteria:
+          - "Do: 'brand.yaml is the single source of truth.'"
+          - "Do: 'Define your brand in one file.'"
+          - "Don't: 'brand.yaml is your amazing, powerful source of truth!'"
+          - "Don't: 'Revolutionize your brand workflow with our cutting-edge platform.'"
 
 extensions:
+  brand-philosophy:
+    identity: "Consistent Polymorphism — one definition, infinite manifestations"
+    layers:
+      - layer: "Confront"
+        copy: "The hardest thing in the world? Brand."
+        component: spec
+      - layer: "Forge"
+        copy: "Forge it."
+        component: workshop
+      - layer: "Maintain"
+        copy: "Keep the edge."
+        component: CLI
+      - layer: "Penetrate"
+        copy: "Cut through everything."
+        component: vision
+    sub-identities:
+      workshop: "Brand Forger"
+  brand-scale:
+    titanium-50:
+      $value: "oklch(0.97 0.005 80)"
+      $type: color
+    titanium-100:
+      $value: "oklch(0.93 0.008 80)"
+      $type: color
+    titanium-200:
+      $value: "oklch(0.87 0.010 75)"
+      $type: color
+    titanium-300:
+      $value: "oklch(0.78 0.012 72)"
+      $type: color
+    titanium-400:
+      $value: "oklch(0.65 0.015 70)"
+      $type: color
+    titanium-600:
+      $value: "oklch(0.45 0.015 65)"
+      $type: color
+    titanium-900:
+      $value: "oklch(0.22 0.015 60)"
+      $type: color
+    ember-subtle:
+      $value: "oklch(0.80 0.05 75)"
+      $type: color
+    ember:
+      $value: "oklch(0.65 0.10 70)"
+      $type: color
+    ember-strong:
+      $value: "oklch(0.55 0.12 65)"
+      $type: color
   copy:
     hero_en: "The hardest thing in the world? Brand. Forge it. Keep the edge. Cut through everything."
     hero_ja: "鍛えろ。研げ。貫け。"
