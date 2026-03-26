@@ -49,9 +49,9 @@ Taste → Primitives → Components → Patterns → Screens → Confirm → Han
 
 Each phase uses the same core loop: **Generate variants → Compare → Select → Refine**.
 
-## Phase 1: Taste
+## Phase 1: Taste (Look & Feel)
 
-**Goal**: Establish the design system's overall character before touching individual components.
+**Goal**: Establish the design system's overall look & feel before touching individual components.
 
 ### Taste Axes
 
@@ -1144,7 +1144,7 @@ For agent-human communication, these terms are precise:
 
 | Term | Meaning |
 |------|---------|
-| Taste | The overall design character across all 10 axes |
+| Taste | The overall look & feel of the design system, expressed across 10 axes (density, shape, weight, contrast, elevation, typography scale, color temperature, surface distinction, motion, icon style) |
 | Primitive | Single component (Atom) |
 | Component | Combined primitives (Molecule) |
 | Pattern | Page-level building block (Organism) |

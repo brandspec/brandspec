@@ -616,7 +616,7 @@ function cmdWhiteboard() {
   lines.push("I want to create a design system in Figma based on my brand definition.");
   lines.push("");
   lines.push("Read these skill files:");
-  lines.push(`1. ${skillPath} — the design system creation process (Taste, Primitives, Components, Patterns, Screens)`);
+  lines.push(`1. ${skillPath} — the design system creation process (Taste/Look & Feel, Primitives, Components, Patterns, Screens)`);
   if (existsSync(figmaSkillPath)) {
     lines.push(`2. ${figmaSkillPath} — Figma Plugin API operation rules (color conversion, auto-layout, variables, etc.)`);
   }
