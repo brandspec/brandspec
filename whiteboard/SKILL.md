@@ -508,17 +508,53 @@ The screen is **the single product screen where the most component types coexist
 
 **These taste sketches are disposable.** After taste is confirmed, production components are built from scratch in Phase 2-4 with full variants, states, and audits. The sketches served their purpose — helping the user choose a direction.
 
-### User Selects or Mixes
+### Pattern Distance Rule
 
-- "B" → proceed with B
-- "A's density with B's shape" → agent creates mixed pattern D, regenerates full stack
-- "Something between A and B" → agent interpolates and proposes D with full stack
-- "None of these, more like Linear" → agent reinterprets with reference and proposes new set with full stack
-- "I like B's screen but A's table density" → agent mixes at the axis level and regenerates
+The 3 initial patterns MUST be clearly distinct directions, not variations of the same idea. If personality inference pushes all patterns toward the same center, the comparison becomes useless.
+
+**Requirements:**
+- At least 3 axes must differ between any two patterns
+- Pattern A: the natural consequence of personality inference (safe zone)
+- Pattern B: intentionally distant from personality — a challenging alternative
+- Pattern C: a different reference product aesthetic, or a midpoint that combines unexpected axes
+
+**Anti-pattern:** All 3 patterns are "compact, moderate-radius, light-weight" with only shadow depth varying. This is a micro-adjustment, not a direction comparison.
+
+**Good example:**
+```
+Pattern A "Forge" (from personality: rigorous, pragmatic):
+  density: compact | shape: sharp | weight: light | elevation: flat | motion: crisp
+
+Pattern B "Canvas" (challenging — opposite of rigorous):
+  density: spacious | shape: rounded | weight: medium | elevation: layered | motion: expressive
+
+Pattern C "Anvil" (reference: Vercel-like):
+  density: balanced | shape: moderate | weight: light | contrast: bold | elevation: flat
+```
+
+### Convergence Rounds
+
+Convergence happens AFTER direction is chosen, not during initial proposal.
+
+```
+Round 1: Diverge — 3 clearly different directions
+  → User picks a direction (or mixes axes)
+
+Round 2: Refine — 3 variations within the chosen direction
+  → Subtle adjustments: radius 4px vs 6px vs 8px, padding scale, shadow depth
+
+Round 3: Confirm — final taste locked
+```
+
+### User Selects or Mixes (Round 1)
+
+- "B" → Round 2 explores variations of B
+- "A's density with B's shape" → agent creates mixed pattern D, generates Round 2 around D
+- "Something between A and B" → agent interpolates, generates Round 2 around the midpoint
+- "None of these, more like Linear" → agent proposes new Round 1 with reference
+- "I like B's screen but A's table density" → agent mixes at the axis level
 
 Every selection/mix regenerates from Atoms through Screens so the user always sees the complete picture.
-
-Loop until taste is confirmed.
 
 ### Reference Presets
 
