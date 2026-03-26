@@ -9,6 +9,7 @@ Figma is the shared whiteboard between agent and human. The human judges. The ag
 - `brand.yaml` with tokens defined (colors, typography, spacing, radius)
 - Figma file with write access
 - Figma MCP (`use_figma` / Plugin API) available
+- **`figma/SKILL.md` loaded** — Figma Plugin API operation rules. Contains critical patterns for color conversion (Section 1), auto-layout sizing (Section 2), variable binding (Section 3), and screen assembly (Section 8). Load before starting any phase.
 - **Variables synced to Figma** — brand.yaml tokens must be in the Figma file as Variables before starting. This is done via the brandspec workshop (see `workshop/SKILL.md` Phase 3 → `brandspec generate --format figma`) or by the agent reading brand.yaml and creating Variables via `use_figma`. If Variables don't exist yet, create them first before proceeding to Phase 1.
 
 ## Deliverables

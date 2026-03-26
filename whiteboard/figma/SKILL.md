@@ -56,6 +56,13 @@ function oklchToSrgb(L, C, H) {
 
 Dark colors diverge most. Always verify against the browser's computed color.
 
+### oklch vs HSL: Which Source to Use
+
+- `brand.yaml` (oklch) is the SSoT → Phase 2 onward, always use `oklchToSrgb()`
+- `globals.css` (HSL) is a pre-converted implementation value → acceptable for Taste comparison speed
+- Difference: oklch→sRGB is perceptually accurate; HSL→sRGB is less precise for wide-gamut colors
+- Phase 2 Variable creation MUST convert from brand.yaml oklch, not globals.css HSL
+
 ## 2. Auto-Layout Sizing (The h=10 Problem)
 
 The most common bug. Pattern: `resize(width, 10)` to set width, expecting height to auto-size. It doesn't.
@@ -85,17 +92,27 @@ frame.layoutMode = "HORIZONTAL";
 frame.counterAxisSizingMode = "AUTO";   // ← height = auto
 ```
 
-### Pre-Flight Check
+### Pre-Flight Check (Enhanced)
 
-Before returning from any `use_figma` call that creates frames:
+Before returning from any `use_figma` call that creates frames. Checks both axes — a HORIZONTAL layout with `counterAxisSizingMode = "FIXED"` and height <= 20 is the same bug as a VERTICAL layout with `primaryAxisSizingMode = "FIXED"`.
+
 ```js
-// Audit all created nodes
-for (const id of createdNodeIds) {
-  const node = figma.getNodeById(id);
-  if (node && node.height <= 20 && node.layoutMode !== "NONE") {
-    // Almost certainly a sizing bug
-    node.primaryAxisSizingMode = "AUTO";
+function auditFrameSizing(node) {
+  if (!node || node.type === "TEXT" || node.type === "RECTANGLE" || node.type === "ELLIPSE") return;
+  if (!node.layoutMode || node.layoutMode === "NONE") return;
+  if (node.children && node.children.length > 0) {
+    const isVertical = node.layoutMode === "VERTICAL";
+    const heightAxis = isVertical ? "primaryAxisSizingMode" : "counterAxisSizingMode";
+    if (node[heightAxis] === "FIXED" && node.height <= 20) {
+      node[heightAxis] = "AUTO";
+    }
   }
+  if (node.children) node.children.forEach(auditFrameSizing);
+}
+
+// Run on all created top-level nodes
+for (const id of createdNodeIds) {
+  auditFrameSizing(figma.getNodeById(id));
 }
 ```
 
@@ -141,6 +158,16 @@ const paint = figma.variables.setBoundVariableForPaint(
   semVar  // ← bind to semantic, not primitive
 );
 ```
+
+### When to Bind vs Hardcode
+
+| Phase | Variable Binding | Reason |
+|-------|-----------------|--------|
+| Taste sketches (Phase 1) | Not required | Disposable. Speed matters |
+| Production components (Phase 2-4) | Required | SSoT, mode switching |
+| Screen assembly (Phase 5) | Automatic via instances | Components are already bound |
+
+Taste comparison is disposable — hardcoded colors are fine. When building production components in Phase 2, create Variables and bind everything from scratch.
 
 ## 4. Component Architecture
 
@@ -365,6 +392,38 @@ newScreen.x = 100;
 newScreen.y = maxY + 80;
 ```
 
+### Parallel Comparison Layout (Taste Phase)
+
+Taste comparison needs multiple patterns side by side. Don't hardcode x positions — frame widths depend on content and won't be known at creation time.
+
+Pattern: generate all frames first, then arrange in a grid.
+
+```js
+function arrangeGrid(frames, columns, gapX, gapY, startX, startY) {
+  // First pass: measure column widths and row heights
+  const colWidths = new Array(columns).fill(0);
+  const rowHeights = [];
+  frames.forEach((f, i) => {
+    const col = i % columns;
+    const row = Math.floor(i / columns);
+    colWidths[col] = Math.max(colWidths[col], f.width);
+    if (!rowHeights[row]) rowHeights[row] = 0;
+    rowHeights[row] = Math.max(rowHeights[row], f.height);
+  });
+
+  // Second pass: position
+  frames.forEach((f, i) => {
+    const col = i % columns;
+    const row = Math.floor(i / columns);
+    f.x = startX + colWidths.slice(0, col).reduce((s, w) => s + w + gapX, 0);
+    f.y = startY + rowHeights.slice(0, row).reduce((s, h) => s + h + gapY, 0);
+  });
+}
+
+// Usage: 3 taste patterns in a row
+arrangeGrid([patternA, patternB, patternC], 3, 80, 80, 100, 100);
+```
+
 ## 9. Component Variants (ComponentSet)
 
 ### Creating Variants
@@ -417,6 +476,32 @@ style.textCase = "UPPER";
 ```
 
 Note: `letterSpacing` and `lineHeight` require `{unit, value}` objects, not bare numbers.
+
+### Font Availability Check
+
+`loadFontAsync()` fails if the font isn't available in the Figma file. brand.yaml may specify fonts the user hasn't installed.
+
+```js
+async function tryLoadFont(family, style) {
+  try {
+    await figma.loadFontAsync({ family, style });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const brandFont = await tryLoadFont("Josefin Sans", "Bold");
+if (!brandFont) {
+  await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+  // Return warning: "Josefin Sans not available, using Inter as fallback"
+}
+```
+
+| Phase | Font handling |
+|-------|-------------|
+| Taste comparison (Phase 1) | Inter fallback OK — shape comparison is the goal |
+| Production components (Phase 2+) | brand.yaml font required — ask user to install if missing |
 
 ## 11. Moving Components Between Pages
 
