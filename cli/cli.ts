@@ -26,7 +26,7 @@ import {
 } from "./remote.js";
 import type { BrandspecYaml } from "./types.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 
 // ── Color utilities (NO_COLOR + TTY aware) ──
 

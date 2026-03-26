@@ -99,8 +99,8 @@ npx brandspec lint
 A structured 4-phase process that works with **any LLM**. Claude, GPT, Gemini — bring your own model.
 
 ```bash
-npx brandspec workshop start | pbcopy
-# Paste into your AI. The workshop begins.
+npx brandspec workshop
+# Copy the output into your AI. The workshop begins.
 ```
 
 ```
@@ -109,10 +109,31 @@ Discovery → Concept → Visual Identity → Documentation
 
 The AI guides you through brand essence, personality, colors, typography. All decisions are recorded in `_workshop/decisions.yml` — resumable, auditable, model-independent.
 
+## Whiteboard — Design system in Figma
+
+Turn your brand.yaml into a complete Figma design system. AI builds, you judge.
+
 ```bash
-npx brandspec workshop resume | pbcopy
-# Pick up where you left off. Any model. Any session.
+npx brandspec whiteboard
+# Copy into Claude Code. It reads the skills and asks for your Figma URL.
 ```
+
+```
+Taste → Primitives → Components → Patterns → Screens
+```
+
+The AI proposes 3 design directions (10 axes: density, shape, contrast, etc.), generates components in Figma, and iterates based on your visual feedback. No design experience needed.
+
+## Code — Figma to production
+
+Generate production components from your confirmed Figma design system.
+
+```bash
+npx brandspec code
+# Copy into Claude Code. Point it to your Figma file.
+```
+
+Outputs React + Tailwind + Radix components with CSS custom properties from your brand tokens. Every color, spacing, and radius value traces back to brand.yaml.
 
 ## Consult — Brand-aligned AI
 
@@ -166,9 +187,10 @@ brandspec <command> [options]
     --format <fmt>          css, tailwind, figma, sd, all
     --out <dir>             Output directory (default: ./output)
   consult [path]          Print brand context for AI
-  workshop start          Print workshop start prompt
-  workshop resume         Print workshop resume prompt
+  workshop                Print workshop prompt (auto start/resume)
   workshop status         Show current position
+  whiteboard              Print Figma design system prompt
+  code [stack]            Print Figma-to-code prompt (default: web)
   login                   Authenticate with brandspec.tools
   push [org/brand]        Push to cloud
   pull [org/brand]        Pull from cloud
