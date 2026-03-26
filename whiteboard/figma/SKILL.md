@@ -65,18 +65,32 @@ Dark colors diverge most. Always verify against the browser's computed color.
 
 ## 2. Auto-Layout Sizing (The h=10 Problem)
 
-The most common bug. Pattern: `resize(width, 10)` to set width, expecting height to auto-size. It doesn't.
+The most recurring bug. `resize(w, h)` affects both axes. When you want fixed width + auto height, the small placeholder height gets locked by `counterAxisSizingMode = "FIXED"`.
 
-### The Rule
-
-After creating any auto-layout frame with a fixed width:
+### Anti-Pattern: resize() for width-only control
 
 ```js
-const frame = figma.createFrame();
+// WRONG — height gets stuck at 1
+frame.resize(280, 1);
+// counterAxisSizingMode is still FIXED → height = 1px forever
+```
+
+### Correct Pattern: Fixed-Width Frame Snippets
+
+Always set the height axis to AUTO immediately after resize.
+
+```js
+// VERTICAL layout, fixed width, auto height:
 frame.layoutMode = "VERTICAL";
-frame.counterAxisSizingMode = "FIXED";  // width = fixed
-frame.resize(320, 10);                  // placeholder height
-frame.primaryAxisSizingMode = "AUTO";   // ← MUST SET THIS. height = auto.
+frame.resize(280, 1);
+frame.counterAxisSizingMode = "FIXED";   // width fixed
+frame.primaryAxisSizingMode = "AUTO";    // height auto ← REQUIRED
+
+// HORIZONTAL layout, fixed width, auto height:
+frame.layoutMode = "HORIZONTAL";
+frame.resize(280, 1);
+frame.primaryAxisSizingMode = "FIXED";   // width fixed
+frame.counterAxisSizingMode = "AUTO";    // height auto ← REQUIRED
 ```
 
 ### Axis Mapping
@@ -86,34 +100,30 @@ frame.primaryAxisSizingMode = "AUTO";   // ← MUST SET THIS. height = auto.
 | VERTICAL | height (↕) | width (↔) |
 | HORIZONTAL | width (↔) | height (↕) |
 
-So for HORIZONTAL layout with auto height:
-```js
-frame.layoutMode = "HORIZONTAL";
-frame.counterAxisSizingMode = "AUTO";   // ← height = auto
-```
+### Post-Script Audit (mandatory)
 
-### Pre-Flight Check (Enhanced)
-
-Before returning from any `use_figma` call that creates frames. Checks both axes — a HORIZONTAL layout with `counterAxisSizingMode = "FIXED"` and height <= 20 is the same bug as a VERTICAL layout with `primaryAxisSizingMode = "FIXED"`.
+Add this to the end of EVERY `use_figma` call that creates frames. Non-negotiable.
 
 ```js
-function auditFrameSizing(node) {
-  if (!node || node.type === "TEXT" || node.type === "RECTANGLE" || node.type === "ELLIPSE") return;
-  if (!node.layoutMode || node.layoutMode === "NONE") return;
-  if (node.children && node.children.length > 0) {
-    const isVertical = node.layoutMode === "VERTICAL";
-    const heightAxis = isVertical ? "primaryAxisSizingMode" : "counterAxisSizingMode";
-    if (node[heightAxis] === "FIXED" && node.height <= 20) {
-      node[heightAxis] = "AUTO";
+function auditHeights(node) {
+  if (!node) return;
+  if (node.type !== "FRAME" && node.type !== "COMPONENT") return;
+  if (!node.children || node.children.length === 0) return;
+  if (node.height <= 5) {
+    const isV = node.layoutMode === "VERTICAL";
+    const prop = isV ? "primaryAxisSizingMode" : "counterAxisSizingMode";
+    if (node[prop] === "FIXED") {
+      node[prop] = "AUTO";
     }
   }
-  if (node.children) node.children.forEach(auditFrameSizing);
+  if (node.children) node.children.forEach(auditHeights);
 }
 
-// Run on all created top-level nodes
-for (const id of createdNodeIds) {
-  auditFrameSizing(figma.getNodeById(id));
-}
+// Run on all created nodes before return
+createdNodeIds.forEach(id => {
+  const n = figma.getNodeById(id);
+  if (n) auditHeights(n);
+});
 ```
 
 ## 3. Variable-Bound Paints
