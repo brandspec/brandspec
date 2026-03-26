@@ -813,14 +813,33 @@ After each layer, agent runs a cross-component audit:
 
 ```
 Audit checklist:
+
+Structural consistency:
 - [ ] All sm/md/lg heights match across components
 - [ ] All padding values come from taste density parameters
 - [ ] All colors are Variables-bound (no hardcoded values)
 - [ ] All radius values match taste shape setting (with component-specific overrides)
-- [ ] All font-sizes follow typography-scale
 - [ ] Hover/focus states use consistent interaction patterns per motion axis
 - [ ] Icon sizes follow icon-style at matching size variant
 - [ ] Surface treatments follow surface-distinction axis
+
+Typography precision:
+- [ ] Minimum 4-level type hierarchy (display/heading/body/caption) with clear size steps
+- [ ] No two adjacent levels share the same font-size — each step must be visually distinct
+- [ ] Letter-spacing and line-height set per level (not just font-size)
+- [ ] Numeric data right-aligned in tables
+
+Color refinement:
+- [ ] Status/semantic colors (success/warning/danger) have reduced chroma to sit within the UI
+      — not raw green/yellow/red. Typical range: oklch chroma 0.08–0.12, not 0.15+
+- [ ] Status colors maintain WCAG AA contrast against their background
+- [ ] Accent color usage is intentional and sparse — not applied to every interactive element
+
+Spacing rhythm:
+- [ ] Spacing follows grouping logic: tight within groups, wider between groups
+      — e.g. related fields gap-sm (6-8px), section gap-lg (24-32px)
+- [ ] Consistent vertical rhythm in lists/tables (row height uniform per density)
+- [ ] Header/toolbar visually separated from content (not just by a line — by spacing weight)
 ```
 
 Report findings visually in Figma (highlight inconsistencies).
