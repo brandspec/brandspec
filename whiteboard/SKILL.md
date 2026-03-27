@@ -655,33 +655,35 @@ Phases 2 (Primitives), 3 (Components), 4 (Patterns) share the same rhythm. They 
 
 Phase 1's taste sketches are disposable — they existed to help choose a direction. Now the agent builds **production components**: full variants, all states, Variables-bound, audited.
 
-### Icon Plugin Setup
+### Icon Setup
 
-Before building components with icons, the user needs a Figma **plugin** for their icon set. These are Figma plugins (not libraries) — installed from the Figma Community, then run inside the file to insert icons.
+Before building components with icons, the user needs an icon set available in Figma. There are two ways to get icons — the choice affects whether the agent (MCP) can insert them automatically.
 
-The agent checks the confirmed `taste.icon-style` and recommends the matching plugin:
+**Figma concepts for non-designers:**
+- **Plugin** = a tool you run manually to search and insert icons. The agent (MCP) cannot run plugins.
+- **Library** = a shared component file enabled in your Assets panel. The agent CAN search and import from libraries via `search_design_system` + `importComponentByKeyAsync`.
 
-| taste.icon-style | Recommended Plugin | Notes |
-|-----------------|-------------------|-------|
-| thin-stroke | Lucide Icons | Default for most SaaS. 1.5px stroke, 24x24 grid |
-| medium-stroke | Phosphor Icons | 6 weights (Thin→Fill). 2px stroke at Regular |
-| filled | Material Symbols | 2,500+ glyphs. Variable weight/fill/grade |
+**For MCP-driven workflow, use Library files.** The agent can then insert icons as component instances automatically.
+
+The agent checks the confirmed `taste.icon-style` and recommends:
+
+| taste.icon-style | Library File (MCP-compatible) | Plugin (manual) |
+|-----------------|------------------------------|-----------------|
+| thin-stroke | Lucide Icons Library (Community file) | Lucide Icons plugin |
+| medium-stroke | Phosphor Icons (Community file) | Phosphor Icons plugin |
+| filled | Material Symbols Library (Community file) | Material Symbols plugin |
 
 The agent prompts the user:
 
-> "Your taste uses thin-stroke icons. Install the **Lucide Icons** plugin:
-> 1. Go to Figma Community (toolbar → Resources → Plugins → search 'Lucide Icons')
-> 2. Click 'Save' to install
-> 3. Run it: right-click canvas → Plugins → Lucide Icons
-> 4. Search and click an icon to insert it
+> "Your taste uses thin-stroke icons. To let me insert icons automatically:
+> 1. Open the Figma Assets panel (left sidebar)
+> 2. Click the book icon (Team library)
+> 3. Search for 'Lucide Icons Library' in Community
+> 4. Click 'Add to file'
 >
-> Or: I can build components without icons for now and add them later."
+> If you prefer to insert icons yourself, install the Lucide Icons **plugin** instead (Resources → Plugins → search 'Lucide Icons')."
 
-**Plugin vs Library distinction for non-designers:**
-- **Plugin** = a tool you run to insert things. Like a search dialog. (This is what icon sets are)
-- **Library** = a shared component collection that shows in the Assets panel. (This is what your own design system becomes)
-
-If the user can't install the plugin, the agent proceeds without icons. Icons are not a blocker for component structure — placeholders (colored rectangles) work for layout, and icons are swapped in later.
+If neither option works, the agent proceeds with placeholder rectangles for icon slots and the user adds icons manually later. Icons are not a blocker for component structure.
 
 ### Scope Negotiation
 
