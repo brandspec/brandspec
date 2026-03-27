@@ -655,23 +655,33 @@ Phases 2 (Primitives), 3 (Components), 4 (Patterns) share the same rhythm. They 
 
 Phase 1's taste sketches are disposable — they existed to help choose a direction. Now the agent builds **production components**: full variants, all states, Variables-bound, audited.
 
-### Icon Library Setup
+### Icon Plugin Setup
 
-Before building components with icons, the user needs an icon library enabled in Figma. The agent checks the confirmed `taste.icon-style` and recommends the matching library:
+Before building components with icons, the user needs a Figma **plugin** for their icon set. These are Figma plugins (not libraries) — installed from the Figma Community, then run inside the file to insert icons.
 
-| taste.icon-style | Recommended Library | Notes |
+The agent checks the confirmed `taste.icon-style` and recommends the matching plugin:
+
+| taste.icon-style | Recommended Plugin | Notes |
 |-----------------|-------------------|-------|
-| thin-stroke | Lucide Icons | Default for most SaaS. 1.5px stroke |
-| medium-stroke | Phosphor Icons or Heroicons | 2px stroke. More visual weight |
-| filled | Material Symbols | Solid fills. Suited to dense UIs |
+| thin-stroke | Lucide Icons | Default for most SaaS. 1.5px stroke, 24x24 grid |
+| medium-stroke | Phosphor Icons | 6 weights (Thin→Fill). 2px stroke at Regular |
+| filled | Material Symbols | 2,500+ glyphs. Variable weight/fill/grade |
 
 The agent prompts the user:
 
-> "Your taste uses thin-stroke icons. Enable **Lucide Icons** from the Figma Community library (Assets panel → library icon → search 'Lucide Icons' → Enable). This lets me use icons as instances in your components."
+> "Your taste uses thin-stroke icons. Install the **Lucide Icons** plugin:
+> 1. Go to Figma Community (toolbar → Resources → Plugins → search 'Lucide Icons')
+> 2. Click 'Save' to install
+> 3. Run it: right-click canvas → Plugins → Lucide Icons
+> 4. Search and click an icon to insert it
+>
+> Or: I can build components without icons for now and add them later."
 
-Once enabled, icons are available via `search_design_system` and `importComponentByKeyAsync` — see `figma/SKILL.md` for details.
+**Plugin vs Library distinction for non-designers:**
+- **Plugin** = a tool you run to insert things. Like a search dialog. (This is what icon sets are)
+- **Library** = a shared component collection that shows in the Assets panel. (This is what your own design system becomes)
 
-If the user can't find or enable the library, the agent can proceed without icons and add them later. Icons are not a blocker for component structure.
+If the user can't install the plugin, the agent proceeds without icons. Icons are not a blocker for component structure — placeholders (colored rectangles) work for layout, and icons are swapped in later.
 
 ### Scope Negotiation
 
