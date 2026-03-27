@@ -915,6 +915,31 @@ Key behaviors:
 - **Agent remembers what was deferred** — can revisit after screens if needed
 - **No pressure to be exhaustive** — better to build what matters than catalog everything
 
+### Interaction Pattern Decisions
+
+The Pattern layer involves not just visual treatment but product-wide interaction decisions. These don't all need answers in initial build — but the **questions** must be surfaced.
+
+The agent maintains a decision table. Items start as undecided with a sensible default. Decisions are prompted naturally as Screens are assembled in Phase 5.
+
+```
+| Pattern | Decision | Options | Status |
+|---------|----------|---------|--------|
+| DataTable | Sort | header click / external control / both | ⬜ undecided |
+| DataTable | Pagination | paginated / infinite scroll / load all | ⬜ undecided |
+| DataTable | Row density | fixed / user-toggle (compact/default) | ⬜ undecided |
+| List display | View mode | table only / table+card toggle | ⬜ undecided |
+| Filter | Visibility | always visible / collapsible panel | ⬜ undecided |
+| Selection | Row select | none / single / multi-select | ⬜ undecided |
+| Editing | Edit mode | inline / modal / slide-over panel | ⬜ undecided |
+| Empty state | Action | CTA button / illustration + text / redirect | ⬜ undecided |
+| Loading | Pattern | skeleton / spinner / progressive | ⬜ undecided |
+| Confirmation | Destructive actions | inline confirm / dialog | ⬜ undecided |
+```
+
+This table is the design system's way of **asking questions, not answering them**. Undecided items get a default placeholder so work can proceed. When a decision is made (by the user or through Phase 5 screen assembly), the table is updated.
+
+In Ongoing mode, this table becomes a reference for new screens — ensuring interaction patterns stay consistent across features built at different times.
+
 ## Phase 5: Screens (Templates)
 
 **Goal**: Validate the system by assembling real product screens — not generic templates.
