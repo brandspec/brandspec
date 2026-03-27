@@ -655,6 +655,24 @@ Phases 2 (Primitives), 3 (Components), 4 (Patterns) share the same rhythm. They 
 
 Phase 1's taste sketches are disposable — they existed to help choose a direction. Now the agent builds **production components**: full variants, all states, Variables-bound, audited.
 
+### Icon Library Setup
+
+Before building components with icons, the user needs an icon library enabled in Figma. The agent checks the confirmed `taste.icon-style` and recommends the matching library:
+
+| taste.icon-style | Recommended Library | Notes |
+|-----------------|-------------------|-------|
+| thin-stroke | Lucide Icons | Default for most SaaS. 1.5px stroke |
+| medium-stroke | Phosphor Icons or Heroicons | 2px stroke. More visual weight |
+| filled | Material Symbols | Solid fills. Suited to dense UIs |
+
+The agent prompts the user:
+
+> "Your taste uses thin-stroke icons. Enable **Lucide Icons** from the Figma Community library (Assets panel → library icon → search 'Lucide Icons' → Enable). This lets me use icons as instances in your components."
+
+Once enabled, icons are available via `search_design_system` and `importComponentByKeyAsync` — see `figma/SKILL.md` for details.
+
+If the user can't find or enable the library, the agent can proceed without icons and add them later. Icons are not a blocker for component structure.
+
 ### Scope Negotiation
 
 The agent does NOT blindly build a fixed list. Instead, at the start of Phase 2:
