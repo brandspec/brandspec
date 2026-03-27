@@ -17,6 +17,7 @@ Figma is the shared whiteboard between agent and human. The human judges. The ag
 ```
 Figma file:
 ├── Variables          # Synced from brand.yaml tokens
+├── Foundations        # Token visualization (color palette, type scale, spacing, radius)
 ├── Primitives         # Atoms: Button, Input, Badge, Tag, Toggle, etc.
 ├── Components         # Molecules: FormField, SearchBar, NavItem, etc.
 ├── Patterns           # Organisms: DataTable, SettingsPanel, Header, etc.

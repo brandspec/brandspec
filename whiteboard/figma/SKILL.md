@@ -278,12 +278,27 @@ variable.scopes = ["GAP"];
 
 ```
 Figma file:
-├── Primitives    # Tokens + atom-level components
-├── Components    # Molecules (composed from primitives)
-├── Patterns      # Organisms (page-level building blocks)
+├── Foundations    # Token visualization (color, typography, spacing, radius)
+├── Primitives    # Atoms: Button, Input, Badge, Toggle, etc.
+├── Components    # Molecules: FormField, SearchBar, TabBar, etc.
+├── Patterns      # Organisms: PageHeader, SideNav, DataTable, etc.
 ├── Screens       # Full page assemblies (instances only)
 └── [Feature]     # Feature-specific pages (Chat, Portal, etc.)
 ```
+
+### Foundations Page (mandatory)
+
+Foundations is NOT part of Primitives. It visualizes the design tokens (Variables) so engineers and collaborators can reference them without opening the Variables panel. Tokens are the foundation that Primitives are built ON — not peers.
+
+Create Foundations immediately after Variables Sync, before Phase 2 (Primitives).
+
+Contents:
+- **Color Palette**: all color tokens grouped by category, swatches bound to Variables
+- **Typography Scale**: all type levels at actual size, with weight/color annotation
+- **Spacing Scale**: visual bars showing spacing token values
+- **Radius Scale**: visual squares showing each radius token
+- (Optional) **Shadow Scale**: elevation examples
+- (Optional) **Icon Grid**: available icon set reference
 
 ### Page Backgrounds
 
