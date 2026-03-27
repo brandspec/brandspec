@@ -1166,6 +1166,66 @@ Agent: "Built the Toast component. Here are the interaction defaults:
 
 The defaults are sensible starting points. Most users will accept them. But the decisions are **explicit and visible**, not buried in implementation later.
 
+## Scope and Limits
+
+### What Whiteboard Does
+
+Whiteboard establishes **visual consistency and direction** — the look & feel of a design system. Given a Taste configuration, every visual property (spacing, radius, shadow, typography, color usage) is deterministically derived.
+
+### What Whiteboard Does NOT Do
+
+Whiteboard does not do information design. It does not decide:
+- What data to show on a screen
+- Column selection for tables
+- KPI priority
+- Navigation structure
+- User flow logic
+
+These are product decisions that come from outside — PRDs, requirements, domain knowledge.
+
+### Communicate This to the User
+
+When assembling Screens (Phase 5), if the information structure is unclear, say so:
+
+> "I can build this screen's visual treatment, but I'm guessing at the data structure. The columns and KPIs I'm showing are placeholders based on the product context in brand.yaml. You should validate the information design separately."
+
+Placeholder screens are useful for validating visual direction. They are NOT a substitute for information design.
+
+## Two Usage Modes
+
+### Initial (Phases 1–6)
+
+Build a design system from zero. Full flow: Taste → Primitives → Components → Patterns → Screens → Confirm.
+
+Requires: brand.yaml with tokens. Optionally, information design for product screens.
+
+### Ongoing (Post Phase 6)
+
+The design system is confirmed. New features need new screens or components.
+
+```
+Input: Feature requirements (what the screen needs to show)
+     + Existing Figma design system (confirmed Variables, Components, Patterns)
+
+Flow:
+1. Read existing Figma file — discover available components
+2. Assemble new screen from existing component instances
+3. Identify missing components → build them (Phase 2-4 rules apply)
+   - New components inherit confirmed Taste parameters
+   - Consistency Audit against existing components
+4. User reviews the assembled screen
+5. Code generation (via code/web skill)
+```
+
+Ongoing mode is where the most day-to-day value is. The initial build happens once. Ongoing happens every sprint.
+
+### Detecting Mode
+
+The agent reads the Figma file state:
+- No Variables, no components → Initial (start from Phase 1)
+- Variables + confirmed Taste + components → Ongoing (assemble new screens)
+- Variables + partial components → Resume Initial (continue from current phase)
+
 ## Core Rules
 
 1. **Everything is Variables-bound**. No hardcoded colors, ever.
