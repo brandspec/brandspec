@@ -924,14 +924,14 @@ The agent maintains a decision table. Items start as undecided with a sensible d
 ```
 | Pattern | Decision | Options | Status |
 |---------|----------|---------|--------|
+| Navigation | Primary nav | sidebar / top-nav / tabs | ⬜ undecided |
 | DataTable | Sort | header click / external control / both | ⬜ undecided |
 | DataTable | Pagination | paginated / infinite scroll / load all | ⬜ undecided |
-| DataTable | Row density | fixed / user-toggle (compact/default) | ⬜ undecided |
-| List display | View mode | table only / table+card toggle | ⬜ undecided |
 | Filter | Visibility | always visible / collapsible panel | ⬜ undecided |
 | Selection | Row select | none / single / multi-select | ⬜ undecided |
 | Editing | Edit mode | inline / modal / slide-over panel | ⬜ undecided |
-| Empty state | Action | CTA button / illustration + text / redirect | ⬜ undecided |
+| Form validation | Error display | inline per-field / summary top / toast | ⬜ undecided |
+| Notification | Delivery | toast / banner / badge / combination | ⬜ undecided |
 | Loading | Pattern | skeleton / spinner / progressive | ⬜ undecided |
 | Confirmation | Destructive actions | inline confirm / dialog | ⬜ undecided |
 ```
