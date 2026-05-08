@@ -124,6 +124,8 @@ Taste → Primitives → Components → Patterns → Screens
 
 The AI proposes 3 design directions (10 axes: density, shape, contrast, etc.), generates components in Figma, and iterates based on your visual feedback. No design experience needed.
 
+> **Requires Figma MCP, Pro plan recommended.** Figma MCP must be connected to your AI client (Claude Code, etc.). The Starter plan caps reads at 6/month — one session typically uses more than that. Pro is $15/month with 200 reads/day.
+
 ## Code — Figma to production
 
 Generate production components from your confirmed Figma design system.
@@ -134,6 +136,8 @@ npx brandspec code
 ```
 
 Outputs React + Tailwind + Radix components with CSS custom properties from your brand tokens. Every color, spacing, and radius value traces back to brand.yaml.
+
+> **Requires Figma MCP** to read the source design system. Same Pro-plan caveat as Whiteboard.
 
 ## Consult — Brand-aligned AI
 

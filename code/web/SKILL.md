@@ -144,6 +144,21 @@ For each Figma Primitive, decide the implementation strategy:
 | Separator | No | Custom (single div) |
 | Skeleton | No | Custom + Tailwind animation |
 
+### Naming alignment across layers
+
+The names produced here should align with the corresponding Figma Component names (created by the `whiteboard` skill) and with the [DESIGN.md spec](https://designmd.ai) `components` vocabulary where applicable. Aligning the three layers means a brand definition can move cleanly between Figma, code, and a DESIGN.md export.
+
+| Concept | Figma | React (this skill) | DESIGN.md |
+|---------|-------|---------------------|-----------|
+| Button (primary) | Component `Button`, Variant=`Primary` | `<Button variant="primary">` | `button-primary` |
+| Input field | Component `Input` | `<Input>` | `input-field` |
+| Tooltip | Component `Tooltip` | `<Tooltip>` | `tooltip` |
+| Checkbox | Component `Checkbox` | `<Checkbox>` | `checkbox` |
+
+Each layer keeps its natural casing (Figma PascalCase, React PascalCase, DESIGN.md kebab-case). The **concept identity** is what must be consistent — `Button` in Figma and `<Button>` in React must refer to the same thing, and that thing maps to `button-*` in DESIGN.md.
+
+For components not in DESIGN.md's example list (Card, Avatar, Dialog, Tabs, Badge, Skeleton, Toast, ...), use the names established by the `whiteboard` skill — DESIGN.md is intentionally extensible and `components` is a free map. Product-specific molecules (`BrandCard`, `LintBadge`, etc.) similarly carry across only Figma ↔ React.
+
 ### Mapping Figma to Code
 
 For each Figma component, extract:

@@ -686,6 +686,31 @@ The agent prompts the user:
 
 If neither option works, the agent proceeds with placeholder rectangles for icon slots and the user adds icons manually later. Icons are not a blocker for component structure.
 
+### Naming Vocabulary (DESIGN.md alignment)
+
+When proposing the component inventory, the agent should use names that align with the [DESIGN.md spec](https://designmd.ai) where applicable. DESIGN.md is an emerging open spec for design system documentation (Google Labs, Apache 2.0). Aligning names now keeps brandspec composable with that ecosystem and gives users a single, consistent vocabulary across Figma, code, and any DESIGN.md export.
+
+**The agent must understand DESIGN.md's component model before proposing names.** Specifically:
+
+- DESIGN.md `components` is a `map<component-name, map<property, value>>` of style tokens — not class definitions.
+- Variants use a flat kebab-case suffix: `button-primary`, `button-primary-hover`, `button-secondary`. The agent reads them as a family.
+- Common component types named in the spec: **buttons, chips, lists, tooltips, checkboxes, radio buttons, input fields**. Use these names (or close singular forms — `Button`, `Tooltip`, `Checkbox`) at the Primitive layer when applicable.
+- Component property tokens DESIGN.md recognizes: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`. Component visual properties built in Figma should map cleanly onto these.
+
+**3-layer naming correspondence**:
+
+| Concept | Figma | React | DESIGN.md |
+|---------|-------|-------|-----------|
+| Button (primary) | Component `Button`, Variant=`Primary` | `<Button variant="primary">` | `button-primary` |
+| Input field | Component `Input`, Variant=`Default`/`Focus` | `<Input>` | `input-field` |
+| Tooltip | Component `Tooltip` | `<Tooltip>` | `tooltip` |
+
+Layers may use their natural casing (Figma PascalCase, React PascalCase, DESIGN.md kebab-case). The **concept** is what must align.
+
+**Components outside DESIGN.md's example list** (Card, Avatar, Dialog, Tabs, Badge, Skeleton, Toast, etc.) follow brandspec's own naming — DESIGN.md is intentionally extensible, and `components` is a free map. Pick clear names; consistency within the project matters more than matching any external list.
+
+**Product-specific molecules and organisms** (e.g. `BrandCard`, `LintBadge`, `MemberRow`) live entirely in brandspec naming. They are not expected in DESIGN.md exports.
+
 ### Scope Negotiation
 
 The agent does NOT blindly build a fixed list. Instead, at the start of Phase 2:
