@@ -31,10 +31,15 @@ brandspec/
 │   ├── exports/            # Export format docs (css, tailwind, figma)
 │   └── examples/           # Example brand.yaml files
 ├── workshop/               # AI-facilitated brand creation toolkit
-│   ├── SKILL.md            # Claude Code integration entry point (Japanese)
+│   ├── SKILL.md            # Workshop skill (4-phase brand creation)
 │   ├── flow.md             # 4-phase process overview
 │   ├── phases/             # 01-discovery, 02-concept, 03-visual, 04-documentation
-│   └── templates/          # Scaffolded when running `brandspec workshop start`
+│   └── templates/          # Scaffolded when running `brandspec init`
+├── whiteboard/             # Figma design system creation
+│   ├── SKILL.md            # Design System Forge skill (Taste → Screens)
+│   └── figma/SKILL.md      # Figma MCP operation rules
+├── code/                   # Figma-to-code generation
+│   └── web/SKILL.md        # React + Tailwind + Radix
 ├── site/                   # LP (brandspec.dev)
 └── package.json
 ```
@@ -55,9 +60,10 @@ brandspec init                          # Create brandspec/ directory with templ
 brandspec validate [path]               # Validate a brand.yaml
 brandspec generate [path] --format all  # Generate output/ (css, tailwind, figma, sd)
 brandspec consult [path]                # Print brand context for AI consultation
-brandspec workshop start                # Print start prompt for AI workshop
-brandspec workshop resume               # Print resume prompt for AI workshop
+brandspec workshop                      # Print workshop prompt (auto start/resume)
 brandspec workshop status               # Show workshop position
+brandspec whiteboard                    # Print Figma design system prompt
+brandspec code [stack]                  # Print Figma-to-code prompt (default: web)
 ```
 
 ## Specification (brand.yaml)

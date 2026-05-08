@@ -1,6 +1,6 @@
 {
   "name": "brandspec",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Define Brand Identity as code. CLI for creating, validating, and generating brand tokens.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -19,7 +19,9 @@
   "files": [
     "dist",
     "schema",
-    "workshop"
+    "workshop",
+    "whiteboard",
+    "code"
   ],
   "engines": {
     "node": ">=18.0.0"

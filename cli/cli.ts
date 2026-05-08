@@ -26,7 +26,7 @@ import {
 } from "./remote.js";
 import type { BrandspecYaml } from "./types.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 
 // ── Color utilities (NO_COLOR + TTY aware) ──
 
@@ -80,9 +80,10 @@ Commands:
 
   consult [path]          Print brand context for AI consultation
 
-  workshop start          Print start prompt for AI workshop
-  workshop resume         Print resume prompt for AI workshop
-  workshop status         Show current workshop position
+  workshop          Print prompt for AI brand workshop
+  workshop status   Show current workshop position
+  whiteboard        Print prompt for Figma design system session
+  code [stack]      Print prompt for Figma-to-code session (default: web)
 
   login             Save API token for brandspec.tools
   logout            Remove saved API token
@@ -465,41 +466,31 @@ function cmdWorkshopStart() {
   // Guard: if workshop has progressed, auto-fallback to resume
   const hasDecisions = !/decisions:\s*\[\]/.test(decisions);
   if (!isInitialPosition(position) || hasDecisions) {
-    console.error("Workshop already in progress — resuming.");
     cmdWorkshopResume();
     return;
   }
 
-  // Load workshop materials
   const workshopDir = getWorkshopDir();
-  const skillMd = readFileSync(join(workshopDir, "SKILL.md"), "utf-8");
-  const flowMd = readFileSync(join(workshopDir, "flow.md"), "utf-8");
-  const phase1 = readFileSync(join(workshopDir, "phases", "01-discovery.md"), "utf-8");
+  const skillPath = join(workshopDir, "SKILL.md");
+  const flowPath = join(workshopDir, "flow.md");
+  const phase1Path = join(workshopDir, "phases", "01-discovery.md");
 
   const lines: string[] = [];
 
-  lines.push("# brandspec workshop — Start Session");
+  lines.push("brandspec is a tool that defines brand identity as code using a YAML file (brand.yaml).");
   lines.push("");
-  lines.push("You are a brand identity facilitator. Guide the user through the brandspec workshop.");
-  lines.push("First ask the user's preferred session language, then proceed with Phase 1: Discovery.");
+  lines.push("I want to create a brand identity through an AI-facilitated workshop.");
   lines.push("");
-  lines.push("---");
+  lines.push("Read these skill files — they contain the workshop process:");
+  lines.push(`1. ${skillPath}`);
+  lines.push(`2. ${flowPath}`);
+  lines.push(`3. ${phase1Path}`);
   lines.push("");
-  lines.push(skillMd);
+  lines.push("Workshop state files:");
+  lines.push(`- Position: ${positionPath}`);
+  lines.push(`- Decisions: ${decisionsPath}`);
   lines.push("");
-  lines.push("---");
-  lines.push("");
-  lines.push(flowMd);
-  lines.push("");
-  lines.push("---");
-  lines.push("");
-  lines.push("## Current Phase Guide");
-  lines.push("");
-  lines.push(phase1);
-  lines.push("");
-  lines.push("---");
-  lines.push("");
-  lines.push("Begin the workshop now. Ask the user their preferred session language.");
+  lines.push("Start by reading the skills and state, then begin the workshop.");
 
   console.log(lines.join("\n"));
 }
@@ -517,14 +508,18 @@ function cmdWorkshopStatus() {
   console.log(content);
 }
 
-function getPhaseFile(phase: number): string {
+function getPhaseFileName(phase: number): string {
   const phaseFiles: Record<number, string> = {
     1: "01-discovery.md",
     2: "02-concept.md",
     3: "03-visual.md",
     4: "04-documentation.md",
   };
-  const file = phaseFiles[phase];
+  return phaseFiles[phase] ?? "";
+}
+
+function getPhaseFile(phase: number): string {
+  const file = getPhaseFileName(phase);
   if (!file) return "";
   const filePath = join(getWorkshopDir(), "phases", file);
   return existsSync(filePath) ? readFileSync(filePath, "utf-8") : "";
@@ -533,65 +528,36 @@ function getPhaseFile(phase: number): string {
 function cmdWorkshopResume() {
   const { positionPath, decisionsPath } = ensureWorkshopState();
   const position = readFileSync(positionPath, "utf-8");
-  const decisions = readFileSync(decisionsPath, "utf-8");
 
   // Extract current phase number
   const phaseMatch = position.match(/phase:\s*(\d+)/);
   const currentPhase = phaseMatch ? parseInt(phaseMatch[1], 10) : 1;
 
-  // Load workshop materials
   const workshopDir = getWorkshopDir();
-  const skillMd = readFileSync(join(workshopDir, "SKILL.md"), "utf-8");
-  const phaseGuide = getPhaseFile(currentPhase);
+  const skillPath = join(workshopDir, "SKILL.md");
+  const phasePath = join(workshopDir, "phases", getPhaseFileName(currentPhase));
+  const memoPath = resolve("_workshop", "memo.md");
 
   const lines: string[] = [];
 
-  lines.push("# brandspec workshop — Resume Session");
+  lines.push("brandspec is a tool that defines brand identity as code using a YAML file (brand.yaml).");
   lines.push("");
-  lines.push("You are a brand identity facilitator. The user is resuming a workshop session.");
-  lines.push("Restore context from the state below, then continue where they left off.");
+  lines.push("I want to resume my brand identity workshop session.");
   lines.push("");
-  lines.push("---");
+  lines.push("Read these skill files — they contain the workshop process:");
+  lines.push(`1. ${skillPath}`);
+  if (existsSync(phasePath)) {
+    lines.push(`2. ${phasePath}`);
+  }
   lines.push("");
-  lines.push(skillMd);
-  lines.push("");
-  lines.push("---");
-  lines.push("");
-  lines.push("## Current State");
-  lines.push("");
-  lines.push("### Position");
-  lines.push("```yaml");
-  lines.push(position.trim());
-  lines.push("```");
-  lines.push("");
-  lines.push("### Decisions");
-  lines.push("```yaml");
-  lines.push(decisions.trim());
-  lines.push("```");
-  lines.push("");
-
-  // Include memo if present
-  const memoPath = resolve("_workshop", "memo.md");
+  lines.push("Workshop state files (read these to understand where I left off):");
+  lines.push(`- Position: ${positionPath}`);
+  lines.push(`- Decisions: ${decisionsPath}`);
   if (existsSync(memoPath)) {
-    const memo = readFileSync(memoPath, "utf-8").trim();
-    if (memo) {
-      lines.push("### Working Notes");
-      lines.push(memo);
-      lines.push("");
-    }
-  }
-
-  lines.push("---");
-  lines.push("");
-  lines.push(`## Current Phase Guide (Phase ${currentPhase})`);
-  lines.push("");
-  if (phaseGuide) {
-    lines.push(phaseGuide);
+    lines.push(`- Memo: ${memoPath}`);
   }
   lines.push("");
-  lines.push("---");
-  lines.push("");
-  lines.push("Resume the workshop. Present the restored state summary, then continue from the current step.");
+  lines.push("Start by reading the skills and state, then present a summary and continue.");
 
   console.log(lines.join("\n"));
 }
@@ -599,37 +565,111 @@ function cmdWorkshopResume() {
 function cmdWorkshop(args: string[]) {
   const sub = args[0];
 
-  if (!sub || sub === "--help") {
+  if (sub === "status") {
+    cmdWorkshopStatus();
+    return;
+  }
+
+  if (sub === "--help") {
     console.log(`
 brandspec workshop — AI-facilitated brand creation
 
-Commands:
-  start    Print start prompt for AI (initial state only)
-  resume   Print resume prompt for AI (any state)
-  status   Show current workshop position
+Usage:
+  workshop          Print prompt for AI (auto-detects start/resume)
+  workshop status   Show current workshop position
     `.trim());
     process.exit(0);
   }
 
-  switch (sub) {
-    case "start":
-      cmdWorkshopStart();
-      break;
-    case "status":
-      cmdWorkshopStatus();
-      break;
-    case "resume":
-      cmdWorkshopResume();
-      break;
-    default:
-      console.error(`Unknown workshop command: ${sub}`);
-      console.error("");
-      console.error("Available commands:");
-      console.error("  start    Print start prompt for AI (initial state only)");
-      console.error("  resume   Print resume prompt for AI (any state)");
-      console.error("  status   Show current workshop position");
-      process.exit(1);
+  // No subcommand or "start"/"resume" → auto-detect
+  cmdWorkshopStart();
+}
+
+// ── Whiteboard commands ──
+
+function getWhiteboardDir(): string {
+  return resolve(__dirname, "..", "whiteboard");
+}
+
+function cmdWhiteboard() {
+  const whiteboardDir = getWhiteboardDir();
+  const skillPath = join(whiteboardDir, "SKILL.md");
+  const figmaSkillPath = join(whiteboardDir, "figma", "SKILL.md");
+
+  if (!existsSync(skillPath)) {
+    console.error("Whiteboard skill not found. Ensure brandspec is installed correctly.");
+    process.exit(1);
   }
+
+  const target = resolveBrandYaml();
+  if (!existsSync(target)) {
+    console.error("brand.yaml not found in current directory.");
+    console.error("Run 'brandspec init' and complete the workshop first, or provide a brand.yaml.");
+    process.exit(1);
+  }
+
+  const lines: string[] = [];
+
+  lines.push("brandspec is a tool that defines brand identity as code using a YAML file (brand.yaml).");
+  lines.push("It includes colors, typography, personality, and voice guidelines.");
+  lines.push("");
+  lines.push("I want to create a design system in Figma based on my brand definition.");
+  lines.push("");
+  lines.push("Read these skill files:");
+  lines.push(`1. ${skillPath} — the design system creation process (Taste/Look & Feel, Primitives, Components, Patterns, Screens)`);
+  if (existsSync(figmaSkillPath)) {
+    lines.push(`2. ${figmaSkillPath} — Figma Plugin API operation rules (color conversion, auto-layout, variables, etc.)`);
+  }
+  lines.push("");
+  lines.push("My brand definition is at:");
+  lines.push(target);
+  lines.push("");
+  lines.push("Start by reading the skills and brand.yaml, then ask me for my Figma file URL.");
+
+  console.log(lines.join("\n"));
+}
+
+// ── Code commands ──
+
+function getCodeDir(): string {
+  return resolve(__dirname, "..", "code");
+}
+
+function cmdCode(args: string[]) {
+  const stack = args.find((a) => !a.startsWith("-")) ?? "web";
+  const codeDir = getCodeDir();
+  const skillPath = join(codeDir, stack, "SKILL.md");
+
+  if (!existsSync(skillPath)) {
+    console.error(`Code skill not found for stack: ${stack}`);
+    const available = existsSync(codeDir)
+      ? readdirSync(codeDir).filter((d) => existsSync(join(codeDir, d, "SKILL.md")))
+      : [];
+    if (available.length > 0) {
+      console.error(`Available: ${available.join(", ")}`);
+    }
+    process.exit(1);
+  }
+
+  const target = resolveBrandYaml();
+  const brandYamlPath = existsSync(target) ? target : null;
+
+  const lines: string[] = [];
+
+  lines.push("brandspec is a tool that defines brand identity as code using a YAML file (brand.yaml).");
+  lines.push("I have a confirmed design system in Figma and want to generate production code from it.");
+  lines.push("");
+  lines.push("Read this skill file — it contains the full Figma-to-code process:");
+  lines.push(`1. ${skillPath}`);
+  if (brandYamlPath) {
+    lines.push("");
+    lines.push("My brand definition is at:");
+    lines.push(brandYamlPath);
+  }
+  lines.push("");
+  lines.push("Start by reading the skill, then ask me for my Figma file URL and target directory.");
+
+  console.log(lines.join("\n"));
 }
 
 // ── Consult command ──
@@ -1001,6 +1041,12 @@ async function main() {
       break;
     case "workshop":
       cmdWorkshop(args.slice(1));
+      break;
+    case "whiteboard":
+      cmdWhiteboard();
+      break;
+    case "code":
+      cmdCode(args.slice(1));
       break;
     case "consult":
       cmdConsult(args.slice(1));
