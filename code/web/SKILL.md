@@ -35,15 +35,18 @@ Read Figma → Extract Tokens → Generate CSS → Build Primitives → Build Co
 
 ### Read Figma Variables
 
-Use `get_variable_defs` or `use_figma` to extract all variable collections:
+The primary tool is **`get_design_context`**, not `get_variable_defs`. Reason:
 
-```
-Figma Variables          →  CSS Custom Properties
-─────────────────────────────────────────────────
-primitives/titanium/50   →  --color-titanium-50: #f6f4f1;
-semantic/background      →  --background: var(--color-titanium-50);
-semantic/foreground      →  --foreground: var(--color-titanium-900);
-```
+- `get_design_context` returns reference React+Tailwind code AND a screenshot AND resolved Variable aliases (semantic names like `--primary`, `--destructive`) for the node you ask about.
+- `get_variable_defs` requires either a current selection in the Figma desktop app, or a specific node id. **Calling it on the page id (`0:1`) fails with "nothing selected"**.
+- `get_variable_defs` on a primitives palette frame returns raw token names (`titanium/50`, `ember/default`). The same call on a component (Button, Input) returns semantic aliases (`primary`, `secondary`, `muted-foreground`) because those are what the component actually binds to.
+
+Practical sequence to bootstrap a token file:
+
+1. `get_metadata` on the Primitives page node id to discover frame ids (Color Palette, Button, etc.)
+2. `get_variable_defs` on the **Color Palette frame** id — gets all primitive color values
+3. `get_variable_defs` on **one component** (Button is fine) — gets the semantic alias names that the system uses
+4. Combine: write primitives as raw values, semantics as `var(--primitive)` references
 
 ### Generate tokens.css
 
@@ -81,6 +84,37 @@ semantic/foreground      →  --foreground: var(--color-titanium-900);
   }
 }
 ```
+
+### Dark-only systems
+
+Some products (SaaS-only, dark-by-default) don't need light/dark switching — they ship a single dark palette. In that case, put the dark values directly under `:root` and skip the `.dark` selector. The Variables you'll see from `get_variable_defs` reflect this: a dark-only system's `--primary` resolves to `titanium-100` (light text on dark bg), not `titanium-900`. Don't fight it — match the Figma file's intent.
+
+### Tailwind config bridge
+
+Tailwind needs to know about the CSS Variables to expose them as utility classes. Minimal `tailwind.config.js` extension:
+
+```js
+theme: {
+  extend: {
+    colors: {
+      background: "var(--background)",
+      foreground: "var(--foreground)",
+      card: { DEFAULT: "var(--card)", foreground: "var(--card-foreground)" },
+      primary: { DEFAULT: "var(--primary)", foreground: "var(--primary-foreground)" },
+      // ...same shape for secondary, muted, accent, destructive
+      border: "var(--border)",
+      ring: "var(--ring)",
+    },
+    borderRadius: {
+      sm: "var(--radius-sm)",
+      md: "var(--radius-md)",
+      lg: "var(--radius-lg)",
+    },
+  },
+}
+```
+
+This is what makes `bg-primary` and `text-muted-foreground` work as references to the CSS Variables. Without it, Tailwind has no idea those names exist.
 
 ### Source of Truth
 
@@ -145,6 +179,13 @@ text: semantic/primary-fg      →  text-primary-foreground
 border: semantic/secondary 1px →  border border-secondary
 ```
 
+### Workflow per component
+
+1. `get_design_context` on the component node id. The response includes (a) reference React+Tailwind code, (b) a screenshot, (c) a "SUPER CRITICAL" note that says the code MUST be adapted to the target stack.
+2. Read the reference code as a **specification** (sizes, colors, gaps, radius), not a drop-in. The reference uses `bg-[var(--primary,#ebe7e2)]` style fallback literals — strip those and use clean Tailwind classes mapped to the project's `tailwind.config`.
+3. Re-express the reference as `cva` variants, one per Figma variant. Drop fallback hex values — the project's CSS Variables are the source of truth.
+4. Render in the dev server, take a screenshot, compare against the Figma screenshot from step 1. Trust the visual diff over the code.
+
 ### Component Template
 
 ```tsx
@@ -159,9 +200,9 @@ const buttonVariants = cva(
       variant: {
         // Each from Figma's variant
         primary: "bg-primary text-primary-foreground",
-        secondary: "bg-secondary text-secondary-foreground border border-secondary",
-        ghost: "text-muted-foreground hover:bg-accent",
-        destructive: "bg-destructive text-white",
+        secondary: "bg-secondary text-secondary-foreground border border-border",
+        ghost: "text-muted-foreground hover:text-foreground",
+        destructive: "bg-destructive text-destructive-foreground",
       },
       size: {
         // From Figma's size variants (derived from Taste density)
